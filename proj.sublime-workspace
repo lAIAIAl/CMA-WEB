@@ -1,0 +1,567 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "bin/dev-server.js",
+			"settings":
+			{
+				"buffer_size": 257,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/routes/Login/containers/LoginContainer.js",
+			"settings":
+			{
+				"buffer_size": 9570,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/routes/Login/reducers/LoginReducer.js",
+			"settings":
+			{
+				"buffer_size": 397,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/routes/Login/components/LoginView.js",
+			"settings":
+			{
+				"buffer_size": 4183,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/layouts/CoreLayout.js",
+			"settings":
+			{
+				"buffer_size": 9151,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/routes/Blank/components/Blank.js",
+			"settings":
+			{
+				"buffer_size": 798,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main.js",
+			"settings":
+			{
+				"buffer_size": 1522,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/routes/tabsmap.js",
+			"settings":
+			{
+				"buffer_size": 1054,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/E/sinosteel-master/client/framework-webclient",
+		"/E/sinosteel-master/client/framework-webclient/src",
+		"/E/sinosteel-master/client/framework-webclient/src/routes",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Blank",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Blank/components",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Login"
+	],
+	"file_history":
+	[
+		"/E/sinosteel-master/server/framework-example/src/main/resources/structure.json",
+		"/E/sinosteel-backend-master/src/main/resources/structure.json",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Login/index.js",
+		"/E/react-redux-starter-kit-master/src/main.js",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Blank/index.js",
+		"/E/sinosteel-backend-master/src/main/resources/application.properties",
+		"/E/sinosteel-backend-master/src/main/resources/config/datasource.properties",
+		"/D/Redis-x64-3.2.100/redis.windows.conf",
+		"/E/sinosteel-master/client/framework-webclient/package.json",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Blank/components/Blank.js",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Project/subviews/ProjectList/components/ProjectListView.js",
+		"/E/sinosteel-master/client/framework-webclient/src/main.js",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/tabsmap.js",
+		"/E/sinosteel-master/client/framework-webclient/src/index.html",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/index.js",
+		"/E/sinosteel-master/client/framework-webclient/server/main.js",
+		"/E/sinosteel-master/client/framework-webclient/src/containers/AppContainer.js",
+		"/E/实验/nodejs-learning/test1.js",
+		"/E/课件/面向对象设计方法/Calculator.java",
+		"/E/课件/综合实验/需求/CMA.wiki/需求规格说明.md",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Login/containers/LoginContainer.js",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Knowledge/subviews/StandardList/components/StandardAddView.js",
+		"/E/shawodsocks.json",
+		"/E/实验/sinosteel-master/sinosteel-master/client/framework-webclient/src/routes/Knowledge/subviews/StandardList/components/StandardAddView.js",
+		"/E/实验/sinosteel-master/sinosteel-master/client/framework-webclient/src/main.js",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/helpers/file/domain/File.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/project/web/ProjectController.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/FrameworkApplication.java",
+		"/E/实验/sinosteel-master/sinosteel-master/client/framework-webclient/package.json",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/resources/config/datasource.properties",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/resources/config/redis.properties",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/resources/application.properties",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/resources/config/datasource.properties",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/resources/structure.json",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/resources/config/system.properties",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/resources/config/redis.properties",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/pom.xml",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/core/cache/RedisService.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/config/database/RepositoryConfig.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/config/database/DateSourceConfig.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/system/auth/domain/Role.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/helpers/hierarchy/helper/HierarchyHelper.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/helpers/hierarchy/domain/Hierarchy.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/Application.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/resources/config/spring.properties",
+		"/E/实验/spring-petclinic/src/main/resources/application.properties",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/AST.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/sym_table.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/semantic_check.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/common.h",
+		"/E/课件/编译原理/第一次实验/Lab1_v2/Code/lexical.l",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/semantic.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/sym_table.h",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/semantic.h",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/AST.h",
+		"/E/课件/编译原理/第二次实验/Lab2/Code/tree.h",
+		"/E/实验/demo/springboot_learning/src/main/java/com/example/demo/domain/Student.java",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_oc.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_AST.c",
+		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/service/StandardService.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/web/StandardController.java",
+		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/repository/StandardRepository.java",
+		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/core/base/service/BaseService.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/domain/Standard.java",
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/core/base/domain/BaseEntity.java",
+		"/E/实验/demo/springboot_learning/src/main/java/com/example/demo/DemoApplication.java",
+		"/C/ProgramData/MySQL/MySQL Installer for Windows/ManifestUpdates.xml",
+		"/C/ProgramData/MySQL/MySQL Installer for Windows/settings-Community.xml",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/syntax.y",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/oc.h",
+		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework/pom.xml",
+		"/E/实验/demo/springboot_learning/src/main/resources/application.properties",
+		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework-example/pom.xml",
+		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework-example/src/main/resources/config/datasource.properties",
+		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework-example/src/main/resources/application.properties"
+	],
+	"find":
+	{
+		"height": 52.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"登",
+			"登陆",
+			"query",
+			"findm",
+			"sass",
+			"saas",
+			"glup",
+			"Def",
+			"error"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"folders":
+	[
+		{
+			"path": "E:\\sinosteel-master\\client\\framework-webclient"
+		}
+	],
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "bin/dev-server.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 257,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/routes/Login/containers/LoginContainer.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9570,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								452,
+								452
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 879.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/routes/Login/reducers/LoginReducer.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 397,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/routes/Login/components/LoginView.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4183,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								41,
+								41
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 300.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/layouts/CoreLayout.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4959,
+								4960
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2895.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/routes/Blank/components/Blank.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 798,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								680,
+								680
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/main.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1522,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 600.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/routes/tabsmap.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1054,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								595,
+								595
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 35.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "",
+	"replace":
+	{
+		"height": 65.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 330.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
