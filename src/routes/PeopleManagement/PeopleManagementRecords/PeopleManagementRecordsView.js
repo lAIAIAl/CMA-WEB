@@ -1,9 +1,10 @@
 import React from 'react';
 import { Form, Input, Icon, Row, Col, Button, Card} from 'antd';
-import {Table, Divider, Modal, Avatar} from 'antd';
+import {Table, Divider, Modal, Avatar, Radio} from 'antd';
 const { Column, ColumnGroup } = Table;
 
-import ListView from 'common/basic/components/ListView';
+import OperationComponent from 'common/basic/components/OperationComponent';
+import AddPeopleForm from './AddPeopleForm'
 
 const FormItem = Form.Item;
 //名称，部门，职位，档案编号，档案存放位置，档案扫描件
@@ -14,61 +15,58 @@ const columns = [
 }, 
 {
   title: '部门',
-  dataIndex: 'dep',
+  dataIndex: 'department',
 }, 
 {
   title: '职位',
-  dataIndex: 'job',
+  dataIndex: 'position',
 },
 {
   title: '档案编号',
-  dataIndex: 'fileNo',
+  dataIndex: 'id',
 }, 
 {
   title: '档案存放位置',
-  dataIndex: 'filePlace',
+  dataIndex: 'location',
 }
 ];
 
 let data = [
 {
-  key: '10',
-  name: 'lxd',
-  dep: '档案部',
-  job: '哈哈哈',
-  fileNo: '12',
-  filePlace: '档案室',
-  fileImage: '暂无'
-}, 
-{
-
-  key: '24',
-  name: 'wlz',
-  dep: '档案部',  
-  job: '哈哈哈',
-  fileNo: '123',
-  filePlace: '档案室',
-  fileImage: 'kong'
+	key: '1231',
+	name: 'lxd',	    //名称
+	department: '档案部',	//部门
+    position: '主任',    //职位
+    id: '78098109',          //档案编号
+    location: '档案室',    //档案位置
+    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
 },
 {
-
-  key: '3',
-  name: 'cc',
-  dep: '市场部',  
-  job: '哈哈哈',
-  fileNo: '1234',
-  filePlace: '档案室',
-  fileImage: 'kong'
+	key: '1-1',
+	name: 'wlz',	    //名称
+	department: '档案部',	//部门
+    position: '主任',    //职位
+    id: '1756709',          //档案编号
+    location: '档案室',    //档案位置
+    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
 },
 {
-
-  key: '4',
-  name: 'zt',
-  dep: 'shichang部',  
-  job: '哈哈哈',
-  fileNo: '12345',
-  filePlace: '档案室',
-  fileImage: 'kong'
+	key: '113-no',
+	name: 'cc',	    //名称
+	department: '档案部',	//部门
+    position: '主任',    //职位
+    id: '10298',          //档案编号
+    location: '档案室',    //档案位置
+    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
+},
+{
+	key: '12OIP3522',
+	name: 'zt',	    //名称
+	department: '档案部',	//部门
+    position: '主任',    //职位
+    id: '10209',          //档案编号
+    location: '档案室',    //档案位置
+    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
 }
 ];
 
@@ -109,32 +107,55 @@ function sendMessage(url, OPTION, data, action){
 	xmlhttp.send(JSON.stringify(data));
 }
 
+
+
 class PeopleManagementRecordsViewF extends React.Component{
 
-
-  
 	state = {
 	    selectedRowKeys: [], // Check here to configure the default column
 	    loading: false,
-		visible: false
+		visible: false,
 	};
 
+	handleCreate = () => {
+    	const form = this.formRef.props.form;
+    	form.validateFields((err, values) => {
+      		if (err) {
+      		  	return;
+      		}
+      		//TODO:ajax add
+      		console.log('Received values of form: ', values);
+      		let temp = values;
+      		temp.key = data.length;
+      		data.push(temp);
+      		form.resetFields();
+      		this.setState({ visible: false });
+    	});
+  	}
+
+    saveFormRef = (formRef) => {
+    	this.formRef = formRef;
+  	}
+
+  	showModal = () => {
+    	this.setState({ visible: true });
+  	}
+
+  	handleCancel = () => {
+    	this.setState({ visible: false });
+  	}
 
   	componentDidMount() {
     // To disabled submit button at the beginning.
     	this.props.form.validateFields();
   	}
 
-  	showModal = () => {
-    	this.setState({
-      	visible: true,
-    	});
-  	}
   
   	handleSubmit = (e) => {
     	e.preventDefault();
     	this.props.form.validateFields((err, values) => {
       		if (!err) {
+      			//TODO:ajax
         		console.log('Received values of form: ', values);
       		}
     	});
@@ -148,7 +169,7 @@ class PeopleManagementRecordsViewF extends React.Component{
   			let x = data.findIndex(function(x){
   				return x.key == selectedRowKeys[i];
   			});
-  			//console.log(x);
+
   			if(x>-1)data.splice(x,1);
 
   		}
@@ -160,26 +181,6 @@ class PeopleManagementRecordsViewF extends React.Component{
     	console.log('selectedRowKeys changed: ', selectedRowKeys);
     	this.setState({ selectedRowKeys });
   	}
-
-  	handleCancel = () => {
-    	this.setState({
-      	visible: false,
-    	});
-  	}
-
-  	handleOk = () => {
-    	this.setState({
-      		ModalText: 'The modal will be closed after two seconds',
-      		confirmLoading: true,
-    	});
-    	setTimeout(() => {
-      		this.setState({
-        	visible: false,
-        	confirmLoading: false,
-      		});
-    	}, 2000);
-  	}
-
 
 
   	render() {
@@ -234,34 +235,18 @@ class PeopleManagementRecordsViewF extends React.Component{
 	      		</Card>
 	      		<br/>
 	      		<div>
-	      		<Button
-	      			style={{margin: '0px 20px' }}
-	      			shape="circle"
-	      			icon="plus"
-	      			size="large"
-	      			type="primary"
-	      			onClick={this.showModal}
-	      			>
-	      		</Button>
-	      		<Modal
-		          	visible={visible}
-		          	title="新增人员管理档案记录"
-		          	onOk={this.handleOk}
-          			
-          			onCancel={this.handleCancel}
-		          	footer={[
-		            	<Button key="back" type="danger" onClick={this.handleCancel}>返回</Button>,
-		            	<Button key="submit" type="primary" loading={loading} >
-		              	提交
-		            	</Button>,
-		          	]}
-		        	>
-		          	<p>Some contents...</p>
-		          	<p>Some contents...</p>
-		          	<p>Some contents...</p>
-		          	<p>Some contents...</p>
-		          	<p>Some contents...</p>
-		        </Modal>
+	      		<Button 
+	      			type="primary" 
+	      			shape='circle' 
+	      			onClick={this.showModal} 
+	      			icon='plus' 
+	      			style={{margin:'0px 20px'}}></Button>
+			        <AddPeopleForm
+			          	wrappedComponentRef={this.saveFormRef}
+			          	visible={this.state.visible}
+			          	onCancel={this.handleCancel}
+			          	onCreate={this.handleCreate}
+			        />
 	      		<Button
 	      			shape="circle"
 	      			icon="minus"

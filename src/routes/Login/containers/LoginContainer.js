@@ -40,7 +40,7 @@ const initialState =
 	        code: "0-0",      
 	        name: "人员档案管理记录",
 	        modulePath: "/index/system",
-	        menuPath: "/PeopleManagementRecords"
+	        menuPath: "/PeopleManagementRecords",
         	}
         ]
     }]
