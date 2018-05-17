@@ -15,7 +15,7 @@ class StandardListView extends ListView
 
         //add
         this.operationComponent = StandardOperationComponent;
-        //this.addAuthString = 'addStandard';
+        this.addAuthString = 'addStandard';
         this.deleteAuthString = 'deleteStandard';
 
         //list

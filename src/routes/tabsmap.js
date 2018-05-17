@@ -8,8 +8,10 @@ import RoleListView from 'routes/System/subviews/RoleList/components/RoleListVie
 
 import ItemContainer from 'common/basic/containers/ItemContainer';
 
-import TestView from 'routes/test/TestView'
-import TestListView from 'routes/test/TestListView'
+import TestView from 'routes/test/TestView';
+import TestListView from 'routes/test/TestListView';
+
+import PeopleManagementRecordsView from 'routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView';
 
 const tabsmap = 
 [
@@ -32,15 +34,11 @@ const tabsmap =
     {
         path: '/role_list',
         component: ItemContainer('role', RoleListView)
-    }/*,
-    {
-        path: '/testSub2_list',
-        component: TestView
     },
     {
-        path: '/testSub1_list',
-        component: TestListView
-    }*/
+        path: '/PeopleManagementRecords',
+        component: PeopleManagementRecordsView
+    }
 ]
 
 export default tabsmap

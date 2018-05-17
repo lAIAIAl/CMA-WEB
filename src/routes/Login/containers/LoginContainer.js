@@ -35,20 +35,13 @@ const initialState =
         moduleIcon: "setting",
         modulePath: "/index/system",
         menus:[
-/*        	{
+        	{
 	        id: "0-0",       
 	        code: "0-0",      
-	        name: "testSubSideBar1",
-	        modulePath: "/index/test",
-	        menuPath: "/testSub1_list"
-        	},
-        	{
-	        id: "0-1",       
-	        code: "0-1",      
-	        name: "testSubSideBar2",
-	        modulePath: "/index/test",
-	        menuPath: "/testSub2_list"
-        	}*/
+	        name: "人员档案管理记录",
+	        modulePath: "/index/system",
+	        menuPath: "/PeopleManagementRecords"
+        	}
         ]
     }]
 }
