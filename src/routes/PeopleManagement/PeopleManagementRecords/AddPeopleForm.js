@@ -2,12 +2,15 @@ import React from 'react';
 import { Form, Input, Icon, Row, Col, Button, Card} from 'antd';
 import {Table, Divider, Modal, Avatar, Upload, message} from 'antd';
 
+import {baseAddress} from 'services';
+
 const FormItem = Form.Item;
 
 const props = {
     name: 'file',
     action: '//jsonplaceholder.typicode.com/posts/',
     headers: {
+      //此处
       authorization: 'authorization-text',
     },
     onChange(info) {
@@ -59,7 +62,7 @@ class extends React.Component {
                       )}
                   </FormItem>
                   <FormItem label="档案编号">
-                      {getFieldDecorator('id', {
+                      {getFieldDecorator('fileId', {
                           rules: [{ required: true, message: '请输入档案编号！' }],
                       })(
                           <Input />
@@ -72,17 +75,7 @@ class extends React.Component {
                           <Input />
                       )}
                   </FormItem>
-                  <FormItem label="档案存放位置">
-                      {getFieldDecorator('pic', {
-                         
-                      })(
-                          <Upload {...props}>
-                              <Button>
-                                  <Icon type="upload" /> 上传档案扫描件
-                              </Button>
-                          </Upload>
-                      )}
-                  </FormItem>
+
                   
               </Form>
           </Modal>
@@ -92,3 +85,16 @@ class extends React.Component {
 );
 
 export default AddPeopleForm;
+
+/*                  <FormItem label="档案扫描件">
+                      {getFieldDecorator('fileImage', {
+                         
+                      })(  
+                          <Upload {...props}>
+                              <Button>
+                                  <Icon type="upload" /> 上传档案扫描件
+                              </Button>
+                          </Upload>
+
+                      )}
+                  </FormItem>*/

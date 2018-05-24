@@ -1,74 +1,18 @@
 import React from 'react';
 import { Form, Input, Icon, Row, Col, Button, Card} from 'antd';
-import {Table, Divider, Modal, Avatar, Radio} from 'antd';
+import {Table, Divider, Modal, Avatar, Radio, message} from 'antd';
 const { Column, ColumnGroup } = Table;
 
+import {baseAddress} from 'services';
 import OperationComponent from 'common/basic/components/OperationComponent';
-import AddPeopleForm from './AddPeopleForm'
+import AddPeopleForm from './AddPeopleForm';
+import InspectPeople from './InspectPeople';
+import $ from 'lib/jquery-3.3.1';
 
 const FormItem = Form.Item;
 //名称，部门，职位，档案编号，档案存放位置，档案扫描件
-const columns = [
-{
-  title: '名称',
-  dataIndex: 'name',
-}, 
-{
-  title: '部门',
-  dataIndex: 'department',
-}, 
-{
-  title: '职位',
-  dataIndex: 'position',
-},
-{
-  title: '档案编号',
-  dataIndex: 'id',
-}, 
-{
-  title: '档案存放位置',
-  dataIndex: 'location',
-}
-];
 
-let data = [
-{
-	key: '1231',
-	name: 'lxd',	    //名称
-	department: '档案部',	//部门
-    position: '主任',    //职位
-    id: '78098109',          //档案编号
-    location: '档案室',    //档案位置
-    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
-},
-{
-	key: '1-1',
-	name: 'wlz',	    //名称
-	department: '档案部',	//部门
-    position: '主任',    //职位
-    id: '1756709',          //档案编号
-    location: '档案室',    //档案位置
-    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
-},
-{
-	key: '113-no',
-	name: 'cc',	    //名称
-	department: '档案部',	//部门
-    position: '主任',    //职位
-    id: '10298',          //档案编号
-    location: '档案室',    //档案位置
-    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
-},
-{
-	key: '12OIP3522',
-	name: 'zt',	    //名称
-	department: '档案部',	//部门
-    position: '主任',    //职位
-    id: '10209',          //档案编号
-    location: '档案室',    //档案位置
-    fileImage: '/src/dsafa'   //档案扫描件（图片在服务器的位置）
-}
-];
+
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
@@ -85,37 +29,47 @@ function hasErrors(fieldsError) {
 }
 
 function handleImage(text){
-	let x = data.find(function(x){
+	let x = fileData.find(function(x){
   		return x.name == text;
   	});
 	console.log(x);
 }
 
 
-function sendMessage(url, OPTION, data, action){
+function sendMessage(url, OPTION, sendData, sucessAction, failAction){
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open(OPTION, url, true);
+	//xmlhttp.dataType = 'jsonp';
 	xmlhttp.onreadystatechange=function(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-    		action();
+    		sucessAction(xmlhttp);
     	}
     	if(xmlhttp.status==404){
-    		window.alert("404!");
-    		//action();
+    		//window.alert("404!");
+    		failAction();
     	}
   	};
-	xmlhttp.send(JSON.stringify(data));
+	xmlhttp.send(sendData);
 }
-
-
 
 class PeopleManagementRecordsViewF extends React.Component{
 
 	state = {
 	    selectedRowKeys: [], // Check here to configure the default column
+	    fileData: [],
 	    loading: false,
 		visible: false,
+
 	};
+
+	constructor(props){
+		super(props);
+
+	}
+
+  	handleInspect = (props) => {
+        this.props.addTab("人员详情", "人员详情", InspectPeople, props);
+    }
 
 	handleCreate = () => {
     	const form = this.formRef.props.form;
@@ -123,12 +77,35 @@ class PeopleManagementRecordsViewF extends React.Component{
       		if (err) {
       		  	return;
       		}
-      		//TODO:ajax add
-      		console.log('Received values of form: ', values);
+      		//TODO:ajax add.
       		let temp = values;
-      		temp.key = data.length;
-      		data.push(temp);
+
+      		temp.fileImage = null;
+      		
+
+  			console.log(JSON.stringify(temp));
+/*  			$.post(baseAddress+"/cma/StaffFile/addStaff",
+  				JSON.stringify(temp),
+  				(res, status) => {
+  					message.success("成功");
+  				},
+  				"json");*/
+  			$.ajax({
+		      	type: "post",
+		      	dataType: 'json',
+		      	url: baseAddress+"/cma/StaffFile/addStaff",
+		      	contentType: 'application/json',
+		      	data: JSON.stringify(temp),
+		      	//data: temp,
+		      	success: function (d) {
+		      		message.success("新增成功");
+		      	}
+		    });
+		    temp.key = -this.state.fileData.length;
+  			this.state.fileData.push(temp);
+
       		form.resetFields();
+
       		this.setState({ visible: false });
     	});
   	}
@@ -149,13 +126,39 @@ class PeopleManagementRecordsViewF extends React.Component{
     // To disabled submit button at the beginning.
     	this.props.form.validateFields();
   	}
-
+	
+  	componentWillMount() {
+  		$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
+  			console.log(res);
+  			for (var i = res.length - 1; i >= 0; i--) {
+  				res[i].key = res[i].id;
+  			}
+  			this.setState({
+		        fileData: res,
+		    });
+  		});
+  	}
   
   	handleSubmit = (e) => {
     	e.preventDefault();
     	this.props.form.validateFields((err, values) => {
       		if (!err) {
       			//TODO:ajax
+      			let url = baseAddress+'/cma/StaffFile/querybyname?name=';
+      			url += values.peopleName;
+
+		    	sendMessage(url,
+		  			"GET",
+		  			null,
+		  			function(xmlhttp){
+		  				//data = xmlhttp.responseText;
+		  				console.log("返回结果：" + xmlhttp.responseText);
+		  				message.success("获取数据成功");
+		  			},
+		  			function(){
+		  				message.error("无法获取数据");
+		  			}
+		  		);
         		console.log('Received values of form: ', values);
       		}
     	});
@@ -166,22 +169,32 @@ class PeopleManagementRecordsViewF extends React.Component{
 
   		this.setState({ loading: true });
   		for (let i = selectedRowKeys.length - 1; i >= 0; i--) {
-  			let x = data.findIndex(function(x){
+  			let x = this.state.fileData.findIndex(function(x){
   				return x.key == selectedRowKeys[i];
   			});
+  			let deleteName = this.state.fileData[x].name;
 
-  			if(x>-1)data.splice(x,1);
-
+  			$.ajax({
+		      	type: "post",
+		      	dataType: 'json',
+		      	url: baseAddress+"/cma/StaffFile/delete",
+		      	contentType: 'application/json',
+		      	data: JSON.stringify({name:deleteName}),
+		      	success: function (d) {
+		      	}
+		    });
+  			this.state.fileData.splice(x,1);
   		}
   		//TODO:ajax request
-  		this.setState({ loading: false });	
+  		this.setState({ 
+  			loading: false,
+  			selectedRowKeys:[] });	
   	}
 
   	onSelectChange = (selectedRowKeys) => {
     	console.log('selectedRowKeys changed: ', selectedRowKeys);
     	this.setState({ selectedRowKeys });
   	}
-
 
   	render() {
 	  	const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
@@ -194,7 +207,50 @@ class PeopleManagementRecordsViewF extends React.Component{
 		    onChange: this.onSelectChange,
 		};
 		const hasSelected = selectedRowKeys.length > 0;
-
+		const columns = [
+			{
+			  title: '名称',
+			  dataIndex: 'name',
+			  key: 'name',
+			}, 
+			{
+			  title: '部门',
+			  dataIndex: 'department',
+			  key: 'department',
+			}, 
+			{
+			  title: '职位',
+			  dataIndex: 'position',
+			  key: 'position',
+			},
+			{
+			  title: '档案编号',
+			  dataIndex: 'fileId',
+			  key: 'fileId',
+			}, 
+			{
+			  title: '档案存放位置',
+			  dataIndex: 'location',
+			  key: 'location',
+			},
+			{
+			  title: '操作',
+			  dataIndex: 'detail',
+			  key: 'detail',
+			  render: (text, record) => {
+			  	var props = 
+			  	{
+			        item: record
+			    };
+			  	return (
+			  		<a 
+			  			onClick={()=>{this.handleInspect(props)}}>
+			  			查看和修改
+			  		</a>
+			  	);
+			  }
+			}
+		];
 	    return (
 	    	<div>
 	    		<Card>
@@ -222,17 +278,12 @@ class PeopleManagementRecordsViewF extends React.Component{
 	      		</Form>
 	      		</Card>
 
-	      		<Card>
 	      			<Table 
 	      				rowSelection={rowSelection} 
 	      				columns={columns} 
-	      				expandedRowRender={record => 
-	      					<p>
-	      						<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-	      					</p>}
-	      				dataSource={data}>
+	      				
+	      				dataSource={this.state.fileData}>
   					</Table>
-	      		</Card>
 	      		<br/>
 	      		<div>
 	      		<Button 
@@ -264,19 +315,3 @@ class PeopleManagementRecordsViewF extends React.Component{
 
 const PeopleManagementRecordsView = Form.create()(PeopleManagementRecordsViewF);
 export default PeopleManagementRecordsView;
-
-/*export default class PeopleManagementRecordsView extends React.Component{
-	constructor(props){
-		super(props);
-
-	}
-	render (){
-		const PMRV = Form.create()(PeopleManagementRecordsViewF);
-		return(
-			<div>
-				<PMRV />
-
-			</div>
-		);
-	}
-}*/

@@ -4,6 +4,94 @@
 		"selected_items":
 		[
 			[
+				"da",
+				"dataType"
+			],
+			[
+				"form",
+				"formData"
+			],
+			[
+				"修改",
+				"修改成功"
+			],
+			[
+				"档案",
+				"档案扫描件"
+			],
+			[
+				"de",
+				"defaltVal"
+			],
+			[
+				"fil",
+				"fileImage"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"temp",
+				"tempdata"
+			],
+			[
+				"const",
+				"constructor"
+			],
+			[
+				"Ins",
+				"InspectPeople"
+			],
+			[
+				"data",
+				"dataIndex"
+			],
+			[
+				"dele",
+				"deleteName"
+			],
+			[
+				"bas",
+				"baseAddress"
+			],
+			[
+				"new",
+				"newData"
+			],
+			[
+				"file",
+				"fileData"
+			],
+			[
+				"T",
+				"responseText"
+			],
+			[
+				"le",
+				"length"
+			],
+			[
+				"we",
+				"webpackConfig"
+			],
+			[
+				"webp",
+				"webpackConfig"
+			],
+			[
+				"x",
+				"xmlhttp"
+			],
+			[
+				"XM",
+				"xmlhttp"
+			],
+			[
+				"peo",
+				"peopleName"
+			],
+			[
 				"Fo",
 				"Form"
 			],
@@ -48,10 +136,6 @@
 				"selectedRowKeys"
 			],
 			[
-				"con",
-				"console"
-			],
-			[
 				"send",
 				"sendMessage"
 			],
@@ -91,43 +175,90 @@
 			"file": "src/routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView.js",
 			"settings":
 			{
-				"buffer_size": 6732,
+				"buffer_size": 7843,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
+			"contents": "#include <stdarg.h>\n#include <stdlib.h>\n#include <assert.h>\n#include <string.h>\n#include \"AST.h\"\n#include \"ir.h\"\n#include \"sym_table.h\"\n#include \"debug.h\"\n\nInterCodes* newInterCodes() {\n    InterCodes* p = (InterCodes*)malloc(sizeof(InterCodes));\n    p->next = p->prev = NULL;\n    p->code.result.u.var_id = -1;\n    p->code.arg1.u.var_id = -1;\n    p->code.arg2.u.var_id = -1;\n    return p;\n}\n\nArgNode* newArgNode(int var_id) {\n    ArgNode *arg = (ArgNode*)malloc(sizeof(ArgNode));\n    arg->next = NULL;\n    arg->var_id = var_id;\n    return arg;\n}\n\nint variableId = 1;\nint newVariableId() {\n    return variableId++;\n}\n\nint newLabelId() {\n    static int id = 1;\n    return id++;\n}\n\nstatic InterCodes* getInterCodesTail(InterCodes* head) {\n    if (head == NULL) return NULL;\n    while (head->next != NULL) {\n        head = head->next;\n    }\n    return head;\n}\n\nInterCodes* concatInterCodes(int count, ...) {\n    // input can be:\n    //     NULL code1 code2 NULL NULL code3 ...\n    if (count < 1) return NULL;\n\n    va_list argp;\n    va_start(argp, count);\n\n    InterCodes *head, *tail, *p;\n    int i = 1;\n    head = tail = va_arg(argp, InterCodes*);\n\n    // find the first Not NULL value\n    while (head == NULL && i < count) {\n        head = tail = va_arg(argp, InterCodes*);\n        i++;\n    }\n    if (i >= count) return head;\n\n    assert(head);\n    assert(tail);\n    for (; i < count; i++) {\n        p = va_arg(argp, InterCodes*);\n        if (p == NULL)\n            continue;\n        tail = getInterCodesTail(tail);\n        assert(tail);\n        tail->next = p;\n        p->prev = tail;\n    }\n\n    va_end(argp);\n    return head;\n}\n\nInterCodes* deleteInterCode(InterCodes *head, InterCodes *del) {\n    InterCodes *newHead = head;\n    if (head == NULL || del == NULL) return NULL;\n    if (head != del && del->next != NULL) {\n        del->prev->next = del->next;\n        del->next->prev = del->prev;\n    }\n    else if (head != del) {\n        del->prev->next = NULL;\n    }\n    else if (del->next != NULL) {\n        del->next->prev = NULL;\n        newHead = del->next;\n    }\n    else {\n        newHead = NULL;\n    }\n    //TODO: free (InterCodes*)del\n    return newHead;\n}\n\nInterCodes* genLabelCode(int label_id) {\n    InterCodes* codes = newInterCodes();\n    codes->code.kind = IR_LABEL;\n    codes->code.result.kind = OP_LABEL;\n    codes->code.result.u.label_id = label_id;\n    return codes;\n}\n\nInterCodes* genGotoCode(int label_id) {\n    InterCodes* codes = newInterCodes();\n    codes->code.kind = IR_GOTO;\n    codes->code.result.kind = OP_LABEL;\n    codes->code.result.u.label_id = label_id;\n    return codes;\n}\n\nenum RELOP_TYPE get_relop(ASTNode *RELOP) {\n    assert(RELOP);\n    assert(RELOP->type == AST_RELOP);\n\n    if (strcmp(RELOP->val.c, \"<\") == 0) {\n        return RELOP_LT;\n    } else if (strcmp(RELOP->val.c, \"<=\") == 0) {\n        return RELOP_LE;\n    } else if (strcmp(RELOP->val.c, \"==\") == 0) {\n        return RELOP_EQ;\n    } else if (strcmp(RELOP->val.c, \">\") == 0) {\n        return RELOP_GT;\n    } else if (strcmp(RELOP->val.c, \">=\") == 0) {\n        return RELOP_GE;\n    } else if (strcmp(RELOP->val.c, \"!=\") == 0) {\n        return RELOP_NE;\n    } else {\n        assert(0);\n    }\n}\n\nenum RELOP_TYPE get_reverse_relop(enum RELOP_TYPE relop) {\n    switch (relop) {\n        case RELOP_LT: return RELOP_GE;\n        case RELOP_LE: return RELOP_GT;\n        case RELOP_EQ: return RELOP_NE;\n        case RELOP_GT: return RELOP_LE;\n        case RELOP_GE: return RELOP_LT;\n        case RELOP_NE: return RELOP_EQ;\n        default: assert(0);\n    }\n}\n\nInterCodes* translate_Exp(ASTNode* Exp, int place) {\n    assert(Exp);\n    assert(Exp->type == AST_Exp);\n\n    InterCodes* codes = newInterCodes();\n    if (Exp->child->type == AST_INT) { // Exp -> INT\n        codes->code.kind = IR_ASSIGN;\n        codes->code.result.kind = OP_TEMP;\n        codes->code.result.u.var_id = place;\n        codes->code.arg1.kind = OP_CONSTANT;\n        codes->code.arg1.u.value = Exp->child->val.i;\n    } else if (Exp->child->type == AST_ID && Exp->child->sibling == NULL) { // Exp -> ID\n        codes->code.kind = IR_ASSIGN;\n        codes->code.result.kind = OP_TEMP;\n        codes->code.result.u.var_id = place;\n        Symbol sym = lookupSymbol(Exp->child->val.c, true);\n        codes->code.arg1.kind = OP_VARIABLE;\n        codes->code.arg1.symbol = sym;\n    } else if(Exp->child->type == AST_FLOAT) {\n        assert(0);\n    } else if (Exp->child->type == AST_LP) {  // Exp -> LP Exp RP\n        codes = translate_Exp(Exp->child->sibling, place);\n    } else if (Exp->child->sibling->type == AST_ASSIGNOP) { // Exp -> EXP1 ASSIGNOP Exp2\n        if (Exp->child->child->type == AST_ID) { // Exp1 -> ID\n            Symbol variable = lookupSymbol(Exp->child->child->val.c, true);\n            int t1 = newVariableId();\n            InterCodes* code1 = translate_Exp(Exp->child->sibling->sibling, t1);\n\n            InterCodes* code2 = newInterCodes();\n            code2->code.kind = IR_ASSIGN;\n            code2->code.result.kind = OP_VARIABLE;\n            code2->code.result.symbol = variable;\n            code2->code.arg1.kind = OP_TEMP;\n            code2->code.arg1.u.var_id = t1;\n\n            InterCodes* code3 = newInterCodes();\n            code3->code.kind = IR_ASSIGN;\n            code3->code.result.kind = OP_TEMP;\n            code3->code.result.u.var_id = place;\n            code3->code.arg1.kind = OP_VARIABLE;\n            code3->code.arg1.symbol = variable;\n\n            codes = concatInterCodes(3, code1, code2, code3);\n        }\n        else if (Exp->child->child->subtype == ARRAY_USE) { // Exp1 -> Exp LB Exp RB   i.e. Exp1 is array\n            int t1 = newVariableId();\n            int t2 = newVariableId();\n            InterCodes* code1 = translate_Exp(Exp->child->child, t1);\n            InterCodes* code2 = translate_Exp(Exp->child->child->sibling->sibling, t2);\n\n            int t3 = newVariableId();\n            InterCodes* code3 = newInterCodes();\n            code3->code.kind = IR_MUL;\n            code3->code.result.kind = OP_TEMP;\n            code3->code.result.u.var_id = t3;\n            code3->code.arg1.kind = OP_TEMP;\n            code3->code.arg1.u.var_id = t2;\n            code3->code.arg2.kind = OP_CONSTANT;\n            code3->code.arg2.u.value = getTypeSize(Exp->child->expType);\n\n            int t4 = newVariableId();\n            InterCodes* code4 = newInterCodes();\n            code4->code.kind = IR_ADD;\n            code4->code.result.kind = OP_TEMP;\n            code4->code.result.u.var_id = t4;\n            code4->code.arg1.kind = OP_TEMP;\n            code4->code.arg1.u.var_id = t1;\n            code4->code.arg2.kind = OP_TEMP;\n            code4->code.arg2.u.var_id = t3;\n\n            int t5 = newVariableId();\n            InterCodes* code5 = translate_Exp(Exp->child->sibling->sibling, t5);\n\n            InterCodes* code6 = newInterCodes();\n            code6->code.kind = IR_DEREF_L;\n            code6->code.result.kind = OP_TEMP;\n            code6->code.result.u.var_id = t4;\n            code6->code.arg1.kind = OP_TEMP;\n            code6->code.arg1.u.var_id = t5;\n\n            InterCodes* code7 = newInterCodes();\n            code7->code.kind = IR_ASSIGN;\n            code7->code.result.kind = OP_TEMP;\n            code7->code.result.u.var_id = place;\n            code7->code.arg1.kind = OP_TEMP;\n            code7->code.arg1.u.var_id = t5;\n\n            codes = concatInterCodes(7, code1, code2, code3, code4, code5, code6, code7);\n        }\n        else if (Exp->child->child->subtype == STRUCT_USE) { // Exp1 -> Exp DOT Exp   i.e. Exp1 is struct\n            char *name = Exp->child->child->sibling->sibling->val.c;\n            int t1 = newVariableId();\n            InterCodes* code1 = translate_Exp(Exp->child->child, t1);\n\n            assert(Exp->child->child->expType->kind == STRUCTURE);\n            FieldList field = Exp->child->child->expType->u.structure;\n            int offset = 0;\n            while (strcmp(field->name, name) != 0) {\n                offset += getTypeSize(field->type);\n                assert(field->tail != NULL);\n                field = field->tail;\n            }\n\n            int t2 = newVariableId();\n            InterCodes* code2 = newInterCodes();\n            code2->code.kind = IR_ADD;\n            code2->code.result.kind = OP_TEMP;\n            code2->code.result.u.var_id = t2;\n            code2->code.arg1.kind = OP_TEMP;\n            code2->code.arg1.u.var_id = t1;\n            code2->code.arg2.kind = OP_CONSTANT;\n            code2->code.arg2.u.value = offset;\n\n            int t3 = newVariableId();\n            InterCodes* code3 = translate_Exp(Exp->child->sibling->sibling, t3);\n\n            InterCodes* code4 = newInterCodes();\n            code4->code.kind = IR_DEREF_L;\n            code4->code.result.kind = OP_TEMP;\n            code4->code.result.u.var_id = t2;\n            code4->code.arg1.kind = OP_TEMP;\n            code4->code.arg1.u.var_id = t3;\n\n            InterCodes* code5 = newInterCodes();\n            code5->code.kind = IR_ASSIGN;\n            code5->code.result.kind = OP_TEMP;\n            code5->code.result.u.var_id = place;\n            code5->code.arg1.kind = OP_TEMP;\n            code5->code.arg1.u.var_id = t3;\n\n            codes = concatInterCodes(5, code1, code2, code3, code4, code5);\n        }\n        else {\n            assert(0);\n        }\n    } else if (Exp->child->sibling->type == AST_PLUS) { // Exp -> EXP PLUS Exp\n        int t1 = newVariableId();\n        int t2 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child, t1);\n        InterCodes* code2 = translate_Exp(Exp->child->sibling->sibling, t2);\n\n        InterCodes* code3 = newInterCodes();\n        code3->code.kind = IR_ADD;\n        code3->code.result.kind = OP_TEMP;\n        code3->code.result.u.var_id = place;\n        code3->code.arg1.kind = OP_TEMP;\n        code3->code.arg1.u.var_id = t1;\n        code3->code.arg2.kind = OP_TEMP;\n        code3->code.arg2.u.var_id = t2;\n\n        codes = concatInterCodes(3, code1, code2, code3);\n    } else if (Exp->child->sibling->type == AST_MINUS) { // Exp -> EXP MINUS Exp\n        int t1 = newVariableId();\n        int t2 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child, t1);\n        InterCodes* code2 = translate_Exp(Exp->child->sibling->sibling, t2);\n\n        InterCodes* code3 = newInterCodes();\n        code3->code.kind = IR_SUB;\n        code3->code.result.kind = OP_TEMP;\n        code3->code.result.u.var_id = place;\n        code3->code.arg1.kind = OP_TEMP;\n        code3->code.arg1.u.var_id = t1;\n        code3->code.arg2.kind = OP_TEMP;\n        code3->code.arg2.u.var_id = t2;\n\n        codes = concatInterCodes(3, code1, code2, code3);\n    } else if (Exp->child->sibling->type == AST_STAR) { // Exp -> EXP STAR Exp\n        int t1 = newVariableId();\n        int t2 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child, t1);\n        InterCodes* code2 = translate_Exp(Exp->child->sibling->sibling, t2);\n\n        InterCodes* code3 = newInterCodes();\n        code3->code.kind = IR_MUL;\n        code3->code.result.kind = OP_TEMP;\n        code3->code.result.u.var_id = place;\n        code3->code.arg1.kind = OP_TEMP;\n        code3->code.arg1.u.var_id = t1;\n        code3->code.arg2.kind = OP_TEMP;\n        code3->code.arg2.u.var_id = t2;\n\n        codes = concatInterCodes(3, code1, code2, code3);\n    } else if (Exp->child->sibling->type == AST_DIV) { // Exp -> EXP DIV Exp\n        int t1 = newVariableId();\n        int t2 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child, t1);\n        InterCodes* code2 = translate_Exp(Exp->child->sibling->sibling, t2);\n\n        InterCodes* code3 = newInterCodes();\n        code3->code.kind = IR_DIV;\n        code3->code.result.kind = OP_TEMP;\n        code3->code.result.u.var_id = place;\n        code3->code.arg1.kind = OP_TEMP;\n        code3->code.arg1.u.var_id = t1;\n        code3->code.arg2.kind = OP_TEMP;\n        code3->code.arg2.u.var_id = t2;\n\n        codes = concatInterCodes(3, code1, code2, code3);\n    } else if (Exp->child->type == AST_MINUS) { // Exp -> MINUS Exp\n        int t1 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child->sibling, t1);\n\n        InterCodes* code2 = newInterCodes();\n        code2->code.kind = IR_SUB;\n        code2->code.result.kind = OP_TEMP;\n        code2->code.result.u.var_id = place;\n        code2->code.arg1.kind = OP_CONSTANT;\n        code2->code.arg1.u.value = 0;\n        code2->code.arg2.kind = OP_TEMP;\n        code2->code.arg2.u.var_id = t1;\n\n        codes = concatInterCodes(2, code1, code2);\n    } else if (Exp->child->sibling->type == AST_RELOP ||\n               Exp->child->sibling->type == AST_AND ||\n               Exp->child->sibling->type == AST_OR ||\n               Exp->child->type == AST_NOT) {\n        int true_label = newLabelId();\n        int false_label = newLabelId();\n\n        InterCodes* code1 = newInterCodes();\n        code1->code.kind = IR_ASSIGN;\n        code1->code.result.kind = OP_TEMP;\n        code1->code.result.u.var_id = place;\n        code1->code.arg1.kind = OP_CONSTANT;\n        code1->code.arg1.u.value = 0;\n\n        InterCodes* code2 = translate_Cond(Exp, true_label, false_label);\n\n        InterCodes* code3 = genLabelCode(true_label);\n\n        InterCodes* code4 = newInterCodes();\n        code4->code.kind = IR_ASSIGN;\n        code4->code.result.kind = OP_TEMP;\n        code4->code.result.u.var_id = place;\n        code4->code.arg1.kind = OP_CONSTANT;\n        code4->code.arg1.u.value = 1;\n\n        InterCodes* code5 = genLabelCode(false_label);\n\n        codes = concatInterCodes(5, code1, code2, code3, code4, code5);\n    } else if (Exp->child->type == AST_ID && Exp->child->sibling->type == AST_LP) {\n        if (Exp->child->sibling->sibling->type == AST_RP) { // ID LP RP\n            Symbol func = lookupSymbol(Exp->child->val.c, true);\n            if (strcmp(func->name, \"read\") == 0) {\n                codes->code.kind = IR_READ;\n                codes->code.result.kind = OP_TEMP;\n                codes->code.result.u.var_id = place;\n            } else {\n                codes->code.kind = IR_CALL;\n                codes->code.result.kind = OP_TEMP;\n                codes->code.result.u.var_id = place;\n                codes->code.arg1.kind = OP_FUNCTION;\n                codes->code.arg1.symbol = func;\n            }\n        } else { // ID LP Args RP\n            Symbol func = lookupSymbol(Exp->child->val.c, true);\n\n            ArgNode* arg_list = NULL;\n            InterCodes* code1 = translate_Args(Exp->child->sibling->sibling, &arg_list);\n            if (strcmp(func->name, \"write\") == 0) {\n                assert(arg_list);\n                assert(arg_list->next == NULL);\n                InterCodes* code2 = newInterCodes();\n                code2->code.kind = IR_WRITE;\n                code2->code.result.kind = OP_TEMP;\n                code2->code.result.u.var_id = arg_list->var_id;\n                codes = concatInterCodes(2, code1, code2);\n            } else {\n                InterCodes* code2 = NULL;\n                for (ArgNode* p = arg_list; p != NULL; p = p->next) {\n                    InterCodes* tmp_code = newInterCodes();\n                    tmp_code->code.kind = IR_ARG;\n                    tmp_code->code.result.kind = OP_TEMP;\n                    tmp_code->code.result.u.var_id = p->var_id;\n                    if (code2 == NULL) {\n                        code2 = tmp_code;\n                    } else {\n                        code2 = concatInterCodes(2, code2, tmp_code);\n                    }\n                }\n\n                InterCodes* code3 = newInterCodes();\n                code3->code.kind = IR_CALL;\n                code3->code.result.kind = OP_TEMP;\n                code3->code.result.u.var_id = place;\n                code3->code.arg1.kind = OP_FUNCTION;\n                code3->code.arg1.symbol = func;\n\n                codes = concatInterCodes(3, code1, code2, code3);\n                // TODO: dealloc arg_list\n            }\n        }\n    } else if (Exp->child->type == AST_Exp && Exp->child->sibling->type == AST_LB) { // Exp -> Exp LB Exp RB\n        int t1 = newVariableId();\n        int t2 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child, t1);\n        InterCodes* code2 = translate_Exp(Exp->child->sibling->sibling, t2);\n\n        int t3 = newVariableId();\n        InterCodes* code3 = newInterCodes();\n        code3->code.kind = IR_MUL;\n        code3->code.result.kind = OP_TEMP;\n        code3->code.result.u.var_id = t3;\n        code3->code.arg1.kind = OP_TEMP;\n        code3->code.arg1.u.var_id = t2;\n        code3->code.arg2.kind = OP_CONSTANT;\n        code3->code.arg2.u.value = getTypeSize(Exp->expType);\n\n        int t4 = newVariableId();\n        int t5 = place;\n        InterCodes* code4 = newInterCodes();\n        InterCodes* code5 = NULL;\n        if (Exp->expType->kind == BASIC) {  // derefernce\n            t5 = newVariableId();\n            code5 = newInterCodes();\n            code5->code.kind = IR_DEREF_R;\n            code5->code.result.kind = OP_TEMP;\n            code5->code.result.u.var_id = place;\n            code5->code.arg1.kind = OP_TEMP;\n            code5->code.arg1.u.var_id = t5;\n        }\n        code4->code.kind = IR_ADD;\n        code4->code.result.kind = OP_TEMP;\n        code4->code.result.u.var_id = t5;\n        code4->code.arg1.kind = OP_TEMP;\n        code4->code.arg1.u.var_id = t1;\n        code4->code.arg2.kind = OP_TEMP;\n        code4->code.arg2.u.var_id = t3;\n\n        codes = concatInterCodes(5, code1, code2, code3, code4, code5);\n    } else if (Exp->child->type == AST_Exp && Exp->child->sibling->type == AST_DOT) { // Exp -> Exp DOT Exp\n        char *name = Exp->child->sibling->sibling->val.c;\n        int t1 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child, t1);\n\n        assert(Exp->child->expType->kind == STRUCTURE);\n        FieldList field = Exp->child->expType->u.structure;\n        int offset = 0;\n        while (strcmp(field->name, name) != 0) {\n            offset += getTypeSize(field->type);\n            assert(field->tail != NULL);\n            field = field->tail;\n        }\n\n        int t2 = place;\n        InterCodes* code2 = newInterCodes();\n        InterCodes* code3 = NULL;\n        if (Exp->expType->kind == BASIC) {  // derefernce\n            t2 = newVariableId();\n            code3 = newInterCodes();\n            code3->code.kind = IR_DEREF_R;\n            code3->code.result.kind = OP_TEMP;\n            code3->code.result.u.var_id = place;\n            code3->code.arg1.kind = OP_TEMP;\n            code3->code.arg1.u.var_id = t2;\n        }\n        code2->code.kind = IR_ADD;\n        code2->code.result.kind = OP_TEMP;\n        code2->code.result.u.var_id = t2;\n        code2->code.arg1.kind = OP_TEMP;\n        code2->code.arg1.u.var_id = t1;\n        code2->code.arg2.kind = OP_CONSTANT;\n        code2->code.arg2.u.value = offset;\n\n        codes = concatInterCodes(3, code1, code2, code3);\n    } else {\n        ASTwalk(Exp, 0);\n        assert(0);\n    }\n\n    return codes;\n}\n\nInterCodes* translate_Stmt(ASTNode *Stmt) {\n    assert(Stmt);\n    assert(Stmt->type == AST_Stmt);\n\n    InterCodes* codes = NULL;\n\n    if (Stmt->child->type == AST_CompSt) { // Stmt -> CompSt\n        codes = translate_CompSt(Stmt->child);\n    } else if (Stmt->child->type == AST_Exp) { // Stmt -> Exp SEMI\n        codes = translate_Exp(Stmt->child, VAR_NULL);\n    } else if (Stmt->child->type == AST_RETURN) { // Stmt -> RETURN Exp SEMI\n        int t1 = newVariableId();\n        InterCodes* code1 = translate_Exp(Stmt->child->sibling, t1);\n\n        InterCodes* code2 = newInterCodes();\n        code2->code.kind = IR_RETURN;\n        code2->code.result.kind = OP_TEMP;\n        code2->code.result.u.var_id = t1;\n\n        codes = concatInterCodes(2, code1, code2);\n    } else if (Stmt->child->type == AST_WHILE) { // Stmt -> WHILE LP Exp RP Stmt\n        int label1 = newLabelId();\n        int label2 = LABEL_FALL;    \n        int label3 = newLabelId();\n\n        InterCodes* code1 = translate_Cond(Stmt->child->sibling->sibling, label2, label3);\n        InterCodes* code2 = translate_Stmt(Stmt->child->sibling->sibling->sibling->sibling);\n\n        codes = concatInterCodes(5, genLabelCode(label1), code1,\n                                    code2, genGotoCode(label1), genLabelCode(label3));\n    } else if (Stmt->child->type == AST_IF) {\n        if (Stmt->child->sibling->sibling->sibling->sibling->sibling == NULL) { // Stmt -> IF LP Exp RP Stmt\n            int label1 = LABEL_FALL;\n            int label2 = newLabelId();\n            InterCodes* code1 = translate_Cond(Stmt->child->sibling->sibling, label1, label2);\n            InterCodes* code2 = translate_Stmt(Stmt->child->sibling->sibling->sibling->sibling);\n            codes = concatInterCodes(3, code1, code2, genLabelCode(label2));\n        } else { // IF LP Exp RP Stmt ELSE Stmt\n            int label1 = LABEL_FALL;\n            int label2 = newLabelId();\n            int label3 = newLabelId();\n            InterCodes* code1 = translate_Cond(Stmt->child->sibling->sibling, label1, label2);\n            InterCodes* code2 = translate_Stmt(Stmt->child->sibling->sibling->sibling->sibling);\n            InterCodes* code3 = translate_Stmt(Stmt->child->sibling->sibling->sibling->sibling->sibling->sibling);\n            codes = concatInterCodes(6, code1, code2, genGotoCode(label3), genLabelCode(label2),\n                                        code3, genLabelCode(label3));\n        }\n    } else {\n        assert(0);\n    }\n\n    return codes;\n}\n\nInterCodes* translate_StmtList(ASTNode *StmtList) {\n    assert(StmtList);\n    assert(StmtList->type == AST_StmtList);\n\n    InterCodes* codes = NULL;\n\n    if (StmtList->child != NULL) {\n        codes = translate_Stmt(StmtList->child);\n        InterCodes* code2 = translate_StmtList(StmtList->child->sibling);\n        if (code2 != NULL) {\n            codes = concatInterCodes(2, codes, code2);\n        }\n    }\n\n    return codes;\n}\n\nInterCodes* translate_CompSt(ASTNode *CompSt) {\n    assert(CompSt);\n    assert(CompSt->type == AST_CompSt);\n\n    InterCodes* code1 = translate_DefList(CompSt->child->sibling);\n    InterCodes* code2 = translate_StmtList(CompSt->child->sibling->sibling);\n\n    return concatInterCodes(2, code1, code2);\n}\n\nInterCodes* translate_DefList(ASTNode *DefList) {\n    assert(DefList);\n    assert(DefList->type == AST_DefList);\n\n    InterCodes* codes = NULL;\n\n    if (DefList->child != NULL) {\n        codes = translate_Def(DefList->child);\n        InterCodes* code2 = translate_DefList(DefList->child->sibling);\n        if (code2 != NULL) {\n            codes = concatInterCodes(2, codes, code2);\n        }\n    }\n\n    return codes;\n}\n\nInterCodes* translate_Def(ASTNode *Def) {\n    assert(Def);\n    assert(Def->type == AST_Def);\n\n    return translate_DecList(Def->child->sibling);\n}\n\nInterCodes* translate_DecList(ASTNode *DecList) {\n    assert(DecList);\n    assert(DecList->type == AST_DecList);\n\n    InterCodes* codes = NULL;\n\n    codes = translate_Dec(DecList->child);\n\n    if (DecList->child->sibling != NULL) {\n        InterCodes* code2 = translate_DecList(DecList->child->sibling->sibling);\n        if (code2 != NULL) {\n            codes = concatInterCodes(2, codes, code2);\n        }\n    }\n\n    return codes;\n}\n\nInterCodes* translate_Dec(ASTNode *Dec) {\n    assert(Dec);\n    assert(Dec->type == AST_Dec);\n\n    InterCodes* codes = NULL;\n\n    if (Dec->child->sibling == NULL) { // Dec -> VarDec\n        codes = translate_VarDec(Dec->child);\n    } else if (Dec->child->sibling != NULL) { // Dec -> VarDec ASSIGNOP Exp\n        int t1 = newVariableId();\n        assert(Dec->child->child->type == AST_ID);\n        Symbol variable = lookupSymbol(Dec->child->child->val.c, true);\n        InterCodes* code1 = translate_Exp(Dec->child->sibling->sibling, t1);\n\n        InterCodes* code2 = newInterCodes();\n        code2->code.kind = IR_ASSIGN;\n        code2->code.result.kind = OP_VARIABLE;\n        code2->code.result.symbol = variable;\n        code2->code.arg1.kind = OP_TEMP;\n        code2->code.arg1.u.var_id = t1;\n\n        codes = concatInterCodes(2, code1, code2);\n    } else {\n        assert(0);\n    }\n\n    return codes;\n}\n\nInterCodes* translate_Cond(ASTNode *Exp, int label_true, int label_false) {\n    assert(Exp);\n    assert(Exp->type == AST_Exp);\n\n    InterCodes* codes = NULL;\n    if (Exp->child->type == AST_NOT) { // Exp -> NOT Exp\n        codes = translate_Cond(Exp, label_false, label_true);\n    } else if (Exp->child->sibling->type == AST_RELOP) { // Exp -> Exp RELOP Exp\n        int t1 = newVariableId();\n        int t2 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp->child, t1);\n        InterCodes* code2 = translate_Exp(Exp->child->sibling->sibling, t2);\n\n        if (label_true != LABEL_FALL && label_false != LABEL_FALL) {\n            InterCodes* code3 = newInterCodes();\n            code3->code.kind = IR_RELOP;\n            code3->code.relop = get_relop(Exp->child->sibling);\n            code3->code.result.kind = OP_LABEL;\n            code3->code.result.u.label_id = label_true;\n            code3->code.arg1.kind = OP_TEMP;\n            code3->code.arg1.u.var_id = t1;\n            code3->code.arg2.kind = OP_TEMP;\n            code3->code.arg2.u.var_id = t2;\n\n            codes = concatInterCodes(4, code1, code2, code3, genGotoCode(label_false));\n        } else if (label_true != LABEL_FALL) {\n            InterCodes* code3 = newInterCodes();\n            code3->code.kind = IR_RELOP;\n            code3->code.relop = get_relop(Exp->child->sibling);\n            code3->code.result.kind = OP_LABEL;\n            code3->code.result.u.label_id = label_true;\n            code3->code.arg1.kind = OP_TEMP;\n            code3->code.arg1.u.var_id = t1;\n            code3->code.arg2.kind = OP_TEMP;\n            code3->code.arg2.u.var_id = t2;\n\n            codes = concatInterCodes(3, code1, code2, code3);\n        } else if (label_false != LABEL_FALL) {\n            InterCodes* code3 = newInterCodes();\n            code3->code.kind = IR_RELOP;\n            code3->code.relop = get_reverse_relop(get_relop(Exp->child->sibling));\n            code3->code.result.kind = OP_LABEL;\n            code3->code.result.u.label_id = label_false;\n            code3->code.arg1.kind = OP_TEMP;\n            code3->code.arg1.u.var_id = t1;\n            code3->code.arg2.kind = OP_TEMP;\n            code3->code.arg2.u.var_id = t2;\n\n            codes = concatInterCodes(3, code1, code2, code3);\n        } else {\n            codes = concatInterCodes(2, code1, code2);\n        }\n    } else if (Exp->child->sibling->type == AST_AND) { // Exp AND Exp\n        int label_Exp1_false;\n        if (label_false != LABEL_FALL) {\n            label_Exp1_false = label_false;\n        } else {\n            label_Exp1_false = newLabelId();\n        }\n\n        InterCodes* code1 = translate_Cond(Exp->child, LABEL_FALL, label_Exp1_false);\n        InterCodes* code2 = translate_Cond(Exp->child->sibling->sibling, label_true, label_false);\n\n        if (label_false != LABEL_FALL) {\n            codes = concatInterCodes(2, code1, code2);\n        } else {\n            codes = concatInterCodes(3, code1, code2, genLabelCode(label_Exp1_false));\n        }\n    } else if (Exp->child->sibling->type == AST_OR) { // Exp OR Exp\n        int label_Exp1_true;\n        if (label_true != LABEL_FALL) {\n            label_Exp1_true = label_true;\n        } else {\n            label_Exp1_true = newLabelId();\n        }\n\n        InterCodes* code1 = translate_Cond(Exp->child, label_Exp1_true, LABEL_FALL);\n        InterCodes* code2 = translate_Cond(Exp->child->sibling->sibling, label_true, label_false);\n\n        if (label_true != LABEL_FALL) {\n            codes = concatInterCodes(2, code1, code2);\n        } else {\n            codes = concatInterCodes(3, code1, code2, genLabelCode(label_Exp1_true));\n        }\n    } else {\n        int t1 = newVariableId();\n        InterCodes* code1 = translate_Exp(Exp, t1);\n\n        InterCodes* code2 = newInterCodes();\n        code2->code.kind = IR_RELOP;\n        code2->code.relop = RELOP_NE;\n        code2->code.result.kind = OP_LABEL;\n        code2->code.result.u.label_id = label_true;\n        code2->code.arg1.kind = OP_TEMP;\n        code2->code.arg1.u.var_id = t1;\n        code2->code.arg2.kind = OP_CONSTANT;\n        code2->code.arg2.u.var_id = 0;\n\n        codes = concatInterCodes(3, code1, code2, genGotoCode(label_false));\n    }\n    assert(codes);\n    return codes;\n}\n\nInterCodes* translate_Args(ASTNode *Args, ArgNode** arg_list) {\n    assert(Args);\n    assert(Args->type == AST_Args);\n\n    int t1 = newVariableId();\n    InterCodes* codes = translate_Exp(Args->child, t1);\n    ArgNode* arg = newArgNode(t1);\n    // append arg before arg_list\n    if (*arg_list == NULL) {\n        *arg_list = arg;\n    } else {\n        ArgNode* p = *arg_list;\n        *arg_list = arg;\n        (*arg_list)->next = p;\n    }\n\n    if (Args->child->sibling == NULL) { // Args -> Exp\n        return codes;\n    } else { // Args -> Exp COMMA Args\n        InterCodes* code2 = translate_Args(Args->child->sibling->sibling, arg_list);\n        return concatInterCodes(2, codes, code2);\n    }\n}\n\nInterCodes* translate_Program(ASTNode *Program) {\n    assert(Program);\n    assert(Program->type == AST_Program);\n    InterCodes* codes = translate_ExtDefList(Program->child);\n#ifndef NO_OPTIMIZE\n    // codes = optmize_copyPropagation(codes);\n    codes = optimize_ir(codes);\n#endif\n    return codes;\n}\n\nInterCodes* translate_ExtDefList(ASTNode *ExtDefList) {\n    assert(ExtDefList);\n    assert(ExtDefList->type == AST_ExtDefList);\n\n    InterCodes* codes = NULL;\n\n    if (ExtDefList->child != NULL) {\n        codes = translate_ExtDef(ExtDefList->child);\n        InterCodes* code2 = translate_ExtDefList(ExtDefList->child->sibling);\n        if (code2 != NULL) {\n            codes = concatInterCodes(2, codes, code2);\n        }\n    }\n\n    return codes;\n}\n\nInterCodes* translate_ExtDef(ASTNode *ExtDef) {\n    assert(ExtDef);\n    assert(ExtDef->type == AST_ExtDef);\n\n    InterCodes* codes = NULL;\n\n    if (ExtDef->child->sibling->type == AST_FunDec) {\n        codes = translate_FunDec(ExtDef->child->sibling);\n        if (ExtDef->child->sibling->sibling->type == AST_CompSt) {\n            InterCodes* code = translate_CompSt(ExtDef->child->sibling->sibling);\n            codes = concatInterCodes(2, codes, code);\n        } else {\n            assert(0);\n        }\n    } else if (ExtDef->child->sibling->type == AST_ExtDecList) {\n        codes = translate_ExtDecList(ExtDef->child->sibling);\n    }\n\n    return codes;\n}\n\nInterCodes* translate_ExtDecList(ASTNode *ExtDecList) {\n    assert(ExtDecList);\n    assert(ExtDecList->type == AST_ExtDecList);\n\n    InterCodes* codes = NULL;\n\n    codes = translate_VarDec(ExtDecList->child);\n\n    if (ExtDecList->child->sibling != NULL) {\n        InterCodes* code2 = translate_ExtDecList(ExtDecList->child->sibling->sibling);\n        if (code2 != NULL) {\n            codes = concatInterCodes(2, codes, code2);\n        }\n    }\n\n    return codes;\n}\n\nint getTypeSize(Type type) {\n    if (type->kind == ARRAY) {\n        return type->u.array.size * getTypeSize(type->u.array.elem);\n    } else if (type->kind == STRUCTURE) {\n        int size = 0;\n        for (FieldList p = type->u.structure; p != NULL; p = p->tail) {\n            size += getTypeSize(p->type);\n        }\n        return size;\n    } else {\n        return 4;\n    }\n}\n\nInterCodes* translate_VarDec(ASTNode *VarDec) {\n    assert(VarDec);\n    assert(VarDec->type == AST_VarDec);\n\n    InterCodes* codes = NULL;\n\n    if (VarDec->child->type == AST_ID) {\n        Symbol variable = lookupSymbol(VarDec->child->val.c, true);\n        if (variable->kind == VAR_DEF) {\n            int size = getTypeSize(variable->u.type);\n            if (size > 4) {\n                int t1 = newVariableId();\n                InterCodes* code1 = newInterCodes();\n                code1->code.kind = IR_DEC;\n                code1->code.result.kind = OP_TEMP;\n                code1->code.result.u.var_id = t1;\n                code1->code.size = size;\n\n                InterCodes* code2 = newInterCodes();\n                code2->code.kind = IR_ADDR;\n                code2->code.result.kind = OP_VARIABLE;\n                code2->code.result.symbol = variable;\n                code2->code.arg1.kind = OP_TEMP;\n                code2->code.arg1.u.var_id = t1;\n\n                codes = concatInterCodes(2, code1, code2);\n            }\n        } else {\n            assert(0);\n        }\n    } else if (VarDec->child->type == AST_VarDec) {\n        codes = translate_VarDec(VarDec->child);\n    } else {\n        assert(0);\n    }\n\n    return codes;\n}\n\nInterCodes* translate_FunDec(ASTNode *FunDec) {\n    assert(FunDec);\n    assert(FunDec->type == AST_FunDec);\n\n    InterCodes* codes = newInterCodes();\n    codes->code.kind = IR_FUNC;\n    codes->code.result.kind = OP_FUNCTION;\n    codes->code.result.symbol = lookupSymbol(FunDec->child->val.c, true);\n\n    if (FunDec->child->sibling->sibling->type == AST_VarList) {\n        codes = concatInterCodes(2, codes, translate_VarList(FunDec->child->sibling->sibling));\n    }\n\n    return codes;\n}\n\nInterCodes* translate_VarList(ASTNode *VarList) {\n    assert(VarList);\n    assert(VarList->type == AST_VarList);\n\n    InterCodes* codes = translate_ParamDec(VarList->child);\n\n    if (VarList->child->sibling != NULL) {\n        codes = concatInterCodes(2, codes, translate_VarList(VarList->child->sibling->sibling));\n    }\n\n    return codes;\n}\n\nInterCodes* translate_ParamDec(ASTNode *ParamDec) {\n    assert(ParamDec);\n    assert(ParamDec->type == AST_ParamDec);\n\n    ASTNode *varDec = ParamDec->child->sibling;\n    while (varDec->child->type != AST_ID) {\n        varDec = varDec->child;\n    }\n    char *name = varDec->child->val.c;\n    Symbol variable = lookupSymbol(name, true);\n    assert(variable);\n\n    InterCodes* codes = newInterCodes();\n    codes->code.kind = IR_PARAM;\n    codes->code.result.kind = OP_VARIABLE;\n    codes->code.result.symbol = variable;\n\n    return codes;\n}\n\nstatic void printOperand(Operand op) {\n    if (op.kind == OP_TEMP) {\n        printf(\"t%d\", op.u.var_id);\n    } else if (op.kind == OP_VARIABLE) {\n        printf(\"v_%s\", op.symbol->name);\n    } else if (op.kind == OP_FUNCTION) {\n        printf(\"%s\", op.symbol->name);\n    } else if (op.kind == OP_CONSTANT) {\n        printf(\"#%d\", op.u.value);\n    } else if (op.kind == OP_LABEL) {\n        printf(\"label%d\", op.u.label_id);\n    } else {\n        assert(0);\n    }\n}\n\nvoid generate_ir(ASTNode* Program) {\n    InterCodes* codes = translate_Program(Program);\n\n    for (InterCodes* p = codes; p != NULL; p = p->next) {\n        switch(p->code.kind) {\n            case IR_LABEL: {\n                assert(p->code.result.kind == OP_LABEL);\n                printf(\"LABEL label%d :\\n\", p->code.result.u.label_id);\n                break;\n            }\n            case IR_FUNC: {\n                assert(p->code.result.kind == OP_FUNCTION);\n                printf(\"FUNCTION %s :\\n\", p->code.result.symbol->name);\n                break;\n            }\n            case IR_ASSIGN: {\n                if (p->code.result.kind == OP_TEMP && p->code.result.u.var_id == VAR_NULL) {\n                    break;\n                }\n                printOperand(p->code.result);\n                printf(\" := \");\n                printOperand(p->code.arg1);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_ADD: {\n                printOperand(p->code.result);\n                printf(\" := \");\n                printOperand(p->code.arg1);\n                printf(\" + \");\n                printOperand(p->code.arg2);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_SUB: {\n                printOperand(p->code.result);\n                printf(\" := \");\n                printOperand(p->code.arg1);\n                printf(\" - \");\n                printOperand(p->code.arg2);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_MUL: {\n                printOperand(p->code.result);\n                printf(\" := \");\n                printOperand(p->code.arg1);\n                printf(\" * \");\n                printOperand(p->code.arg2);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_DIV: {\n                printOperand(p->code.result);\n                printf(\" := \");\n                printOperand(p->code.arg1);\n                printf(\" / \");\n                printOperand(p->code.arg2);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_GOTO: {\n                printf(\"GOTO \");\n                printOperand(p->code.result);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_RELOP: {\n                printf(\"IF \");\n                printOperand(p->code.arg1);\n                switch (p->code.relop) {\n                    case RELOP_LT: printf(\" < \"); break;\n                    case RELOP_LE: printf(\" <= \"); break;\n                    case RELOP_EQ: printf(\" == \"); break;\n                    case RELOP_GT: printf(\" > \"); break;\n                    case RELOP_GE: printf(\" >= \"); break;\n                    case RELOP_NE: printf(\" != \"); break;\n                    default: assert(0);\n                }\n                printOperand(p->code.arg2);\n                printf(\" GOTO \");\n                printOperand(p->code.result);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_DEC: {\n                printf(\"DEC \");\n                printOperand(p->code.result);\n                printf(\" %d\\n\", p->code.size);\n                break;\n            }\n            case IR_RETURN: {\n                printf(\"RETURN \");\n                printOperand(p->code.result);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_ARG: {\n                printf(\"ARG \");\n                printOperand(p->code.result);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_CALL: {\n                printOperand(p->code.result);\n                printf(\" := CALL \");\n                printOperand(p->code.arg1);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_PARAM: {\n                printf(\"PARAM \");\n                printOperand(p->code.result);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_READ: {\n                printf(\"READ \");\n                printOperand(p->code.result);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_WRITE: {\n                printf(\"WRITE \");\n                printOperand(p->code.result);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_DEREF_R: {\n                printOperand(p->code.result);\n                printf(\" := *\");\n                printOperand(p->code.arg1);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_DEREF_L: {\n                printf(\"*\");\n                printOperand(p->code.result);\n                printf(\" := \");\n                printOperand(p->code.arg1);\n                printf(\"\\n\");\n                break;\n            }\n            case IR_ADDR: {\n                printOperand(p->code.result);\n                printf(\" := &\");\n                printOperand(p->code.arg1);\n                printf(\"\\n\");\n                break;\n            }\n            default: assert(0);\n        }\n    }\n}\n\nInterCodes* optmize_copyPropagation(InterCodes* inCodes) {\n    assert(inCodes);\n    InterCodes* outCodes = inCodes;\n\n    for (int i = 1; i < variableId; i ++) {\n        int cntAssign = 0;\n        InterCodes* p = outCodes, *assign;\n        // 找到仅被赋值一次的临时变量\n        while (p != NULL) {\n            if ((p->code.kind == IR_ADD || p->code.kind == IR_SUB\n            || p->code.kind == IR_MUL || p->code.kind == IR_DIV\n            || p->code.kind == IR_ADDR || p->code.kind == IR_DEREF_L\n            || p->code.kind == IR_CALL || p->code.kind == IR_READ\n            ) && p->code.result.kind == OP_TEMP && p->code.result.u.var_id == i) {\n                cntAssign = 2;\n                break;\n            }\n\n            if (p->code.kind == IR_ASSIGN && p->code.result.kind == OP_TEMP\n            && p->code.result.u.var_id == i) {\n                cntAssign ++;\n                assign = p;\n                if (cntAssign > 1) break;\n            }\n            p = p->next;\n        }\n        // 替代所有引用点\n        if (cntAssign == 1) {\n            Operand tmp = assign->code.arg1;\n            InterCodes *p = outCodes;\n            while (p != NULL) {\n                if (p->code.arg1.kind == OP_TEMP && p->code.arg1.u.var_id == i) {\n                    p->code.arg1 = tmp;\n                }\n                if (p->code.arg2.kind == OP_TEMP && p->code.arg2.u.var_id == i) {\n                    p->code.arg2 = tmp;\n                }\n                if ((p->code.kind == IR_RETURN || p->code.kind == IR_ARG\n                || p->code.kind == IR_PARAM || p->code.kind == IR_WRITE\n                ) && p->code.result.kind == OP_TEMP && p->code.result.u.var_id == i) {\n                    p->code.result = tmp;\n                }\n                p = p->next;\n            }\n            // 消除临时变量\n            outCodes = deleteInterCode(outCodes, assign);\n        }\n    }\n    return outCodes;\n}\n\nvoid peek_basic_block(InterCodes* codes, InterCodes** start_, InterCodes** end_) {\n    InterCodes *start, *end;\n    for(start = codes; start != NULL; start = start->next) {\n        if (start->code.kind == IR_ASSIGN || start->code.kind == IR_ADD || \n            start->code.kind == IR_SUB  || start->code.kind == IR_MUL ||\n            start->code.kind == IR_DIV || start->code.kind == IR_ARG) {\n                break;\n            }\n    }\n\n    for(end = start; end != NULL; end = end->next) {\n        if (end->code.kind != IR_ASSIGN && end->code.kind != IR_ADD && \n            end->code.kind != IR_SUB  && end->code.kind != IR_MUL &&\n            end->code.kind != IR_DIV && end->code.kind != IR_ARG &&\n            end->code.kind != IR_DEREF_L && end->code.kind != IR_DEREF_R && end->code.kind != IR_ADDR) {\n                end = end->next;\n                break;\n            }\n    }\n\n    *start_ = start;\n    *end_ = end;\n}\n\nstruct GenNode {\n    int size;\n    InterCodes* gen[200];\n};\n\nbool isOperandEqual(Operand op1, Operand op2) {\n    if (op1.kind == op2.kind) {\n        if (op1.kind == OP_TEMP && op1.u.var_id == op2.u.var_id) {\n            return true;\n        } else if (op1.kind == OP_VARIABLE && op1.symbol == op2.symbol) {\n            return true;\n        }\n    }\n    return false;\n}\n\nInterCodes* optimize_one_run(InterCodes* codes, bool *changed) {\n    *changed = false;\n    InterCodes *start, *end = codes;\n    while (end != NULL) {\n        peek_basic_block(end, &start, &end);\n        struct GenNode gens;\n        gens.size = 0;\n        for (InterCodes *p = start; p != end; p = p->next) {\n            if (p->code.kind == IR_ASSIGN) {\n                // replace\n                for (int i = 0; i < gens.size; i++) {\n                   if (isOperandEqual(p->code.arg1, gens.gen[i]->code.result)) {\n                       p->code.arg1 = gens.gen[i]->code.arg1;\n                       *changed = true;\n                   }\n                }\n\n                // kill all previous gen\n                for (int i = 0; i < gens.size; ) {\n                   if (isOperandEqual(p->code.result, gens.gen[i]->code.result)) {\n                       gens.gen[i] = gens.gen[gens.size - 1];\n                       (gens.size)--;\n                   } else {\n                       i++;\n                   }\n                }\n                // add new gen\n                gens.gen[gens.size] = p;\n                gens.size++;\n            } else if (p->code.kind == IR_ADDR || p->code.kind == IR_DEREF_R) {\n                // replace\n                for (int i = 0; i < gens.size; i++) {\n                   if (isOperandEqual(p->code.arg1, gens.gen[i]->code.result)) {\n                       p->code.arg1 = gens.gen[i]->code.arg1;\n                       *changed = true;\n                   }\n                }\n\n                // kill all previous gen\n                for (int i = 0; i < gens.size; ) {\n                   if (isOperandEqual(p->code.result, gens.gen[i]->code.result)) {\n                       gens.gen[i] = gens.gen[gens.size - 1];\n                       (gens.size)--;\n                   } else {\n                       i++;\n                   }\n                }\n            } else if (p->code.kind == IR_DEREF_L) {\n                // replace\n                for (int i = 0; i < gens.size; i++) {\n                   if (isOperandEqual(p->code.arg1, gens.gen[i]->code.result)) {\n                       p->code.arg1 = gens.gen[i]->code.arg1;\n                       *changed = true;\n                   }\n                }\n            } else if (p->code.kind == IR_ADD || p->code.kind == IR_SUB ||\n                        p->code.kind == IR_MUL || p->code.kind == IR_DIV || p->code.kind == IR_RELOP) {\n                // replace\n                for (int i = 0; i < gens.size; i++) {\n                   if (isOperandEqual(p->code.arg1, gens.gen[i]->code.result)) {\n                       p->code.arg1 = gens.gen[i]->code.arg1;\n                       *changed = true;\n                   }\n                   if (isOperandEqual(p->code.arg2, gens.gen[i]->code.result)) {\n                       p->code.arg2 = gens.gen[i]->code.arg1;\n                       *changed = true;\n                   } \n                }\n\n                // kill all previous gen\n                for (int i = 0; i < gens.size; ) {\n                   if (isOperandEqual(p->code.result, gens.gen[i]->code.result)) {\n                       gens.gen[i] = gens.gen[gens.size - 1];\n                       (gens.size)--;\n                   } else {\n                       i++;\n                   }\n                }\n            } else if (p->code.kind == IR_RETURN || p->code.kind == IR_ARG) {\n                // replace\n                for (int i = 0; i < gens.size; i++) {\n                   if (isOperandEqual(p->code.result, gens.gen[i]->code.result)) {\n                       p->code.result = gens.gen[i]->code.arg1;\n                       *changed = true;\n                   }\n                }\n            }\n        }\n    }\n\n    // constant pre-computation: t98 := #0 * #4  -> t98 := #0\n    for (InterCodes *p = codes; p != NULL; p = p->next) {\n        if (p->code.kind == IR_ADD || p->code.kind == IR_SUB || p->code.kind == IR_MUL || p->code.kind == IR_DIV) {\n            if (p->code.arg1.kind == OP_CONSTANT && p->code.arg2.kind == OP_CONSTANT) {\n                *changed = true;\n                int new_val;\n                switch (p->code.kind) {\n                    case IR_ADD: new_val = p->code.arg1.u.value + p->code.arg2.u.value; break;\n                    case IR_SUB: new_val = p->code.arg1.u.value - p->code.arg2.u.value; break;\n                    case IR_MUL: new_val = p->code.arg1.u.value * p->code.arg2.u.value; break;\n                    case IR_DIV: new_val = p->code.arg1.u.value / p->code.arg2.u.value; break;\n                    default: assert(0); break;\n                }\n                p->code.kind = IR_ASSIGN;\n                p->code.arg1.kind = OP_CONSTANT;\n                p->code.arg1.u.value = new_val;\n            }\n        }\n    }\n\n    // optimize zero addtion: t32 := v_r + #0 -> t32 := v_r\n    for (InterCodes *p = codes; p != NULL; p = p->next) {\n        if (p->code.kind == IR_ADD && p->code.arg2.kind == OP_CONSTANT && p->code.arg2.u.value == 0) {\n            *changed = true;\n            p->code.kind = IR_ASSIGN;\n        }\n    }\n\n    // remove dead code\n    struct GenNode dead_codes;\n    dead_codes.size = 0;\n    // add dead codes\n    for (InterCodes *p = codes; p != NULL; p = p->next) {\n        if (p->code.kind == IR_ASSIGN) {\n            dead_codes.gen[dead_codes.size] = p;\n            (dead_codes.size)++;\n        }\n    }\n    // check dead codes\n    for (InterCodes *p = codes; p != NULL; p = p->next) {\n        for (int i = 0; i < dead_codes.size; ) {\n            if ((p->code.kind == IR_ASSIGN || p->code.kind == IR_ADDR || p->code.kind == IR_DEREF_R) && isOperandEqual(p->code.arg1, dead_codes.gen[i]->code.result)) {\n                dead_codes.gen[i] = dead_codes.gen[dead_codes.size - 1];\n                (dead_codes.size)--;\n            } else if (p->code.kind == IR_DEREF_L && (isOperandEqual(p->code.result, dead_codes.gen[i]->code.result) || isOperandEqual(p->code.arg1, dead_codes.gen[i]->code.result))) {\n                dead_codes.gen[i] = dead_codes.gen[dead_codes.size - 1];\n                (dead_codes.size)--;\n            } else if ((p->code.kind == IR_RETURN || p->code.kind == IR_DEC || p->code.kind == IR_ARG || p->code.kind == IR_PARAM || p->code.kind == IR_READ || p->code.kind == IR_WRITE) && isOperandEqual(p->code.result, dead_codes.gen[i]->code.result)) {\n                dead_codes.gen[i] = dead_codes.gen[dead_codes.size - 1];\n                (dead_codes.size)--;\n            } else if ((p->code.kind == IR_ADD || p->code.kind == IR_SUB || p->code.kind == IR_MUL || p->code.kind == IR_DIV || p->code.kind == IR_RELOP) \n                        && (isOperandEqual(p->code.arg1, dead_codes.gen[i]->code.result) || isOperandEqual(p->code.arg2, dead_codes.gen[i]->code.result))) {\n                dead_codes.gen[i] = dead_codes.gen[dead_codes.size - 1];\n                (dead_codes.size)--;\n            } else {\n                i++;\n            }\n        }\n    }\n    // remove dead codes\n    for (int i = 0; i < dead_codes.size; i++) {\n        *changed = true;\n        if (dead_codes.gen[i]->next != NULL) {\n            dead_codes.gen[i]->next->prev = dead_codes.gen[i]->prev;\n        }\n        if (dead_codes.gen[i]->prev != NULL) {\n            dead_codes.gen[i]->prev->next = dead_codes.gen[i]->next;\n        } else {\n            codes = dead_codes.gen[i]->next;\n        }\n    }\n\n    return codes;\n}\n\nInterCodes* optimize_ir(InterCodes* codes) {\n    bool changed = false;\n    int step = 1;\n    do {\n        codes = optimize_one_run(codes, &changed);\n        // fprintf(stderr, \"optim %d\\n\", step++);\n    } while (changed);\n    return codes;\n}",
+			"file": "/E/课件/编译原理/Compiler-master/Compiler-master/src/ir.c",
+			"file_size": 51700,
+			"file_write_time": 131602751660000000,
+			"settings":
+			{
+				"buffer_size": 50242,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/E/课件/编译原理/Compiler-master/Compiler-master/include/ir.h",
+			"settings":
+			{
+				"buffer_size": 2996,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
+			"settings":
+			{
+				"buffer_size": 5612,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "import React from 'react';\nimport { Form, Input, Icon, Row, Col, Button, Card} from 'antd';\nimport {Table, Divider, Modal, Avatar, Upload, message} from 'antd';\n\nimport {baseAddress} from 'services';\n\nconst FormItem = Form.Item;\n\nconst props = {\n    name: 'file',\n    action: baseAddress+\"/peoplemanagement/PersonnelFile/addPicture\",\n    headers: {\n      //此处\n      authorization: 'authorization-text',\n    },\n    onChange(info) {\n        if (info.file.status !== 'uploading') {\n          console.log(info.file, info.fileList);\n        } \n        if (info.file.status === 'done') {\n            message.success(`${info.file.name} file uploaded successfully`);\n        } else if (info.file.status === 'error') {\n            message.error(`${info.file.name} file upload failed.`);\n        }\n    },\n};\n\n\nconst AddPeopleForm = Form.create()(\nclass extends React.Component {\n    render() {\n        const { visible, onCancel, onCreate, form } = this.props;\n        const { getFieldDecorator } = form;\n        return (\n          <Modal\n            visible={visible}\n            title=\"新增人员管理记录\"\n            okText=\"确定\"\n            onCancel={onCancel}\n            onOk={onCreate}\n          >\n              <Form layout=\"vertical\">\n                  <FormItem label=\"姓名\">\n                      {getFieldDecorator('name', {\n                          rules: [{ required: true, message: '请输入姓名！' }],\n                      })(\n                          <Input />\n                      )}\n                  </FormItem>\n                  <FormItem label=\"部门\">\n                      {getFieldDecorator('department', {\n                          rules: [{ required: true, message: '请输入部门！' }],\n                      })(\n                          <Input />\n                      )}\n                  </FormItem>\n                  <FormItem label=\"职位\">\n                      {getFieldDecorator('position', {\n                          rules: [{ required: true, message: '请输入职位！' }],\n                      })(\n                          <Input />\n                      )}\n                  </FormItem>\n                  <FormItem label=\"档案编号\">\n                      {getFieldDecorator('fileId', {\n                          rules: [{ required: true, message: '请输入档案编号！' }],\n                      })(\n                          <Input />\n                      )}\n                  </FormItem>\n                  <FormItem label=\"档案存放位置\">\n                      {getFieldDecorator('location', {\n                          rules: [{ required: true, message: '请输入档案存放位置！' }],\n                      })(\n                          <Input />\n                      )}\n                  </FormItem>\n                  <FormItem label=\"档案扫描件\">\n                      {getFieldDecorator('fileImage', {\n                         \n                      })(  \n                          <Upload {...props}>\n                              <Button>\n                                  <Icon type=\"upload\" /> 上传档案扫描件\n                              </Button>\n                          </Upload>\n\n                      )}\n                  </FormItem>\n                  \n              </Form>\n          </Modal>\n      );\n    }\n  }\n);\n\nexport default AddPeopleForm;",
 			"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
+			"file_size": 3459,
+			"file_write_time": 131713002855228755,
 			"settings":
 			{
-				"buffer_size": 3128,
-				"encoding": "UTF-8",
+				"buffer_size": 3207,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/common/basic/components/OperationComponent.js",
+			"file": "src/common/basic/components/ListView.js",
 			"settings":
 			{
-				"buffer_size": 1857,
+				"buffer_size": 2770,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/common/basic/containers/ListContainer.js",
+			"settings":
+			{
+				"buffer_size": 528,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/common/basic/components/ListComponent.js",
+			"settings":
+			{
+				"buffer_size": 7440,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/layouts/CoreLayout.js",
+			"file": "src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
 			"settings":
 			{
-				"buffer_size": 9137,
+				"buffer_size": 2052,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/routes/Login/containers/LoginContainer.js",
+			"file": "src/routes/Login/components/LoginView.js",
 			"settings":
 			{
-				"buffer_size": 1246,
+				"buffer_size": 4090,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -178,6 +309,45 @@
 	],
 	"file_history":
 	[
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/AST.h",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/AST.c",
+		"/E/CMA-WEB/package-lock.json",
+		"/E/CMA-WEB/package.json",
+		"/E/CMA-WEB/src/layouts/CoreLayout.js",
+		"/E/sinosteel-master/client/framework-webclient/src/containers/AppContainer.js",
+		"/E/CMA-WEB/config/project.config.js",
+		"/E/CMA-WEB/config/webpack.config.js",
+		"/E/CMA-WEB/server/main.js",
+		"/E/CMA-WEB/src/services/index.js",
+		"/E/CMA-WEB/src/utils/FetchUtil.js",
+		"/E/CMA-WEB/README.md",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/ir.h",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_ir.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/ir.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/oc.c",
+		"/E/CMA-WEB/src/routes/Blank/components/Blank.js",
+		"/E/CMA-WEB/src/routes/index.js",
+		"/E/CMA-WEB/src/main.js",
+		"/E/CMA-WEB/src/routes/Login/containers/LoginContainer.js",
+		"/E/CMA-WEB/src/routes/Login/index.js",
+		"/E/CMA-WEB/src/routes/Blank/index.js",
+		"/E/CMA-WEB/bin/dev-server.js",
+		"/E/CMA-WEB/src/common/basic/components/OperationComponent.js",
+		"/E/sinosteel-master/client/framework-webclient/config/project.config.js",
+		"/E/实验/demo/springboot_learning/src/main/resources/templates/a.html",
+		"/E/sinosteel-master/client/framework-webclient/bin/compile.js",
+		"/E/sinosteel-master/client/framework-webclient/server/main.js",
+		"/E/实验/demo/springboot_learning/src/main/resources/static/js/a.js",
+		"/E/CMA-WEB/src/routes/Project/subviews/ProjectList/components/ProjectSearchComponent.js",
+		"/E/sinosteel-master/client/framework-webclient/bin/dev-server.js",
+		"/E/react-redux-starter-kit-master/server/main.js",
+		"/E/react-redux-starter-kit-master/src/main.js",
+		"/E/CMA-WEB/src/components/Topnav/Topnav.js",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/semantic.h",
+		"/C/Users/dell/Desktop/API.md",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/sym_table.h",
+		"/E/CMA-WEB/config/environments.config.js",
+		"/E/sinosteel-master/client/framework-webclient/src/routes/Login/components/LoginView.js",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListView.js",
 		"/E/CMA-WEB/src/common/basic/components/SearchComponent.js",
 		"/E/CMA-WEB/src/common/basic/components/ListComponent.js",
@@ -185,28 +355,11 @@
 		"/E/CMA-WEB/src/routes/tabsmap.js",
 		"/E/CMA-WEB/src/routes/Login/components/LoginView.js",
 		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleManagementRecordsView.js",
-		"/E/CMA-WEB/src/routes/Login/containers/LoginContainer.js",
-		"/E/CMA-WEB/src/routes/Blank/components/Blank.js",
 		"/E/CMA-WEB/src/common/basic/components/EditView.js",
 		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleManagementRecordView.js",
-		"/E/CMA-WEB/src/layouts/CoreLayout.js",
-		"/E/CMA-WEB/package.json",
-		"/E/CMA-WEB/src/common/basic/components/OperationComponent.js",
-		"/C/Users/dell/Desktop/API.md",
-		"/E/CMA-WEB/src/routes/Blank/index.js",
-		"/E/CMA-WEB/config/environments.config.js",
-		"/E/CMA-WEB/bin/dev-server.js",
-		"/E/CMA-WEB/config/webpack.config.js",
-		"/E/CMA-WEB/config/project.config.js",
-		"/E/CMA-WEB/server/main.js",
-		"/E/CMA-WEB/src/services/index.js",
-		"/E/CMA-WEB/package-lock.json",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardEditView.js",
 		"/E/CMA-WEB/src/utils/ArrayUtil.js",
 		"/E/CMA-WEB/resources/componentTemplate.js",
-		"/E/CMA-WEB/src/main.js",
-		"/E/实验/demo/springboot_learning/src/main/resources/static/js/a.js",
-		"/E/CMA-WEB/src/routes/Login/index.js",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardSearchComponent.js",
 		"/E/新建文本文档.html",
 		"/E/新建文本文档.js",
@@ -220,7 +373,6 @@
 		"/E/sinosteel-master/server/framework-example/src/main/resources/structure.json",
 		"/E/sinosteel-backend-master/src/main/resources/structure.json",
 		"/E/sinosteel-master/client/framework-webclient/src/routes/Login/index.js",
-		"/E/react-redux-starter-kit-master/src/main.js",
 		"/E/sinosteel-master/client/framework-webclient/src/routes/Blank/index.js",
 		"/E/sinosteel-backend-master/src/main/resources/application.properties",
 		"/E/sinosteel-backend-master/src/main/resources/config/datasource.properties",
@@ -231,8 +383,6 @@
 		"/E/sinosteel-master/client/framework-webclient/src/main.js",
 		"/E/sinosteel-master/client/framework-webclient/src/index.html",
 		"/E/sinosteel-master/client/framework-webclient/src/routes/index.js",
-		"/E/sinosteel-master/client/framework-webclient/server/main.js",
-		"/E/sinosteel-master/client/framework-webclient/src/containers/AppContainer.js",
 		"/E/实验/nodejs-learning/test1.js",
 		"/E/课件/面向对象设计方法/Calculator.java",
 		"/E/课件/综合实验/需求/CMA.wiki/需求规格说明.md",
@@ -262,15 +412,11 @@
 		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/Application.java",
 		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/resources/config/spring.properties",
 		"/E/实验/spring-petclinic/src/main/resources/application.properties",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/AST.c",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/sym_table.c",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/semantic_check.c",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/include/common.h",
 		"/E/课件/编译原理/第一次实验/Lab1_v2/Code/lexical.l",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/semantic.c",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/include/sym_table.h",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/include/semantic.h",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/include/AST.h",
 		"/E/课件/编译原理/第二次实验/Lab2/Code/tree.h",
 		"/E/实验/demo/springboot_learning/src/main/java/com/example/demo/domain/Student.java",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_oc.c",
@@ -308,6 +454,41 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"translate_Exp",
+			"VAR_NULL",
+			"place",
+			"InterCodes newInterCodes()",
+			"newInterCodes()",
+			"place",
+			"haserrors",
+			"getFieldsError",
+			"inspect",
+			"record",
+			"text",
+			"handleOpenInspect",
+			"addTab",
+			"EditContainer",
+			"inspectViewTabName",
+			"addTab",
+			"this.setState",
+			"data",
+			"proxy",
+			"middleware",
+			"better-npm-run",
+			"webpack",
+			"optmize_",
+			"Middleware",
+			"webpack",
+			"webpack ",
+			"proxy",
+			"webpackConfig",
+			"sysFetch",
+			"sysfetch",
+			"queryPath",
+			"loginService",
+			"getRootPath",
+			"did",
+			"formRef",
 			"saveFormRef",
 			"wrappedComponentRef",
 			"saveFormRef",
@@ -370,15 +551,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6732,
+						"buffer_size": 7843,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2752,
-								2752
+								6930,
+								6930
 							]
 						],
 						"settings":
@@ -386,27 +567,113 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 5206.0,
+						"translation.y": 6279.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
+					"file": "/E/课件/编译原理/Compiler-master/Compiler-master/src/ir.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3128,
+						"buffer_size": 50242,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								543,
-								543
+								3560,
+								3573
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 4260.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/E/课件/编译原理/Compiler-master/Compiler-master/include/ir.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2996,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								289,
+								297
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5612,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1312,
+								1312
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1066.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3207,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2700,
+								2700
 							]
 						],
 						"settings":
@@ -416,27 +683,57 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 216.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "src/common/basic/components/OperationComponent.js",
+					"buffer": 5,
+					"file": "src/common/basic/components/ListView.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1857,
+						"buffer_size": 2770,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								847,
-								1185
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/common/basic/containers/ListContainer.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 528,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -445,68 +742,100 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 576.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/common/basic/components/ListComponent.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7440,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4892,
+								4892
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3926.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2052,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "src/layouts/CoreLayout.js",
+					"buffer": 9,
+					"file": "src/routes/Login/components/LoginView.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9137,
+						"buffer_size": 4090,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7809,
-								7809
+								1039,
+								1039
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4632.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/routes/Login/containers/LoginContainer.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1246,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								786,
-								786
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 720.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
@@ -514,7 +843,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 38.0
+		"height": 34.0
 	},
 	"input":
 	{
@@ -551,7 +880,7 @@
 	"project": "",
 	"replace":
 	{
-		"height": 71.0
+		"height": 63.0
 	},
 	"save_all_on_build": true,
 	"select_file":

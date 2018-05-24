@@ -1,5 +1,5 @@
-const baseAddress = 'http://localhost:8000'; 
-const serviceBaseAddress = 'http://localhost:8000/services';
+export const baseAddress = 'http://119.23.38.100:8080'; 
+const serviceBaseAddress = 'http://119.23.38.100:8080/cma/services';
 
 //auth
 export const loginService = baseAddress + '/login';
