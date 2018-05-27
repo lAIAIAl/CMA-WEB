@@ -28,14 +28,6 @@ function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
-function handleImage(text){
-	let x = fileData.find(function(x){
-  		return x.name == text;
-  	});
-	console.log(x);
-}
-
-
 function sendMessage(url, OPTION, sendData, sucessAction, failAction){
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open(OPTION, url, true);
@@ -56,7 +48,31 @@ class PeopleManagementRecordsViewF extends React.Component{
 
 	state = {
 	    selectedRowKeys: [], // Check here to configure the default column
-	    fileData: [],
+	    fileData: [{
+		    "id": "1",
+		    "name": "小明",
+		    "gender": "0",
+		    "department": "市场部",
+		    "position": "部员",
+		    "title": "教授",
+		    "degree": "博士研究生",
+		    "graduationSchool": "南京大学",
+		    "graduationMajor": "计算机软件",
+		    "graduationDate": "2000-12",
+		    "workingYears": 6
+		  },{
+		    "id": "2",
+		    "name": "小红",
+		    "gender": "1",
+		    "department": "档案部",
+		    "position": "主任",
+		    "title": "副教授",
+		    "degree": "博士研究生",
+		    "graduationSchool": "浙江大学",
+		    "graduationMajor": "计算机",
+		    "graduationDate": "2005-12",
+		    "workingYears": 3
+		  },],
 	    loading: false,
 		visible: false,
 
@@ -79,24 +95,13 @@ class PeopleManagementRecordsViewF extends React.Component{
       		}
       		//TODO:ajax add.
       		let temp = values;
-
-      		temp.fileImage = null;
-      		
-
-  			console.log(JSON.stringify(temp));
-/*  			$.post(baseAddress+"/cma/StaffFile/addStaff",
-  				JSON.stringify(temp),
-  				(res, status) => {
-  					message.success("成功");
-  				},
-  				"json");*/
+      		temp.graduationDate=temp.graduationDate.format("YYYY-MM");
+      		console.log(temp);
+      		//temp.gender == '男'? temp.gender=0:temp.gender=1;
   			$.ajax({
 		      	type: "post",
-		      	dataType: 'json',
-		      	url: baseAddress+"/cma/StaffFile/addStaff",
-		      	contentType: 'application/json',
-		      	data: JSON.stringify(temp),
-		      	//data: temp,
+		      	url: baseAddress+"/cma/StaffManagement/addOne",
+		      	data: temp,
 		      	success: function (d) {
 		      		message.success("新增成功");
 		      	}
@@ -107,6 +112,8 @@ class PeopleManagementRecordsViewF extends React.Component{
       		form.resetFields();
 
       		this.setState({ visible: false });
+
+      		this.getAll();
     	});
   	}
 
@@ -127,8 +134,11 @@ class PeopleManagementRecordsViewF extends React.Component{
     	this.props.form.validateFields();
   	}
 	
-  	componentWillMount() {
-  		$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
+  	getAll = () => {
+  		for (var i = this.state.fileData.length - 1; i >= 0; i--) {
+  			this.state.fileData[i].key = this.state.fileData[i].id;
+  		}
+/*  		$.get(baseAddress+"/cma/StaffManagement/getAll" , null,(res)=>{
   			console.log(res);
   			for (var i = res.length - 1; i >= 0; i--) {
   				res[i].key = res[i].id;
@@ -137,6 +147,10 @@ class PeopleManagementRecordsViewF extends React.Component{
 		        fileData: res,
 		    });
   		});
+*/  	}
+
+  	componentWillMount() {
+  		this.getAll();
   	}
   
   	handleSubmit = (e) => {
@@ -147,18 +161,7 @@ class PeopleManagementRecordsViewF extends React.Component{
       			let url = baseAddress+'/cma/StaffFile/querybyname?name=';
       			url += values.peopleName;
 
-		    	sendMessage(url,
-		  			"GET",
-		  			null,
-		  			function(xmlhttp){
-		  				//data = xmlhttp.responseText;
-		  				console.log("返回结果：" + xmlhttp.responseText);
-		  				message.success("获取数据成功");
-		  			},
-		  			function(){
-		  				message.error("无法获取数据");
-		  			}
-		  		);
+		    	
         		console.log('Received values of form: ', values);
       		}
     	});
@@ -172,23 +175,22 @@ class PeopleManagementRecordsViewF extends React.Component{
   			let x = this.state.fileData.findIndex(function(x){
   				return x.key == selectedRowKeys[i];
   			});
-  			let deleteName = this.state.fileData[x].name;
+  			let deleteId = this.state.fileData[x].id;
 
   			$.ajax({
 		      	type: "post",
-		      	dataType: 'json',
-		      	url: baseAddress+"/cma/StaffFile/delete",
-		      	contentType: 'application/json',
-		      	data: JSON.stringify({name:deleteName}),
+		      	url: baseAddress+"/cma/StaffManagement/deleteOne",
+		      	data: {id:deleteId},
 		      	success: function (d) {
 		      	}
 		    });
   			this.state.fileData.splice(x,1);
+  			//this.getAll();
   		}
-  		//TODO:ajax request
   		this.setState({ 
   			loading: false,
-  			selectedRowKeys:[] });	
+  			selectedRowKeys:[] 
+  		});	
   	}
 
   	onSelectChange = (selectedRowKeys) => {
@@ -224,16 +226,6 @@ class PeopleManagementRecordsViewF extends React.Component{
 			  key: 'position',
 			},
 			{
-			  title: '档案编号',
-			  dataIndex: 'fileId',
-			  key: 'fileId',
-			}, 
-			{
-			  title: '档案存放位置',
-			  dataIndex: 'location',
-			  key: 'location',
-			},
-			{
 			  title: '操作',
 			  dataIndex: 'detail',
 			  key: 'detail',
@@ -245,7 +237,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 			  	return (
 			  		<a 
 			  			onClick={()=>{this.handleInspect(props)}}>
-			  			查看和修改
+			  			查看详情
 			  		</a>
 			  	);
 			  }
