@@ -12,8 +12,6 @@ import $ from 'lib/jquery-3.3.1';
 const FormItem = Form.Item;
 //名称，部门，职位，档案编号，档案存放位置，档案扫描件
 
-
-
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -48,7 +46,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 
 	state = {
 	    selectedRowKeys: [], // Check here to configure the default column
-	    fileData: [{
+	    peopleData: [{
 		    "id": "1",
 		    "name": "小明",
 		    "gender": "0",
@@ -73,6 +71,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 		    "graduationDate": "2005-12",
 		    "workingYears": 3
 		  },],
+		fileData: [],
 	    loading: false,
 		visible: false,
 
@@ -95,25 +94,29 @@ class PeopleManagementRecordsViewF extends React.Component{
       		}
       		//TODO:ajax add.
       		let temp = values;
-      		temp.graduationDate=temp.graduationDate.format("YYYY-MM");
+      		temp.graduationDate=temp.graduationDate.format("YYYY-MM-DD");
       		console.log(temp);
       		//temp.gender == '男'? temp.gender=0:temp.gender=1;
-  			$.ajax({
+  			
+		    $.ajax({
 		      	type: "post",
 		      	url: baseAddress+"/cma/StaffManagement/addOne",
 		      	data: temp,
+		      	async: false,
 		      	success: function (d) {
 		      		message.success("新增成功");
+
 		      	}
 		    });
-		    temp.key = -this.state.fileData.length;
-  			this.state.fileData.push(temp);
+
+		    //$.post(baseAddress+"/cma/StaffManagement/addOne", temp );
 
       		form.resetFields();
 
       		this.setState({ visible: false });
 
       		this.getAll();
+      		
     	});
   	}
 
@@ -135,19 +138,26 @@ class PeopleManagementRecordsViewF extends React.Component{
   	}
 	
   	getAll = () => {
-  		for (var i = this.state.fileData.length - 1; i >= 0; i--) {
-  			this.state.fileData[i].key = this.state.fileData[i].id;
+  		for (var i = this.state.peopleData.length - 1; i >= 0; i--) {
+  			this.state.peopleData[i].key = this.state.peopleData[i].id;
   		}
-/*  		$.get(baseAddress+"/cma/StaffManagement/getAll" , null,(res)=>{
-  			console.log(res);
-  			for (var i = res.length - 1; i >= 0; i--) {
-  				res[i].key = res[i].id;
+  		$.get(baseAddress+"/cma/StaffManagement/getAll" , null,(res)=>{
+  			let peopledata = res.data;
+  			for (var i = peopledata.length - 1; i >= 0; i--) {
+  				peopledata[i].key = peopledata[i].id;
   			}
   			this.setState({
-		        fileData: res,
+		        peopleData: peopledata,
 		    });
+		    console.log(this.state.peopleData);
   		});
-*/  	}
+  		$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
+  			this.setState({
+  				fileData: res.data
+  			})
+  			console.log(this.state.fileData);
+  		});
+  	}
 
   	componentWillMount() {
   		this.getAll();
@@ -160,8 +170,6 @@ class PeopleManagementRecordsViewF extends React.Component{
       			//TODO:ajax
       			let url = baseAddress+'/cma/StaffFile/querybyname?name=';
       			url += values.peopleName;
-
-		    	
         		console.log('Received values of form: ', values);
       		}
     	});
@@ -172,25 +180,27 @@ class PeopleManagementRecordsViewF extends React.Component{
 
   		this.setState({ loading: true });
   		for (let i = selectedRowKeys.length - 1; i >= 0; i--) {
-  			let x = this.state.fileData.findIndex(function(x){
+  			let x = this.state.peopleData.findIndex(function(x){
   				return x.key == selectedRowKeys[i];
   			});
-  			let deleteId = this.state.fileData[x].id;
-
+  			let deleteId = this.state.peopleData[x].id;
+  			
   			$.ajax({
 		      	type: "post",
 		      	url: baseAddress+"/cma/StaffManagement/deleteOne",
 		      	data: {id:deleteId},
+		      	async:false,
 		      	success: function (d) {
+		      		
 		      	}
 		    });
-  			this.state.fileData.splice(x,1);
-  			//this.getAll();
+  			
   		}
   		this.setState({ 
   			loading: false,
   			selectedRowKeys:[] 
   		});	
+  		this.getAll();
   	}
 
   	onSelectChange = (selectedRowKeys) => {
@@ -230,9 +240,16 @@ class PeopleManagementRecordsViewF extends React.Component{
 			  dataIndex: 'detail',
 			  key: 'detail',
 			  render: (text, record) => {
-			  	var props = 
+
+			    let fileData = null;
+			    for (var i = this.state.fileData.length - 1; i >= 0; i--) {
+			    	if(this.state.fileData[i].id == record.id)
+			    		fileData = this.state.fileData[i];
+			    }
+			    var props = 
 			  	{
-			        item: record
+			        item: record,
+			        fileData: fileData,
 			    };
 			  	return (
 			  		<a 
@@ -274,7 +291,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 	      				rowSelection={rowSelection} 
 	      				columns={columns} 
 	      				
-	      				dataSource={this.state.fileData}>
+	      				dataSource={this.state.peopleData}>
   					</Table>
 	      		<br/>
 	      		<div>

@@ -93,7 +93,7 @@ class extends React.Component {
                       {getFieldDecorator('graduationDate', {
                           rules: [{ required: true, message: '请输入毕业时间！' }],
                       })(
-                          <MonthPicker placeholder="选择时间" />
+                          <DatePicker />
                       )}
                   </FormItem>
                   <FormItem label="工作年限">

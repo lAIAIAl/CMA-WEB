@@ -2,13 +2,15 @@ import React from 'react';
 import { Form, Input, Icon, Row, Col, Button, Card} from 'antd';
 import {Table, Divider, Modal, Avatar, Upload, message, Select, DatePicker, InputNumber} from 'antd';
 
+import AddStuffFile from './AddStuffFile';
 import InspectStuffFile from './InspectStuffFile';
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { MonthPicker } = DatePicker;
+
+//传给新页面的数据是StuffFile，保存在fileData
 
 
 const InspectPeople = Form.create()(
@@ -17,11 +19,20 @@ class extends React.Component {
 		visible: false,
 		item: null,
 		fileData: null,
+		View: null,
 	};
 
 	componentWillMount() {
 		//TODO:use ajax to get proper info and save to state.item
-  		this.setState({ item: this.props.item });
+  		this.setState({ 
+  			item: this.props.item,
+  			fileData: this.props.fileData,
+  		});
+  		if(this.props.fileData == null)
+  		 	this.setState({View: AddStuffFile});
+  			//this.setState({View: InspectStuffFile});
+  		else 
+  			this.setState({View: InspectStuffFile});
   	}
 
 	handleCreate = () => {
@@ -33,7 +44,7 @@ class extends React.Component {
       		//TODO:ajax modify.
       		let temp = values;
       		temp.id=this.state.item.id;
-      		temp.graduationDate=temp.graduationDate.format("YYYY-MM");
+      		temp.graduationDate=temp.graduationDate.format("YYYY-MM-DD");
       		console.log(temp);
       		this.setState({ item:temp});
 
@@ -65,33 +76,16 @@ class extends React.Component {
   	}
 
   	handleFileInfo = () => {
-/*		$.get(baseAddress+"/cma/StaffFile/getOne?id="+this.state.item.id, null,(res)=>{
-  			console.log(res);
-  			this.setState({
-		        fileData: res,
-		    });
-  		});
+		
   		let props = {
-  			item : this.state.fileData,
-  		}*/
-  		let props = {
-  			item : {
-  				"id": "2",
-			    "name": "大明",
-			    "department": "市场部",
-			    "position": "主任",
-			    "fileId": "7662489",
-			    "fileLocation": "1号档案柜",
-			    "fileImage": "Bv54AzdH3Fejvp56AzdH3Fd4abfdA.jpg"
-			}
+  			item : this.state.item,
+  			fileData: this.state.fileData,
   		}
-
-  		this.props.addTab("人员档案", "人员档案", InspectStuffFile, props);
+  		this.props.addTab("人员档案", "人员档案", this.state.View, props);
   	}
 
     render() {
     	let people = this.state.item;
-    	people.gender == '1'?people.gender='女':people.gender='男';
 
     	const formItemLayout = 
 		{
@@ -262,7 +256,7 @@ class extends React.Component {
         return (
           <Modal
             visible={visible}
-            title="新增人员管理记录"
+            title="修改人员管理记录"
             okText="确定"
             onCancel={onCancel}
             onOk={onCreate}
@@ -278,7 +272,6 @@ class extends React.Component {
                   </FormItem>
                   <FormItem label="性别">
                       {getFieldDecorator('gender', {
-                          initialValue: defaultVal.gender,
                           rules: [{ required: true, message: '请选择性别！' }],
                       })(
                           <Select style={{ width: 120 }}>
@@ -337,7 +330,7 @@ class extends React.Component {
                       {getFieldDecorator('graduationDate', {
                           rules: [{ required: true, message: '请输入毕业时间！' }],
                       })(
-                          <MonthPicker placeholder="选择时间" />
+                          <DatePicker />
                       )}
                   </FormItem>
                   <FormItem label="工作年限">

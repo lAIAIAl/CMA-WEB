@@ -12,6 +12,7 @@ import TestView from 'routes/test/TestView';
 import TestListView from 'routes/test/TestListView';
 
 import PeopleManagementRecordsView from 'routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView';
+import Rcomponent from 'routes/PeopleManagement/components/Rcomponent'
 
 const tabsmap = 
 [
@@ -38,6 +39,10 @@ const tabsmap =
     {
         path: '/PeopleManagementRecords',
         component: PeopleManagementRecordsView
+    },
+    {
+        path: '/resigner_list',
+        component: ItemContainer('Resigner', Rcomponent)
     }
 ]
 

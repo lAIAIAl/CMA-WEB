@@ -33,14 +33,22 @@ const initialState =
         code: "0",      
         name: "人员管理",
         moduleIcon: "setting",
-        modulePath: "/index/system",
+        modulePath: "/index/PeopleManagement",
         menus:[
         	{
 	        id: "0-0",       
 	        code: "0-0",      
-	        name: "人员档案管理记录",
-	        modulePath: "/index/system",
+	        name: "人员管理",
+	        modulePath: "/index/PeopleManagement/",
 	        menuPath: "/PeopleManagementRecords",
+        	},       	
+        	{
+	        id: "0-1",       
+	        code: "0-1",      
+	        name: "离任人员管理",
+	        modulePath: "Resigner",
+	        menuPath: "/resigner_list",
+	        functions: []
         	}
         ]
     }]

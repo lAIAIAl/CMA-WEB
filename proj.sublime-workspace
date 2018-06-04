@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"Add",
+				"AddStuffFile"
+			],
+			[
+				"file",
+				"fileData"
+			],
+			[
+				"peo",
+				"peopleData"
+			],
+			[
+				"Ins",
+				"InspectStuffFile"
+			],
+			[
+				"c",
+				"component"
+			],
+			[
+				"com",
+				"components"
+			],
+			[
+				"defa",
+				"defaultVal"
+			],
+			[
+				"people",
+				"peopledata"
+			],
+			[
+				"pr",
+				"props"
+			],
+			[
+				"In",
+				"InspectStuffFile"
+			],
+			[
+				"h",
+				"handleFileInfo"
+			],
+			[
+				"ge",
+				"getAll"
+			],
+			[
+				"dele",
+				"deleteId"
+			],
+			[
 				"ti",
 				"this"
 			],
@@ -64,24 +116,12 @@
 				"constructor"
 			],
 			[
-				"Ins",
-				"InspectPeople"
-			],
-			[
 				"data",
 				"dataIndex"
 			],
 			[
-				"dele",
-				"deleteName"
-			],
-			[
 				"bas",
 				"baseAddress"
-			],
-			[
-				"file",
-				"fileData"
 			],
 			[
 				"T",
@@ -106,10 +146,6 @@
 			[
 				"XM",
 				"xmlhttp"
-			],
-			[
-				"peo",
-				"peopleName"
 			],
 			[
 				"Fo",
@@ -191,35 +227,44 @@
 			"file": "src/routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView.js",
 			"settings":
 			{
-				"buffer_size": 7856,
+				"buffer_size": 8289,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "import React from 'react';\nimport { Form, Input, Icon, Row, Col, Button, Card} from 'antd';\nimport {Table, Divider, Modal, Avatar, Upload, message} from 'antd';\n\nimport {baseAddress} from 'services';\nimport $ from 'lib/jquery-3.3.1';\n\nconst FormItem = Form.Item;\n\n\n\nfunction hasErrors(fieldsError) {\n  return Object.keys(fieldsError).some(field => fieldsError[field]);\n}\n\nconst InspectPeople = Form.create()(\nclass extends React.Component {\n\tstate = {\n    \tfileList: [],\n    \tuploading: false,\n  \t}\n\n\tconstructor(props){\n\t\tsuper(props);\n\t}\n\n\thandleSubmit = (e)=>{\n\t\te.preventDefault();\n    \tthis.props.form.validateFields((err, values) => {\n      \t\tif (!err) {\n      \t\t\t//TODO:ajax\n\n      \t\t\tconst { fileList } = this.state;\n    \t\t\tconst formData = new FormData();\n    \t\t\tfileList.forEach((file) => {\n      \t\t\t\tformData.append('files[]', file);\n    \t\t\t});\n    \t\t\t\n    \t\t\tconsole.log(formData);\n    \t\t\tconsole.log(formData.get('files[]'));\n\n      \t\t\tlet temp={};\n      \t\t\ttemp.staffFile = values;\n      \t\t\ttemp.staffFile.fileImage = null;\n      \t\t\ttemp.name = this.props.item.name;\n      \t\t\t//TODO:发送图片formdata\n      \t\t\t$.ajax({\n\t\t      \t\ttype: \"post\",\n\t\t      \t\tdataType: 'json',\n\t\t      \t\turl: baseAddress+\"/cma/StaffFile/modify\",\n\t\t      \t\tcontentType: 'application/json',\n\t\t      \t\tdata: JSON.stringify(temp),\n\t\t\t      \tcomplete: function(xhr, ts){\n\t\t\t      \t\tmessage.info(xhr.responseText);\n\t\t\t      \t}\n\t\t    \t});\n\t\t    \t/*$.ajax({\n\t\t      \t\ttype: \"post\",\n\t\t      \t\turl: baseAddress+\"/cma/StaffFile/modify\",\n\t\t      \t\t//contentType: 'multipart/form-data',\n\t\t      \t\tcontentType: false,\n                \tprocessData: false,\n\t\t      \t\tdata: formData,\n\t\t      \t\tsuccess: function (d) {\n\t\t      \t\t\tmessage.success(\"修改图片成功\");\n\t\t      \t\t}\n\t\t    \t});*/\n        \t\tconsole.log('Received values of form: ', values);\n      \t\t}\n    \t});\n\t}\n\n    render() {\n    \t//console.log(this.props.item);\n    \tconst { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;\n\t\tconst formItemLayout = {\n\t\t    labelCol: {\n\t\t        xs: { span: 24 },\n\t\t        sm: { span: 8 },\n\t\t    },\n\t\t    wrapperCol: {\n\t\t        xs: { span: 24 },\n\t\t        sm: { span: 16 },\n\t\t    },\n\t\t};\n\t\tconst defaultVal = this.props.item;\n\t\t//const imageAddr = baseAddress+\"/cma/StaffFile/getStaffPicture/\"+defaultVal.fileImage;\n\t\tconst imageAddr = baseAddress+\"/cma/StaffFile/getStaffPicture/7.jpg\";\n\t\tconst props = {\n\t\t    action: '//jsonplaceholder.typicode.com/posts/',\n\t\t    onRemove: (file) => {\n\t\t        this.setState(({ fileList }) => {\n\t\t          \tconst index = fileList.indexOf(file);\n\t\t          \tconst newFileList = fileList.slice();\n\t\t          \tnewFileList.splice(index, 1);\n\t\t          \treturn {\n\t\t            \tfileList: newFileList,\n\t\t          \t};\n\t\t        });\n\t\t    },\n\t\t    beforeUpload: (file) => {\n\t\t        this.setState(({ fileList }) => ({\n\t\t          \tfileList: [file],\n\t\t        }));\n\t\t        return false;\n\t\t    },\n\t\t    fileList: this.state.fileList,\n\t\t};\n\n        return (\n        \t<div>\n            <Form \n                layout=\"vertical\"\n                onSubmit={this.handleSubmit}>\n                <FormItem {...formItemLayout} label=\"姓名\">\n                    {getFieldDecorator('name', {\n                    \tinitialValue: defaultVal.name,\n                        rules: [{ required: true, message: '请输入姓名！' }],\n                    })(\n                        <Input />\n                    )}\n                </FormItem>\n                <FormItem {...formItemLayout} label=\"部门\">\n                    {getFieldDecorator('department', {\n                    \tinitialValue: defaultVal.department,\n                        rules: [{ required: true, message: '请输入部门！' }],\n                    })(\n                        <Input />\n                    )}\n                </FormItem>\n                <FormItem {...formItemLayout} label=\"职位\">\n                    {getFieldDecorator('position', {\n                    \tinitialValue: defaultVal.position,\n                        rules: [{ required: true, message: '请输入职位！' }],\n                    })(\n                        <Input />\n                    )}\n                </FormItem>\n                <FormItem {...formItemLayout} label=\"档案编号\">\n                    {getFieldDecorator('fileId', {\n                    \tinitialValue: defaultVal.fileId,\n                        rules: [{ required: true, message: '请输入档案编号！' }],\n                    })(\n                        <Input />\n                    )}\n                </FormItem>\n                <FormItem {...formItemLayout} label=\"档案存放位置\">\n                    {getFieldDecorator('location', {\n                    \tinitialValue: defaultVal.location,\n                        rules: [{ required: true, message: '请输入档案存放位置！' }],\n                    })(\n                        <Input />\n                    )}\n                </FormItem>\n                <FormItem {...formItemLayout} label=\"修改档案扫描件\">\n                    {getFieldDecorator('fileImage', {\n                       \n                    })(  \n                        <Upload {...props}>\n                            <Button>\n                                <Icon type=\"upload\" /> 上传档案扫描件\n                            </Button>\n                        </Upload>\n                     )}\n                </FormItem>\n                <FormItem>\n\t\t\t       \t<Button\n\t\t\t           \ttype=\"primary\"\n\t\t\t           \thtmlType=\"submit\"\n\t\t\t           \ttype=\"button\"\n\t\t\t           \tdisabled={hasErrors(getFieldsError())}\n\t\t\t       \t>修改\n\t\t\t       \t</Button>\n\t\t        </FormItem>\n\t\t    </Form>\n\t\t    <a href={imageAddr} >点击下载当前档案扫描件</a>\n\t\t    </div>\n      \t);\n    }\n}\n);\n\nexport default InspectPeople;",
+			"file": "src/store/createStore.js",
+			"settings":
+			{
+				"buffer_size": 1698,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
-			"file_size": 6043,
-			"file_write_time": 131716082891278022,
 			"settings":
 			{
-				"buffer_size": 5652,
+				"buffer_size": 10055,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/E/课件/面向对象设计方法/rl/huojing/dp/bridge/Coffee.java",
+			"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectStuffFile.js",
 			"settings":
 			{
-				"buffer_size": 379,
+				"buffer_size": 2083,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/E/课件/面向对象设计方法/rl/huojing/dp/bridge/MediumCoffee.java",
+			"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
 			"settings":
 			{
-				"buffer_size": 284,
+				"buffer_size": 4284,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -227,52 +272,18 @@
 			"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
 			"settings":
 			{
-				"buffer_size": 3196,
+				"buffer_size": 4486,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/common/basic/components/ListView.js",
+			"file": "src/routes/PeopleManagement/components/Rcomponent.js",
 			"settings":
 			{
-				"buffer_size": 2770,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/basic/containers/ListContainer.js",
-			"settings":
-			{
-				"buffer_size": 528,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/basic/components/ListComponent.js",
-			"settings":
-			{
-				"buffer_size": 7440,
+				"buffer_size": 3822,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
-			"settings":
-			{
-				"buffer_size": 2052,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/utils/FetchUtil.js",
-			"settings":
-			{
-				"buffer_size": 2689,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -284,19 +295,10 @@
 			}
 		},
 		{
-			"file": "src/routes/Login/components/LoginView.js",
+			"file": "src/layouts/CoreLayout.js",
 			"settings":
 			{
-				"buffer_size": 4090,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/routes/Blank/components/Blank.js",
-			"settings":
-			{
-				"buffer_size": 798,
+				"buffer_size": 9137,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -347,36 +349,55 @@
 	],
 	"file_history":
 	[
+		"/G/.Trash-1000/files/sources.c",
+		"/G/.Trash-1000/files/ping.c",
+		"/E/课件/编译原理/第三次实验/Lab/Code/main.c",
+		"/G/.Trash-1000/files/source.2.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/ir.h",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/ir.c",
+		"/E/课件/编译原理/第三次实验/Lab3/Code/ir.c",
+		"/C/Users/dell/AppData/Local/Temp/Rar$DIa5612.2801/README",
+		"/E/CMA-WEB/README.md",
+		"/E/CMA-WEB/package.json",
+		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
+		"/E/CMA-WEB/src/common/basic/components/ListComponent.js",
+		"/E/CMA-WEB/src/common/basic/containers/ListContainer.js",
+		"/E/CMA-WEB/src/common/basic/components/ListView.js",
+		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardInspectView.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/components/Rcomponent.js",
+		"/E/CMA-WEB/src/routes/Login/containers/LoginContainer.js",
+		"/E/CMA-WEB/src/routes/tabsmap.js",
+		"/E/CMA-WEB/src/services/index.js",
+		"/E/CMA-WEB/package-lock.json",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/debug.h",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/README.md",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/oc.c",
+		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_ir.c",
+		"/E/CMA-WEB/src/common/basic/components/InspectView.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
+		"/E/CMA-WEB/src/routes/Blank/components/Blank.js",
+		"/E/CMA-WEB/src/routes/Login/components/LoginView.js",
+		"/E/CMA-WEB/src/utils/FetchUtil.js",
+		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/Coffee.java",
+		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/MediumCoffee.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/BlackCoffeeImp.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/MilkCoffeeImp.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/adapter/defaultadapter/LuZhiShen.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/adapter/defaultadapter/Monk.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/CoffeeCustom.java",
-		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/Coffee.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/CoffeeImp.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/adapter/classadapter/Adapter.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/adapter/classadapter/Adaptee.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/adapter/objectadapter/Adapter.java",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/include/ir.h",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/ir.c",
-		"/E/CMA-WEB/README.md",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/include/AST.h",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/AST.c",
-		"/E/CMA-WEB/package-lock.json",
-		"/E/CMA-WEB/package.json",
 		"/E/CMA-WEB/src/layouts/CoreLayout.js",
 		"/E/sinosteel-master/client/framework-webclient/src/containers/AppContainer.js",
 		"/E/CMA-WEB/config/project.config.js",
 		"/E/CMA-WEB/config/webpack.config.js",
 		"/E/CMA-WEB/server/main.js",
-		"/E/CMA-WEB/src/services/index.js",
-		"/E/CMA-WEB/src/utils/FetchUtil.js",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_ir.c",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/oc.c",
-		"/E/CMA-WEB/src/routes/Blank/components/Blank.js",
 		"/E/CMA-WEB/src/routes/index.js",
 		"/E/CMA-WEB/src/main.js",
-		"/E/CMA-WEB/src/routes/Login/containers/LoginContainer.js",
 		"/E/CMA-WEB/src/routes/Login/index.js",
 		"/E/CMA-WEB/src/routes/Blank/index.js",
 		"/E/CMA-WEB/bin/dev-server.js",
@@ -398,10 +419,6 @@
 		"/E/sinosteel-master/client/framework-webclient/src/routes/Login/components/LoginView.js",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListView.js",
 		"/E/CMA-WEB/src/common/basic/components/SearchComponent.js",
-		"/E/CMA-WEB/src/common/basic/components/ListComponent.js",
-		"/E/CMA-WEB/src/common/basic/components/ListView.js",
-		"/E/CMA-WEB/src/routes/tabsmap.js",
-		"/E/CMA-WEB/src/routes/Login/components/LoginView.js",
 		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleManagementRecordsView.js",
 		"/E/CMA-WEB/src/common/basic/components/EditView.js",
 		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleManagementRecordView.js",
@@ -413,9 +430,6 @@
 		"/E/新建文本文档.js",
 		"/E/CMA-WEB/src/routes/Login/reducers/LoginReducer.js",
 		"/E/CMA-WEB/src/routes/test/TestView.js",
-		"/E/CMA-WEB/src/common/basic/components/InspectView.js",
-		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardInspectView.js",
-		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
 		"/E/CMA-WEB/src/common/basic/containers/SearchContainer.js",
 		"/E/sinosteel-master/client/framework-webclient/src/routes/tabsmap.js",
 		"/E/sinosteel-master/server/framework-example/src/main/resources/structure.json",
@@ -462,19 +476,7 @@
 		"/E/实验/spring-petclinic/src/main/resources/application.properties",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/sym_table.c",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/semantic_check.c",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/include/common.h",
-		"/E/课件/编译原理/第一次实验/Lab1_v2/Code/lexical.l",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/semantic.c",
-		"/E/课件/编译原理/第二次实验/Lab2/Code/tree.h",
-		"/E/实验/demo/springboot_learning/src/main/java/com/example/demo/domain/Student.java",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_oc.c",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_AST.c",
-		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/service/StandardService.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/web/StandardController.java",
-		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/repository/StandardRepository.java",
-		"/C/Users/dell/AppData/Local/Temp/Temp1_sinosteel-master.zip/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/core/base/service/BaseService.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/metallurgical/knowledge/domain/Standard.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/core/base/domain/BaseEntity.java"
+		"/E/课件/编译原理/Compiler-master/Compiler-master/include/common.h"
 	],
 	"find":
 	{
@@ -492,6 +494,30 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getTypeSize",
+			"IR_ADDR",
+			"translate_ParamDec",
+			"translate_VarList",
+			"translate_FunDec",
+			"translate_VarDec",
+			"filedata",
+			"translate_vardec",
+			"vardec",
+			"fundec",
+			"extdeflist",
+			"program",
+			"translate_dec(",
+			"translate_declist(",
+			"translate_def(",
+			"translate_def",
+			"compst",
+			"extdeflist",
+			" newVariableId",
+			"translate_exp",
+			"setState",
+			"formRef",
+			"InspectPeople",
+			"handleImage",
 			"fetch",
 			"defaltVal",
 			"fileData",
@@ -583,7 +609,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -592,15 +618,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7856,
+						"buffer_size": 8289,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7436,
-								7436
+								3896,
+								3578
 							]
 						],
 						"settings":
@@ -608,47 +634,19 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2723.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5652,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1417,
-								1417
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1163.0,
+						"translation.y": 3195.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "/E/课件/面向对象设计方法/rl/huojing/dp/bridge/Coffee.java",
+					"buffer": 1,
+					"file": "src/store/createStore.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 379,
+						"buffer_size": 1698,
 						"regions":
 						{
 						},
@@ -657,63 +655,6 @@
 							[
 								0,
 								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/E/课件/面向对象设计方法/rl/huojing/dp/bridge/MediumCoffee.java",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 284,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3196,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3196,
-								3196
 							]
 						],
 						"settings":
@@ -723,146 +664,145 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1224.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/common/basic/components/ListView.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2770,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "src/common/basic/containers/ListContainer.js",
+					"buffer": 2,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 528,
+						"buffer_size": 10055,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2042,
+								2042
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6632.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "src/common/basic/components/ListComponent.js",
+					"buffer": 3,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectStuffFile.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7440,
+						"buffer_size": 2083,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1802,
-								1812
+								1411,
+								1411
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1419.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2052,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1880,
-								1901
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1615.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "src/utils/FetchUtil.js",
+					"buffer": 4,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2689,
+						"buffer_size": 4284,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2017,
-								2017
+								1038,
+								1038
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2794.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4486,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1486,
+								1297
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1564.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/routes/PeopleManagement/components/Rcomponent.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3822,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								763,
+								763
 							]
 						],
 						"settings":
@@ -872,14 +812,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2088.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 7,
 					"file": "src/services/index.js",
 					"semi_transient": false,
 					"settings":
@@ -891,8 +831,8 @@
 						"selection":
 						[
 							[
-								4937,
-								4944
+								0,
+								0
 							]
 						],
 						"settings":
@@ -903,54 +843,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "src/routes/Login/components/LoginView.js",
+					"buffer": 8,
+					"file": "src/layouts/CoreLayout.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4090,
+						"buffer_size": 9137,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1430,
-								1430
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 864.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "src/routes/Blank/components/Blank.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 798,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								680,
-								680
+								8134,
+								8134
 							]
 						],
 						"settings":
@@ -959,10 +869,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 144.0,
+						"translation.y": 7216.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
