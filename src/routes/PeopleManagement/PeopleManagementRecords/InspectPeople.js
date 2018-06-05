@@ -7,11 +7,14 @@ import InspectStuffFile from './InspectStuffFile';
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
+import {getStuffManagement} from './Function';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 //传给新页面的数据是StuffFile，保存在fileData
-
 
 const InspectPeople = Form.create()(
 class extends React.Component {
@@ -22,6 +25,27 @@ class extends React.Component {
 		View: null,
 	};
 
+  constructor(props){
+    super(props);
+    this.unsubscribe = getStore().subscribe(this.refreshData);
+  }
+
+  refreshData = () => {
+    let data = getStore().getState().StaffManagement.items;
+    let myitem = null;
+    for (var i = data.length - 1; i >= 0; i--) {
+      if(data[i].id == this.props.item.id)
+        myitem = data[i];
+    }
+    this.setState({
+        item : myitem
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
 	componentWillMount() {
 		//TODO:use ajax to get proper info and save to state.item
   		this.setState({ 
@@ -30,10 +54,9 @@ class extends React.Component {
   		});
   		if(this.props.fileData == null)
   		 	this.setState({View: AddStuffFile});
-  			//this.setState({View: InspectStuffFile});
   		else 
   			this.setState({View: InspectStuffFile});
-  	}
+  }
 
 	handleCreate = () => {
     	const form = this.formRef.props.form;
@@ -45,20 +68,22 @@ class extends React.Component {
       		let temp = values;
       		temp.id=this.state.item.id;
       		temp.graduationDate=temp.graduationDate.format("YYYY-MM-DD");
-      		console.log(temp);
+      		//console.log(temp);
       		this.setState({ item:temp});
 
-			$.ajax({
-		      	type: "post",
-		      	url: baseAddress+"/cma/StaffManagement/modifyOne",
-		      	data: temp,
-			    complete: function(xhr, ts){
-			      	//message.info(xhr.responseText);
-			    }	
-			});
+    			$.ajax({
+    		      	type: "post",
+    		      	url: baseAddress+"/cma/StaffManagement/modifyOne",
+    		      	data: temp,
+                async: false,
+    			      complete: function(xhr, ts){
+    			      	//message.info(xhr.responseText);
+    			      }	
+    			});
       		form.resetFields();
 
       		this.setState({ visible: false });
+          getStuffManagement();
       		//TODO:use ajax to get proper info and save to state.item
     	});
   	}
@@ -86,12 +111,12 @@ class extends React.Component {
 
     render() {
     	let people = this.state.item;
-
+      people.gender == 0 ? people.gender = '男':people.gender = '女';
     	const formItemLayout = 
-		{
+		  {
   			labelCol: { span: 6 },
   			wrapperCol: { span: 18 },
-		};
+		  };
 
         return (
         	<div>

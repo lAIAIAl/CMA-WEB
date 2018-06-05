@@ -11,6 +11,7 @@ import $ from 'lib/jquery-3.3.1';
 
 import {getStore} from 'store/globalStore';
 import {setItems} from 'common/basic/reducers/ItemReducer';
+import {getStuffManagement} from './Function';
 
 const FormItem = Form.Item;
 //名称，部门，职位，档案编号，档案存放位置，档案扫描件
@@ -77,12 +78,15 @@ class PeopleManagementRecordsViewF extends React.Component{
 		fileData: [],
 	    loading: false,
 		visible: false,
-
 	};
 
 	constructor(props){
 		super(props);
-		getStore().subscribe(this.refreshData);
+		this.unsubscribe = getStore().subscribe(this.refreshData);
+	}
+
+	componentWillUnmount() {
+		this.unsubscribe();
 	}
 
 	refreshData = () => {
@@ -124,7 +128,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 
       		this.setState({ visible: false });
 
-      		this.getAll();
+      		getStuffManagement();
       		
     	});
   	}
@@ -147,29 +151,13 @@ class PeopleManagementRecordsViewF extends React.Component{
   	}
 	
   	getAll = () => {
-  		for (var i = this.state.peopleData.length - 1; i >= 0; i--) {
-  			this.state.peopleData[i].key = this.state.peopleData[i].id;
-  		}
-  		$.get(baseAddress+"/cma/StaffManagement/getAll" , null,(res)=>{
-  			let peopledata = res.data;
-  			for (var i = peopledata.length - 1; i >= 0; i--) {
-  				peopledata[i].key = peopledata[i].id;
-  			}
-  			/*this.setState({
-		        peopleData: peopledata,
-		    });*/
+  		
+  		getStuffManagement();
 
-  			let store = getStore();
-  			store.dispatch(setItems(peopledata, 'StaffManagement'));
-  			console.log(store.getState());
-
-		    //console.log(this.state.peopleData);
-  		});
   		$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
   			this.setState({
   				fileData: res.data
   			})
-  			//console.log(this.state.fileData);
   		});
   	}
 
@@ -214,7 +202,7 @@ class PeopleManagementRecordsViewF extends React.Component{
   			loading: false,
   			selectedRowKeys:[] 
   		});	
-  		this.getAll();
+  		getStuffManagement();
   	}
 
   	onSelectChange = (selectedRowKeys) => {
