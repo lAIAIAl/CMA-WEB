@@ -86,6 +86,7 @@ class extends React.Component {
 
     render() {
     	let people = this.state.item;
+      people.gender == 0? people.gender = '男':people.gender = '女';
 
     	const formItemLayout = 
 		{
