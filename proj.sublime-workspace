@@ -20,6 +20,7 @@
 				"StaffFile"
 			],
 			[
+
 				"peo",
 				"peopleData"
 			],
@@ -113,7 +114,7 @@
 			],
 			[
 				"档案",
-				"档案扫描件"
+				"档案扫描�?
 			],
 			[
 				"de",
@@ -247,7 +248,7 @@
 			"file": "src/routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView.js",
 			"settings":
 			{
-				"buffer_size": 8289,
+				"buffer_size": 8209,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -280,12 +281,11 @@
 			}
 		},
 		{
-			"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
+			"file": "src/common/basic/reducers/ItemReducer.js",
 			"settings":
 			{
-				"buffer_size": 4284,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"buffer_size": 3172,
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -433,11 +433,11 @@
 		"/E/CMA-WEB/src/services/index.js",
 		"/G/.Trash-1000/files/sources.c",
 		"/G/.Trash-1000/files/ping.c",
-		"/E/课件/编译原理/第三次实验/Lab/Code/main.c",
+		"/E/课件/编译原理/第三次实�?Lab/Code/main.c",
 		"/G/.Trash-1000/files/source.2.c",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/include/ir.h",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/ir.c",
-		"/E/课件/编译原理/第三次实验/Lab3/Code/ir.c",
+		"/E/课件/编译原理/第三次实�?Lab3/Code/ir.c",
 		"/C/Users/dell/AppData/Local/Temp/Rar$DIa5612.2801/README",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
 		"/E/CMA-WEB/src/common/basic/components/ListComponent.js",
@@ -520,7 +520,7 @@
 		"/E/sinosteel-master/client/framework-webclient/src/routes/index.js",
 		"/E/实验/nodejs-learning/test1.js",
 		"/E/课件/面向对象设计方法/Calculator.java",
-		"/E/课件/综合实验/需求/CMA.wiki/需求规格说明.md",
+		"/E/课件/综合实验/需�?CMA.wiki/需求规格说�?md",
 		"/E/sinosteel-master/client/framework-webclient/src/routes/Login/containers/LoginContainer.js",
 		"/E/sinosteel-master/client/framework-webclient/src/routes/Knowledge/subviews/StandardList/components/StandardAddView.js",
 		"/E/shawodsocks.json",
@@ -655,7 +655,7 @@
 			"create",
 			"reacdom",
 			"AdvancedSearchForm",
-			"登",
+			"�?,
 			"登陆",
 			"query",
 			"findm",
@@ -696,7 +696,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8289,
+						"buffer_size": 8209,
 						"regions":
 						{
 						},
@@ -738,7 +738,7 @@
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -810,11 +810,11 @@
 				},
 				{
 					"buffer": 4,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
+					"file": "src/common/basic/reducers/ItemReducer.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4284,
+						"buffer_size": 3172,
 						"regions":
 						{
 						},
@@ -981,6 +981,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+
 					"stack_index": 10,
 					"type": "text"
 				},
@@ -1038,6 +1039,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+
 					"stack_index": 9,
 					"type": "text"
 				},
@@ -1084,6 +1086,7 @@
 						"selection":
 						[
 							[
+
 								1277,
 								1277
 							]
@@ -1091,6 +1094,7 @@
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},

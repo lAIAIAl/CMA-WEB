@@ -6,6 +6,10 @@ import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 import ModifyStuffFile from './ModifyStuffFile';
 
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
+import {getStaffManagement, getStaffFile} from './Function';
+
 const FormItem = Form.Item;
 
 function hasErrors(fieldsError) {
@@ -17,22 +21,40 @@ class extends React.Component {
 
     state = {
         visible: false,
-        item: null,
+        item: {},
     };
 
-  constructor(props){
-      super(props);
-  }
+    constructor(props){
+        super(props);
+        this.unsubscribe = getStore().subscribe(this.refreshData);
+    }
 
     componentWillMount(){
+        this.refreshData();
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+    refreshData = () => {
+
+        console.log(this.props);
+
+        let data = getStore().getState().StaffFile.items;
+        let myitem = {};
+        for (var i = data.length - 1; i >= 0; i--) {
+            if(data[i].id == this.props.item.id)
+                myitem = data[i];
+        }
         this.setState({
-            item: this.props.fileData
+            item: myitem,
         });
     }
 
     handleModify = () => {
         let props = {
-          item : this.props.item
+          item : this.state.item
         }
         this.props.addTab("修改档案", "修改档案", ModifyStuffFile, props);
     }
@@ -47,6 +69,9 @@ class extends React.Component {
               message.success("删除成功");
             }
         });
+        //console.log(this.props);
+        getStaffFile();
+        //console.log(this.props);
     }
 
     render() {

@@ -11,6 +11,7 @@ import ItemContainer from 'common/basic/containers/ItemContainer';
 import TestView from 'routes/test/TestView';
 import TestListView from 'routes/test/TestListView';
 
+import InspectPeople from 'routes/PeopleManagement/PeopleManagementRecords/InspectPeople';
 import PeopleManagementRecordsView from 'routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView';
 import Rcomponent from 'routes/PeopleManagement/components/Rcomponent'
 
@@ -38,7 +39,11 @@ const tabsmap =
     },
     {
         path: '/PeopleManagementRecords',
-        component: PeopleManagementRecordsView
+        component: ItemContainer('StaffManagement',PeopleManagementRecordsView)
+    },
+    {
+        path: '/StaffFile_fake',
+        component: ItemContainer('StaffFile', InspectPeople)
     },
     {
         path: '/resigner_list',

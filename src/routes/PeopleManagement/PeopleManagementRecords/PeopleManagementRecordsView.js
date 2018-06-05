@@ -9,6 +9,11 @@ import AddPeopleForm from './AddPeopleForm';
 import InspectPeople from './InspectPeople';
 import $ from 'lib/jquery-3.3.1';
 
+import ItemContainer from 'common/basic/containers/ItemContainer';
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
+import {getStaffManagement} from './Function';
+
 const FormItem = Form.Item;
 //名称，部门，职位，档案编号，档案存放位置，档案扫描件
 
@@ -47,6 +52,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 	state = {
 	    selectedRowKeys: [], // Check here to configure the default column
 	    peopleData: [{
+	    	"key": "1",
 		    "id": "1",
 		    "name": "小明",
 		    "gender": "0",
@@ -59,6 +65,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 		    "graduationDate": "2000-12",
 		    "workingYears": 6
 		  },{
+		  	"key": "2",
 		    "id": "2",
 		    "name": "小红",
 		    "gender": "1",
@@ -74,12 +81,21 @@ class PeopleManagementRecordsViewF extends React.Component{
 		fileData: [],
 	    loading: false,
 		visible: false,
-
 	};
 
 	constructor(props){
 		super(props);
+		this.unsubscribe = getStore().subscribe(this.refreshData);
+	}
 
+	componentWillUnmount() {
+		this.unsubscribe();
+	}
+
+	refreshData = () => {
+		this.setState({
+			peopleData:getStore().getState().StaffManagement.items
+		});
 	}
 
   	handleInspect = (props) => {
@@ -115,7 +131,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 
       		this.setState({ visible: false });
 
-      		this.getAll();
+      		getStaffManagement();
       		
     	});
   	}
@@ -138,24 +154,13 @@ class PeopleManagementRecordsViewF extends React.Component{
   	}
 	
   	getAll = () => {
-  		for (var i = this.state.peopleData.length - 1; i >= 0; i--) {
-  			this.state.peopleData[i].key = this.state.peopleData[i].id;
-  		}
-  		$.get(baseAddress+"/cma/StaffManagement/getAll" , null,(res)=>{
-  			let peopledata = res.data;
-  			for (var i = peopledata.length - 1; i >= 0; i--) {
-  				peopledata[i].key = peopledata[i].id;
-  			}
-  			this.setState({
-		        peopleData: peopledata,
-		    });
-		    console.log(this.state.peopleData);
-  		});
+  		
+  		getStaffManagement();
+
   		$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
   			this.setState({
   				fileData: res.data
   			})
-  			console.log(this.state.fileData);
   		});
   	}
 
@@ -200,7 +205,7 @@ class PeopleManagementRecordsViewF extends React.Component{
   			loading: false,
   			selectedRowKeys:[] 
   		});	
-  		this.getAll();
+  		getStaffManagement();
   	}
 
   	onSelectChange = (selectedRowKeys) => {
