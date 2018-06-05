@@ -38,7 +38,7 @@ const tabsmap =
     },
     {
         path: '/PeopleManagementRecords',
-        component: PeopleManagementRecordsView
+        component: ItemContainer('StaffManagement',PeopleManagementRecordsView)
     },
     {
         path: '/resigner_list',

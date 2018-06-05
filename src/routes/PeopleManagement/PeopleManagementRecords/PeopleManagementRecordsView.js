@@ -9,6 +9,9 @@ import AddPeopleForm from './AddPeopleForm';
 import InspectPeople from './InspectPeople';
 import $ from 'lib/jquery-3.3.1';
 
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
+
 const FormItem = Form.Item;
 //名称，部门，职位，档案编号，档案存放位置，档案扫描件
 
@@ -79,7 +82,13 @@ class PeopleManagementRecordsViewF extends React.Component{
 
 	constructor(props){
 		super(props);
+		getStore().subscribe(this.refreshData);
+	}
 
+	refreshData = () => {
+		this.setState({
+			peopleData:getStore().getState().StaffManagement.items
+		});
 	}
 
   	handleInspect = (props) => {
@@ -146,16 +155,21 @@ class PeopleManagementRecordsViewF extends React.Component{
   			for (var i = peopledata.length - 1; i >= 0; i--) {
   				peopledata[i].key = peopledata[i].id;
   			}
-  			this.setState({
+  			/*this.setState({
 		        peopleData: peopledata,
-		    });
-		    console.log(this.state.peopleData);
+		    });*/
+
+  			let store = getStore();
+  			store.dispatch(setItems(peopledata, 'StaffManagement'));
+  			console.log(store.getState());
+
+		    //console.log(this.state.peopleData);
   		});
   		$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
   			this.setState({
   				fileData: res.data
   			})
-  			console.log(this.state.fileData);
+  			//console.log(this.state.fileData);
   		});
   	}
 

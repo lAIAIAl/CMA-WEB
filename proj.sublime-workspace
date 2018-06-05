@@ -4,16 +4,36 @@
 		"selected_items":
 		[
 			[
+				"peo",
+				"peopleData"
+			],
+			[
+				"gets",
+				"getState"
+			],
+			[
+				"get",
+				"getStore"
+			],
+			[
+				"Sta",
+				"StaffManagement"
+			],
+			[
+				"hand",
+				"handleDelete"
+			],
+			[
+				"Mo",
+				"ModifyStuffFile"
+			],
+			[
 				"Add",
 				"AddStuffFile"
 			],
 			[
 				"file",
 				"fileData"
-			],
-			[
-				"peo",
-				"peopleData"
 			],
 			[
 				"Ins",
@@ -68,16 +88,8 @@
 				"defaultVal"
 			],
 			[
-				"get",
-				"getAll"
-			],
-			[
 				"new",
 				"newpic"
-			],
-			[
-				"hand",
-				"handleAddPic"
 			],
 			[
 				"da",
@@ -227,9 +239,59 @@
 			"file": "src/routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView.js",
 			"settings":
 			{
-				"buffer_size": 8289,
+				"buffer_size": 8681,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/common/basic/reducers/ItemReducer.js",
+			"settings":
+			{
+				"buffer_size": 3172,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/common/basic/components/ListView.js",
+			"settings":
+			{
+				"buffer_size": 2770,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/utils/ArrayUtil.js",
+			"settings":
+			{
+				"buffer_size": 869,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/common/basic/containers/ItemContainer.js",
+			"settings":
+			{
+				"buffer_size": 2307,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/store/reducers.js",
+			"settings":
+			{
+				"buffer_size": 660,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/E/sinosteel-master/client/framework-webclient/src/common/basic/components/AddView.js",
+			"settings":
+			{
+				"buffer_size": 2243,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -237,68 +299,6 @@
 			"settings":
 			{
 				"buffer_size": 1698,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
-			"settings":
-			{
-				"buffer_size": 10055,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectStuffFile.js",
-			"settings":
-			{
-				"buffer_size": 2083,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
-			"settings":
-			{
-				"buffer_size": 4284,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
-			"settings":
-			{
-				"buffer_size": 4486,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/routes/PeopleManagement/components/Rcomponent.js",
-			"settings":
-			{
-				"buffer_size": 3822,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/services/index.js",
-			"settings":
-			{
-				"buffer_size": 6571,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/layouts/CoreLayout.js",
-			"settings":
-			{
-				"buffer_size": 9137,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -349,6 +349,23 @@
 	],
 	"file_history":
 	[
+		"/E/sinosteel-master/client/framework-webclient/src/common/basic/reducers/ItemReducer.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/ModifyStuffFile.js",
+		"/E/CMA-WEB/src/routes/tabsmap.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/components/Rcomponent.js",
+		"/E/sinosteel-master/client/framework-webclient/src/store/createStore.js",
+		"/E/CMA-WEB/src/utils/FetchUtil.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/InspectStuffFile.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
+		"/E/sinosteel-master/client/framework-webclient/src/store/globalStore.js",
+		"/E/CMA-WEB/src/layouts/CoreLayout.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
+		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
+		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListView.js",
+		"/E/CMA-WEB/src/utils/DateUtil.js",
+		"/E/CMA-WEB/src/utils/createContainer.js",
+		"/E/CMA-WEB/src/services/index.js",
+		"/E/CMA-WEB/package.json",
 		"/G/.Trash-1000/files/sources.c",
 		"/G/.Trash-1000/files/ping.c",
 		"/E/课件/编译原理/第三次实验/Lab/Code/main.c",
@@ -358,26 +375,20 @@
 		"/E/课件/编译原理/第三次实验/Lab3/Code/ir.c",
 		"/C/Users/dell/AppData/Local/Temp/Rar$DIa5612.2801/README",
 		"/E/CMA-WEB/README.md",
-		"/E/CMA-WEB/package.json",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
 		"/E/CMA-WEB/src/common/basic/components/ListComponent.js",
 		"/E/CMA-WEB/src/common/basic/containers/ListContainer.js",
 		"/E/CMA-WEB/src/common/basic/components/ListView.js",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardInspectView.js",
-		"/E/CMA-WEB/src/routes/PeopleManagement/components/Rcomponent.js",
 		"/E/CMA-WEB/src/routes/Login/containers/LoginContainer.js",
-		"/E/CMA-WEB/src/routes/tabsmap.js",
-		"/E/CMA-WEB/src/services/index.js",
 		"/E/CMA-WEB/package-lock.json",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/include/debug.h",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/README.md",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/oc.c",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/gen_ir.c",
 		"/E/CMA-WEB/src/common/basic/components/InspectView.js",
-		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
 		"/E/CMA-WEB/src/routes/Blank/components/Blank.js",
 		"/E/CMA-WEB/src/routes/Login/components/LoginView.js",
-		"/E/CMA-WEB/src/utils/FetchUtil.js",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/Coffee.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/MediumCoffee.java",
 		"/E/课件/面向对象设计方法/rl/huojing/dp/bridge/BlackCoffeeImp.java",
@@ -391,7 +402,6 @@
 		"/E/课件/面向对象设计方法/rl/huojing/dp/adapter/objectadapter/Adapter.java",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/include/AST.h",
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/AST.c",
-		"/E/CMA-WEB/src/layouts/CoreLayout.js",
 		"/E/sinosteel-master/client/framework-webclient/src/containers/AppContainer.js",
 		"/E/CMA-WEB/config/project.config.js",
 		"/E/CMA-WEB/config/webpack.config.js",
@@ -417,7 +427,6 @@
 		"/E/课件/编译原理/Compiler-master/Compiler-master/include/sym_table.h",
 		"/E/CMA-WEB/config/environments.config.js",
 		"/E/sinosteel-master/client/framework-webclient/src/routes/Login/components/LoginView.js",
-		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListView.js",
 		"/E/CMA-WEB/src/common/basic/components/SearchComponent.js",
 		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleManagementRecordsView.js",
 		"/E/CMA-WEB/src/common/basic/components/EditView.js",
@@ -467,20 +476,11 @@
 		"/E/实验/sinosteel-master/sinosteel-master/server/framework/pom.xml",
 		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/core/cache/RedisService.java",
 		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/config/database/RepositoryConfig.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/config/database/DateSourceConfig.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/system/auth/domain/Role.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/helpers/hierarchy/helper/HierarchyHelper.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/helpers/hierarchy/domain/Hierarchy.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework-example/src/main/java/com/sinosteel/Application.java",
-		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/resources/config/spring.properties",
-		"/E/实验/spring-petclinic/src/main/resources/application.properties",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/sym_table.c",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/src/semantic_check.c",
-		"/E/课件/编译原理/Compiler-master/Compiler-master/include/common.h"
+		"/E/实验/sinosteel-master/sinosteel-master/server/framework/src/main/java/com/sinosteel/framework/config/database/DateSourceConfig.java"
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 52.0
 	},
 	"find_in_files":
 	{
@@ -494,6 +494,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Store",
+			"store",
+			"setItems",
+			"subscribe",
+			"getStore",
+			"getStore ",
+			"sysfetch",
+			"systemStore",
+			"sendMessage",
+			"refreshList",
+			"getStore",
 			"getTypeSize",
 			"IR_ADDR",
 			"translate_ParamDec",
@@ -609,7 +620,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -618,15 +629,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8289,
+						"buffer_size": 8681,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3896,
-								3578
+								4243,
+								4243
 							]
 						],
 						"settings":
@@ -634,19 +645,77 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 3195.0,
+						"translation.y": 2290.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "src/store/createStore.js",
+					"file": "src/common/basic/reducers/ItemReducer.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1698,
+						"buffer_size": 3172,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								227,
+								235
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/common/basic/components/ListView.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2770,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1165,
+								1170
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1296.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/utils/ArrayUtil.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 869,
 						"regions":
 						{
 						},
@@ -655,154 +724,6 @@
 							[
 								0,
 								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectPeople.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 10055,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2042,
-								2042
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 6632.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectStuffFile.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2083,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1411,
-								1411
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1615.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4284,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1038,
-								1038
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2794.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddPeopleForm.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4486,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1486,
-								1297
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1564.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/routes/PeopleManagement/components/Rcomponent.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3822,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								763,
-								763
 							]
 						],
 						"settings":
@@ -815,16 +736,45 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "src/services/index.js",
+					"buffer": 4,
+					"file": "src/common/basic/containers/ItemContainer.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6571,
+						"buffer_size": 2307,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								544,
+								544
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/store/reducers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 660,
 						"regions":
 						{
 						},
@@ -843,36 +793,67 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
-					"file": "src/layouts/CoreLayout.js",
+					"buffer": 6,
+					"file": "/E/sinosteel-master/client/framework-webclient/src/common/basic/components/AddView.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9137,
+						"buffer_size": 2243,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8134,
-								8134
+								1325,
+								1330
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7216.0,
+						"translation.y": 939.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/store/createStore.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1698,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1277,
+								1277
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 648.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
