@@ -9,9 +9,10 @@ import AddPeopleForm from './AddPeopleForm';
 import InspectPeople from './InspectPeople';
 import $ from 'lib/jquery-3.3.1';
 
+import ItemContainer from 'common/basic/containers/ItemContainer';
 import {getStore} from 'store/globalStore';
 import {setItems} from 'common/basic/reducers/ItemReducer';
-import {getStuffManagement} from './Function';
+import {getStaffManagement} from './Function';
 
 const FormItem = Form.Item;
 //名称，部门，职位，档案编号，档案存放位置，档案扫描件
@@ -51,6 +52,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 	state = {
 	    selectedRowKeys: [], // Check here to configure the default column
 	    peopleData: [{
+	    	"key": "1",
 		    "id": "1",
 		    "name": "小明",
 		    "gender": "0",
@@ -63,6 +65,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 		    "graduationDate": "2000-12",
 		    "workingYears": 6
 		  },{
+		  	"key": "2",
 		    "id": "2",
 		    "name": "小红",
 		    "gender": "1",
@@ -128,7 +131,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 
       		this.setState({ visible: false });
 
-      		getStuffManagement();
+      		getStaffManagement();
       		
     	});
   	}
@@ -152,7 +155,7 @@ class PeopleManagementRecordsViewF extends React.Component{
 	
   	getAll = () => {
   		
-  		getStuffManagement();
+  		getStaffManagement();
 
   		$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
   			this.setState({
@@ -202,7 +205,7 @@ class PeopleManagementRecordsViewF extends React.Component{
   			loading: false,
   			selectedRowKeys:[] 
   		});	
-  		getStuffManagement();
+  		getStaffManagement();
   	}
 
   	onSelectChange = (selectedRowKeys) => {

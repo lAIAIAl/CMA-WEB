@@ -7,7 +7,9 @@ import $ from 'lib/jquery-3.3.1';
 
 const FormItem = Form.Item;
 
-
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
+import {getStaffManagement, getStaffFile} from './Function';
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -47,10 +49,14 @@ class extends React.Component {
 		      		type: "post",
 		      		url: baseAddress+"/cma/StaffFile/modifyOne",
 		      		data: temp,
-			      	complete: function(xhr, ts){
-			      	}
-		    	   });
-        		console.log('Received values of form: ', values);
+			      	async: false,
+                    success: function(d){
+                        message.success("修改成功");
+                    }
+		    	 });
+
+                getStaffFile();
+        		//console.log('Received values of form: ', values);
       		}
     	});
 	}

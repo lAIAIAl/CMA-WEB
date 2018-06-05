@@ -4,7 +4,7 @@ import {baseAddress} from 'services';
 import {getStore} from 'store/globalStore';
 import {setItems} from 'common/basic/reducers/ItemReducer';
 
-export const getStuffManagement = () => {
+export const getStaffManagement = () => {
 	$.get(baseAddress+"/cma/StaffManagement/getAll" , null,(res)=>{
   		let peopledata = res.data;
   		for (var i = peopledata.length - 1; i >= 0; i--) {
@@ -12,18 +12,18 @@ export const getStuffManagement = () => {
   		}
   		let store = getStore();
  		store.dispatch(setItems(peopledata, 'StaffManagement'));
- 		console.log(store.getState());
+ 		//console.log(store.getState());
   	});
 };
 
-export const getStuffFile = () => {
-	$.get(baseAddress+"/cma/StaffManagement/getAll" , null,(res)=>{
+export const getStaffFile = () => {
+	$.get(baseAddress+"/cma/StaffFile/getAll" , null,(res)=>{
   		let peopledata = res.data;
   		for (var i = peopledata.length - 1; i >= 0; i--) {
   			peopledata[i].key = peopledata[i].id;
   		}
   		let store = getStore();
- 		store.dispatch(setItems(peopledata, 'StaffManagement'));
- 		console.log(store.getState());
+ 		store.dispatch(setItems(peopledata, 'StaffFile'));
+ 		//console.log(store.getState());
   	});
 };

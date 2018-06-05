@@ -9,7 +9,7 @@ import $ from 'lib/jquery-3.3.1';
 
 import {getStore} from 'store/globalStore';
 import {setItems} from 'common/basic/reducers/ItemReducer';
-import {getStuffManagement} from './Function';
+import {getStaffManagement, getStaffFile} from './Function';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -31,15 +31,25 @@ class extends React.Component {
   }
 
   refreshData = () => {
-    let data = getStore().getState().StaffManagement.items;
-    let myitem = null;
-    for (var i = data.length - 1; i >= 0; i--) {
-      if(data[i].id == this.props.item.id)
-        myitem = data[i];
-    }
-    this.setState({
-        item : myitem
-    });
+      let data = getStore().getState().StaffManagement.items;
+      let myitem = null;
+      for (var i = data.length - 1; i >= 0; i--) {
+          if(data[i].id == this.props.item.id)
+              myitem = data[i];
+      }
+
+      data = getStore().getState().StaffFile.items;
+      let fileview = AddStuffFile;
+
+      for (var i = data.length - 1; i >= 0; i--) {
+          if(data[i].id == this.props.item.id)
+            fileview = InspectStuffFile;
+      }
+      this.setState({
+          item : myitem,
+          View : fileview,
+      });
+
   }
 
   componentWillUnmount() {
@@ -48,14 +58,9 @@ class extends React.Component {
 
 	componentWillMount() {
 		//TODO:use ajax to get proper info and save to state.item
-  		this.setState({ 
-  			item: this.props.item,
-  			fileData: this.props.fileData,
-  		});
-  		if(this.props.fileData == null)
-  		 	this.setState({View: AddStuffFile});
-  		else 
-  			this.setState({View: InspectStuffFile});
+      getStaffManagement();
+      getStaffFile();
+      this.refreshData();
   }
 
 	handleCreate = () => {
@@ -76,14 +81,14 @@ class extends React.Component {
     		      	url: baseAddress+"/cma/StaffManagement/modifyOne",
     		      	data: temp,
                 async: false,
-    			      complete: function(xhr, ts){
-    			      	//message.info(xhr.responseText);
+    			      success: function(d){
+    			      	message.success("修改成功");
     			      }	
     			});
       		form.resetFields();
 
       		this.setState({ visible: false });
-          getStuffManagement();
+          getStaffManagement();
       		//TODO:use ajax to get proper info and save to state.item
     	});
   	}
@@ -103,8 +108,7 @@ class extends React.Component {
   	handleFileInfo = () => {
 		
   		let props = {
-  			item : this.state.item,
-  			fileData: this.state.fileData,
+  			item : this.props.item,
   		}
   		this.props.addTab("人员档案", "人员档案", this.state.View, props);
   	}

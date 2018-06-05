@@ -7,7 +7,9 @@ import $ from 'lib/jquery-3.3.1';
 
 const FormItem = Form.Item;
 
-
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
+import {getStaffManagement, getStaffFile} from './Function';
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -30,27 +32,30 @@ class extends React.Component {
       		if (!err) {
       			//TODO:ajax
 
-      		const { fileList } = this.state;
+      		    const { fileList } = this.state;
     			const formData = new FormData();
     			fileList.forEach((file) => {
       				formData.append('files[]', file);
     			});
     			
-    			console.log(formData);
-    			console.log(formData.get('files[]'));
+    			//console.log(formData);
+    			//console.log(formData.get('files[]'));
 
       			let temp=values;
-            temp.id = this.props.item.id;
+                temp.id = this.props.item.id;
       			temp.fileImage = null;
       			
       			$.ajax({
 		      		type: "post",
 		      		url: baseAddress+"/cma/StaffFile/addOne",
 		      		data: temp,
-			      	complete: function(xhr, ts){
-			      	}
-		    	   });
-        		console.log('Received values of form: ', values);
+                    async: false,
+			      	success: function(d){
+                        message.success("新增成功");
+                    }
+		    	 });
+                getStaffFile();
+        		//console.log('Received values of form: ', values);
       		}
     	});
 	}
