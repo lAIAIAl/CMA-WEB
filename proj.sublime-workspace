@@ -4,20 +4,28 @@
 		"selected_items":
 		[
 			[
+				"getSta",
+				"getStaffFile"
+			],
+			[
+				"get",
+				"getStaffFile"
+			],
+			[
+				"getS",
+				"getStuffFile"
+			],
+			[
+				"Sta",
+				"StaffFile"
+			],
+			[
 				"peo",
 				"peopleData"
 			],
 			[
 				"gets",
 				"getState"
-			],
-			[
-				"get",
-				"getStore"
-			],
-			[
-				"Sta",
-				"StaffManagement"
 			],
 			[
 				"hand",
@@ -254,6 +262,53 @@
 			}
 		},
 		{
+			"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectStuffFile.js",
+			"settings":
+			{
+				"buffer_size": 2927,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/routes/PeopleManagement/PeopleManagementRecords/ModifyStuffFile.js",
+			"settings":
+			{
+				"buffer_size": 4301,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
+			"settings":
+			{
+				"buffer_size": 4284,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "\nimport $ from 'lib/jquery-3.3.1';\nimport {baseAddress} from 'services';\nimport {getStore} from 'store/globalStore';\nimport {setItems} from 'common/basic/reducers/ItemReducer';\n\nexport const getStaffManagement = () => {\n\t$.get(baseAddress+\"/cma/StaffManagement/getAll\" , null,(res)=>{\n  \t\tlet peopledata = res.data;\n  \t\tfor (var i = peopledata.length - 1; i >= 0; i--) {\n  \t\t\tpeopledata[i].key = peopledata[i].id;\n  \t\t}\n  \t\tlet store = getStore();\n \t\tstore.dispatch(setItems(peopledata, 'StaffManagement'));\n \t\t//console.log(store.getState());\n  \t});\n};\n\nexport const getStaffFile = () => {\n\t$.get(baseAddress+\"/cma/StaffFile/getAll\" , null,(res)=>{\n  \t\tlet peopledata = res.data;\n  \t\tfor (var i = peopledata.length - 1; i >= 0; i--) {\n  \t\t\tpeopledata[i].key = peopledata[i].id;\n  \t\t}\n  \t\tlet store = getStore();\n \t\tstore.dispatch(setItems(peopledata, 'StaffFile'));\n \t\t//console.log(store.getState());\n  \t});\n};",
+			"file": "src/routes/PeopleManagement/PeopleManagementRecords/Function.js",
+			"file_size": 940,
+			"file_write_time": 131726553349113228,
+			"settings":
+			{
+				"buffer_size": 912,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/routes/tabsmap.js",
+			"settings":
+			{
+				"buffer_size": 1548,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/common/basic/reducers/ItemReducer.js",
 			"settings":
 			{
@@ -358,6 +413,7 @@
 	],
 	"file_history":
 	[
+		"/E/CMA-WEB/README.md",
 		"/E/CMA-WEB/package.json",
 		"/E/sinosteel-master/client/framework-webclient/src/common/basic/reducers/ItemReducer.js",
 		"/E/CMA-WEB/src/routes/PeopleManagement/PeopleManagementRecords/ModifyStuffFile.js",
@@ -383,7 +439,6 @@
 		"/E/课件/编译原理/Compiler-master/Compiler-master/src/ir.c",
 		"/E/课件/编译原理/第三次实验/Lab3/Code/ir.c",
 		"/C/Users/dell/AppData/Local/Temp/Rar$DIa5612.2801/README",
-		"/E/CMA-WEB/README.md",
 		"/E/CMA-WEB/src/routes/Knowledge/subviews/StandardList/components/StandardListComponent.js",
 		"/E/CMA-WEB/src/common/basic/components/ListComponent.js",
 		"/E/CMA-WEB/src/common/basic/containers/ListContainer.js",
@@ -489,7 +544,7 @@
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 52.0
 	},
 	"find_in_files":
 	{
@@ -503,6 +558,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getStuff",
+			"getStuffmanagement",
+			"handleInspect",
 			"Store",
 			"store",
 			"setItems",
@@ -645,8 +703,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								2052,
+								2052
 							]
 						],
 						"settings":
@@ -654,7 +712,7 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 114.0,
+						"translation.y": 1008.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -673,8 +731,8 @@
 						"selection":
 						[
 							[
-								2232,
-								2232
+								2793,
+								2793
 							]
 						],
 						"settings":
@@ -684,7 +742,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2129.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -692,6 +750,154 @@
 				},
 				{
 					"buffer": 2,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/InspectStuffFile.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2927,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1834,
+								1834
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 720.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/ModifyStuffFile.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4301,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1556,
+								1556
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 576.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/AddStuffFile.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4284,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1406,
+								1406
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 792.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/routes/PeopleManagement/PeopleManagementRecords/Function.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 912,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								197,
+								197
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/routes/tabsmap.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1548,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								727,
+								727
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 432.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
 					"file": "src/common/basic/reducers/ItemReducer.js",
 					"semi_transient": false,
 					"settings":
@@ -715,11 +921,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 8,
 					"file": "src/common/basic/components/ListView.js",
 					"semi_transient": false,
 					"settings":
@@ -742,14 +948,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1296.0,
+						"translation.y": 1279.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 9,
 					"file": "src/utils/ArrayUtil.js",
 					"semi_transient": false,
 					"settings":
@@ -775,11 +981,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 10,
 					"file": "src/common/basic/containers/ItemContainer.js",
 					"semi_transient": false,
 					"settings":
@@ -791,8 +997,8 @@
 						"selection":
 						[
 							[
-								544,
-								544
+								488,
+								506
 							]
 						],
 						"settings":
@@ -801,14 +1007,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 360.0,
+						"translation.y": 2232.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 11,
 					"file": "src/store/reducers.js",
 					"semi_transient": false,
 					"settings":
@@ -832,11 +1038,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 12,
 					"file": "/E/sinosteel-master/client/framework-webclient/src/common/basic/components/AddView.js",
 					"semi_transient": false,
 					"settings":
@@ -862,11 +1068,11 @@
 						"translation.y": 939.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 13,
 					"file": "src/store/createStore.js",
 					"semi_transient": false,
 					"settings":
@@ -889,10 +1095,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 648.0,
+						"translation.y": 511.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 11,
 					"type": "text"
 				}
 			]
