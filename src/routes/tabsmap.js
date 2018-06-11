@@ -8,12 +8,17 @@ import RoleListView from 'routes/System/subviews/RoleList/components/RoleListVie
 
 import ItemContainer from 'common/basic/containers/ItemContainer';
 
-import TestView from 'routes/test/TestView';
-import TestListView from 'routes/test/TestListView';
-
+//staff management
 import InspectPeople from 'routes/PeopleManagement/PeopleManagementRecords/InspectPeople';
 import PeopleManagementRecordsView from 'routes/PeopleManagement/PeopleManagementRecords/PeopleManagementRecordsView';
-import Rcomponent from 'routes/PeopleManagement/components/Rcomponent'
+import Rcomponent from 'routes/PeopleManagement/components/Rcomponent';
+import StaffTrainingListView from 'routes/Peoplemanagement/StaffTrainingListView';
+import StaffQualificationView from 'routes/Peoplemanagement/StaffQualification/StaffQualificationView';
+import TestView from 'routes/Peoplemanagement/Auth/StaffAuthorizationView';
+//supervise
+import SuperviseList from 'routes/Supervise/SuperviseList';
+import SupervisePlans from 'routes/Supervise/SupervisePlans';
+import SuperviseRecord from 'routes/Supervise/SuperviseRecord';
 
 const tabsmap = 
 [
@@ -46,9 +51,33 @@ const tabsmap =
         component: ItemContainer('StaffFile', InspectPeople)
     },
     {
+        path: '/stafftraining_list',
+        component: ItemContainer('StaffTraining',StaffTrainingListView)
+    },
+    {
+        path: '/staff_auth_list',
+        component: ItemContainer('Authorization',TestView),
+    },
+    {
+        path: '/staff_quali_list',
+        component: StaffQualificationView,
+    },
+    {
         path: '/resigner_list',
         component: ItemContainer('Resigner', Rcomponent)
-    }
+    },
+    {
+        path: '/Supervise',
+        component: ItemContainer('Supervise', SuperviseList)
+    },
+    {
+        path: '/SupervisePlans_fake',
+        component: ItemContainer('SupervisePlans', SupervisePlans)
+    },
+    {
+        path: '/SuperviseRecord_fake',
+        component: ItemContainer('SuperviseRecord', SuperviseRecord)
+    },
 ]
 
 export default tabsmap

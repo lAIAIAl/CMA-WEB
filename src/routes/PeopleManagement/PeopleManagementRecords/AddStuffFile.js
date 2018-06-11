@@ -34,21 +34,23 @@ class extends React.Component {
 
       		    const { fileList } = this.state;
     			const formData = new FormData();
-    			fileList.forEach((file) => {
-      				formData.append('files[]', file);
-    			});
-    			
-    			//console.log(formData);
-    			//console.log(formData.get('files[]'));
 
       			let temp=values;
                 temp.id = this.props.item.id;
-      			temp.fileImage = null;
+      			temp.fileImage = fileList[0];
+
+                formData.append('fileImage', fileList[0]);
+                formData.append('fileId', temp.fileId);
+                formData.append('id', this.props.item.id);
+                formData.append('fileLocation', temp.fileLocation);
       			
+                console.log(temp);
       			$.ajax({
 		      		type: "post",
 		      		url: baseAddress+"/cma/StaffFile/addOne",
-		      		data: temp,
+		      		data: formData,
+                    processData: false,
+                    contentType: false,
                     async: false,
 			      	success: function(d){
                         message.success("新增成功");

@@ -31,24 +31,30 @@ class extends React.Component {
     	this.props.form.validateFields((err, values) => {
       		if (!err) {
       			//TODO:ajax
+                const { fileList } = this.state;
 
-      		    const { fileList } = this.state;
+                let temp=values;
+                temp.id = this.props.item.id;
+                temp.fileImage = fileList[0];
+                //console.log(temp);
+
+ 
     			const formData = new FormData();
-    			fileList.forEach((file) => {
-      				formData.append('files[]', file);
-    			});
+      			formData.append('fileImage', fileList[0]);
+                formData.append('fileId', temp.fileId);
+                formData.append('id', this.props.item.id);
+                formData.append('fileLocation', temp.fileLocation);
     			
     			console.log(formData);
-    			console.log(formData.get('files[]'));
+    			console.log(formData.get('fileId'));
 
-      			let temp=values;
-                temp.id = this.props.item.id;
-      			temp.fileImage = null;
       			
       			$.ajax({
 		      		type: "post",
 		      		url: baseAddress+"/cma/StaffFile/modifyOne",
-		      		data: temp,
+		      		data: formData,
+                    processData: false,
+                    contentType: false,
 			      	async: false,
                     success: function(d){
                         message.success("修改成功");

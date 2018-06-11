@@ -115,3 +115,7 @@ export const queryRolesService = serviceBaseAddress + '/queryRoles';
 export const addRoleService = serviceBaseAddress + '/addRole';
 export const editRoleService = serviceBaseAddress + '/editRole';
 export const deleteRoleService = serviceBaseAddress + '/deleteRole';
+
+export const getAllStaffTrainingsService = baseAddress + '/cma/StaffTraining/getAll';//url: 4.1
+export const addOneStaffTrainingService = baseAddress + '/cma/StaffTraining/addOne';//url: 4.5
+export const deleteOneStaffTrainingService = baseAddress + '/cma/StaffTraining/deleteOne';//url: 4.10

@@ -22,6 +22,7 @@ class extends React.Component {
     state = {
         visible: false,
         item: {},
+        scanningFile: {},
     };
 
     constructor(props){
@@ -39,16 +40,19 @@ class extends React.Component {
 
     refreshData = () => {
 
-        console.log(this.props);
+        //console.log(this.props);
 
         let data = getStore().getState().StaffFile.items;
+        let scanning = {};
         let myitem = {};
         for (var i = data.length - 1; i >= 0; i--) {
             if(data[i].id == this.props.item.id)
                 myitem = data[i];
         }
+
         this.setState({
             item: myitem,
+
         });
     }
 
@@ -76,6 +80,8 @@ class extends React.Component {
 
     render() {
       let people = this.state.item;
+      let imageSrc = baseAddress+"/cma/StaffFile/getImage?id=" + this.props.item.id;
+
       //console.log(people);
       const formItemLayout = 
       {
@@ -94,33 +100,43 @@ class extends React.Component {
                       {people.name}
                     </FormItem>
                   </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                    label="档案编号"
-                >
-                  {people.fileId}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row key='1'>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                    label="档案存放位置"
-                >
-                  {people.fileLocation}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                    label="部门"
-                >
-                  {people.department}
-                </FormItem>
-              </Col>
-            </Row>
+                  <Col span={12}>
+                    <FormItem
+                      {...formItemLayout}
+                        label="档案编号"
+                    >
+                      {people.fileId}
+                    </FormItem>
+                  </Col>
+              </Row>
+              <Row key='1'>
+                  <Col span={12}>
+                    <FormItem
+                      {...formItemLayout}
+                        label="档案存放位置"
+                    >
+                      {people.fileLocation}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem
+                      {...formItemLayout}
+                        label="部门"
+                    >
+                      {people.department}
+                    </FormItem>
+                  </Col>
+              </Row>
+              <Row key='2'>
+                  <Col span={12}>
+                    <FormItem
+                      {...formItemLayout}
+                        label="扫描件"
+                    >
+                      <img src = {imageSrc} />
+                    </FormItem>
+                  </Col>
+              </Row>
             </Card>
             <Button 
                 style={{margin:'5px 10px'}}

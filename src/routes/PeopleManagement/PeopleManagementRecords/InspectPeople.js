@@ -4,6 +4,8 @@ import {Table, Divider, Modal, Avatar, Upload, message, Select, DatePicker, Inpu
 
 import AddStuffFile from './AddStuffFile';
 import InspectStuffFile from './InspectStuffFile';
+import AuthInspectView from 'routes/Peoplemanagement/Auth/AuthInspectView';
+import StaffQualificationInspect from 'routes/Peoplemanagement/StaffQualification/StaffQualificationInspect'
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 
@@ -20,7 +22,7 @@ const InspectPeople = Form.create()(
 class extends React.Component {
 	state = {
 		visible: false,
-		item: null,
+		item: {},
 		fileData: null,
 		View: null,
 	};
@@ -112,6 +114,22 @@ class extends React.Component {
   		}
   		this.props.addTab("人员档案", "人员档案", this.state.View, props);
   	}
+
+    handleInspectAuth = () => {
+
+      let props = {
+        item : this.props.item,
+      }
+      this.props.addTab("授权信息", "授权信息", AuthInspectView, props);
+    }
+
+    handleInspectQual = () => {
+
+      let props = {
+        item : this.props.item,
+      }
+      this.props.addTab("资质信息", "资质信息", StaffQualificationInspect, props);
+    }
 
     render() {
     	let people = this.state.item;
@@ -241,14 +259,14 @@ class extends React.Component {
 			        	<FormItem
 			        		{...formItemLayout}
 			        	>
-            				<a>岗位资质信息</a>
+            				<a onClick={this.handleInspectQual}>岗位资质信息</a>
 			        	</FormItem>
 			        </Col>
 			        <Col span={12}>
 					    <FormItem
 					        {...formItemLayout}
 					    >
-            				<a>授权信息</a>
+            				<a onClick={this.handleInspectAuth}>授权信息</a>
 			        	</FormItem>
 			        </Col>
 			    </Row>
