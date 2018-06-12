@@ -327,7 +327,7 @@ export default class CoreLayout extends Component
 					    </Tabs>   
 			        </Content>
 			        <Footer style={{ textAlign: 'center' }}>
-			            中钢国际工程公司 ©2017 赵易辰 出品 @QQ:1026608946
+			            CMA-WEB组编写 参考sinosteel
 			        </Footer>
 			    </Layout>
             </Layout>

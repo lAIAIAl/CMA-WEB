@@ -32,25 +32,56 @@ const initialState =
         id: "0",       
         code: "0",      
         name: "人员管理",
-        moduleIcon: "setting",
-        modulePath: "/index/system",
+        //moduleIcon: "user",
+        modulePath: "/index/PeopleManagement",
         menus:[
-/*        	{
+        	{
 	        id: "0-0",       
 	        code: "0-0",      
-	        name: "testSubSideBar1",
-	        modulePath: "/index/test",
-	        menuPath: "/testSub1_list"
+	        name: "人员管理",
+	        modulePath: "/index/PeopleManagement/",
+	        menuPath: "/PeopleManagementRecords",
         	},
         	{
-	        id: "0-1",       
-	        code: "0-1",      
-	        name: "testSubSideBar2",
-	        modulePath: "/index/test",
-	        menuPath: "/testSub2_list"
-        	}*/
+                id: "0-1",
+                code: "0-1",
+                name: "培训与考核",
+                modulePath: "/index/StaffTraining",
+                menuPath: "/stafftraining_list"
+            },
+            {
+                id: "0-2",
+                code: "0-2",
+                name: "授权管理",
+                modulePath: "/index/StaffAuth",
+                menuPath: "/staff_auth_list"
+            },
+            {
+                id: "0-3",
+                code: "0-3",
+                name: "岗位资质管理",
+                modulePath: "/index/StaffAuth",
+                menuPath: "/staff_quali_list"
+            },        	
+        	{
+	        id: "0-4",       
+	        code: "0-4",      
+	        name: "离任人员管理",
+	        modulePath: "Resigner",
+	        menuPath: "/resigner_list",
+	        functions: []
+        	}
         ]
-    }]
+    	},
+    	{
+    		id: "1",       
+        	code: "1",      
+        	name: "监督",
+        	//moduleIcon: "eye",
+        	modulePath: "/index/Supervise",
+        	menuPath: "/Supervise",
+    	}
+    ]
 }
 
 const LoginReducer = (state = initialState, action) =>

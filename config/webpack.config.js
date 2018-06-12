@@ -35,7 +35,7 @@ const webpackConfig = {
       PLUGINS: path.join(src, 'plugins'),
     }  
   },
-  module : {}
+  module : {},
 }
 // 文件入口
 const APP_ENTRY = project.paths.client('main.js')
@@ -174,6 +174,7 @@ webpackConfig.postcss = [
     sourcemap     : true
   })
 ]
+
 
 // 文件加载器
 webpackConfig.module.loaders.push(
