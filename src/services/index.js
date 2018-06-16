@@ -116,6 +116,18 @@ export const addRoleService = serviceBaseAddress + '/addRole';
 export const editRoleService = serviceBaseAddress + '/editRole';
 export const deleteRoleService = serviceBaseAddress + '/deleteRole';
 
+//staff training
 export const getAllStaffTrainingsService = baseAddress + '/cma/StaffTraining/getAll';//url: 4.1
 export const addOneStaffTrainingService = baseAddress + '/cma/StaffTraining/addOne';//url: 4.5
 export const deleteOneStaffTrainingService = baseAddress + '/cma/StaffTraining/deleteOne';//url: 4.10
+export const getStaffTrainingPeopleService = baseAddress + '/cma/StaffTraining/getTrainingPeople';//url:4.2
+export const modifyOneStaffTrainingService = baseAddress + '/cma/StaffTraining/modifyOne';//url: 4.8
+export const getAllByStaffService = baseAddress + 'cma/StaffTraining/getAllByStaff';//url: 4.3
+export const getOnePersonalTrainService = baseAddress + 'cma/StaffTraining/getOne';//url: 4.4
+export const addTraineeService = baseAddress + 'cma/StaffTraining/addTrainingPeople';//url: 4.6
+export const addTrainingResultService = baseAddress + 'cma/StaffTraining/addTrainingResult';//url: 4.7
+export const staffTrainingModifyResultService = baseAddress + 'cma/StaffTraining/modifyResult';//url: 4.9
+export const deleteTrainingPeopleResultService = baseAddress + 'cma/StaffTraining/deleteTrainingPeople';//url: 4.11
+
+//period check
+export const periodCheckGetAllService = baseAddress + '/cma/IntermediateChecksPlan/getAll';//url: 1.1

@@ -1,18 +1,18 @@
 /* 资源库 */
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Card, Tabs, Select, Checkbox, Popconfirm, Button, Icon, Table, Form, Input, InputNumber, DatePicker, Divider, Modal, Tooltip, AutoComplete, message } from 'antd';
-import ReactDOM from 'react-dom';
+import { Row, Col, Card, Tabs, Button, Icon, Table, Form, Input, InputNumber, DatePicker, Divider, Modal, Tooltip, AutoComplete, message } from 'antd';
 
 /* 前后端交互 */
 import $ from 'lib/jquery-3.3.1';
 import { getStore } from 'store/globalStore';
 import { setItems } from 'common/basic/reducers/ItemReducer';
 import { getAllStaffTrainingData } from './FetchData';
-import { getAllStaffTrainingsService, addOneStaffTrainingService, deleteOneStaffTrainingService } from "services";
+import { getAllStaffTrainingsService, addOneStaffTrainingService, deleteOneStaffTrainingService, modifyOneStaffTrainingService } from "services";
 
 /* 子组件 */
 import StaffTrainingInspectView from "./StaffTrainingInspectView";
 import StaffTrainingAddView from "./StaffTrainingAddView";
+import StaffTrainingTraineeView from "./StaffTrainingTraineeView";
 
 const FormItem = Form.Item;
 
@@ -21,10 +21,13 @@ class StaffTrainingListComponent extends React.Component{
   constructor(props){
     super(props);
 
-    this.unsubscribe = getStore().subscribe(this.refreshData);//redux同步数据
+    this.unsubscribe = getStore().subscribe(this.refreshData);//redux
 
     this.inspectViewTabName = '培训与考核详情';
     this.inspectView = StaffTrainingInspectView;
+
+    this.traineeViewTabName = '人员与培训操作';
+    this.traineeView = StaffTrainingTraineeView;
 
     this.columns=[
       {
@@ -61,9 +64,14 @@ class StaffTrainingListComponent extends React.Component{
 	  };
 	 
 	  return (
-	    <span>
-	      <a href="javascript:void(0);" onClick={ () => {this.showCurRowMessage(props)} }>查看详情</a>
-	    </span>
+	    <Row gutter={16}>
+	      <Col className="gutter-row" span={6}>
+	        <a href="javascript:void(0);" onClick={ () => {this.showCurRowMessage(props)} }>详情</a>
+	      </Col>
+	      <Col className="gutter-row" span={6}>
+	        <Button type="danger" onClick={ () => {this.deleteCurRow(props)} } >删除</Button>
+	      </Col>
+	    </Row>
 	  );
 	}
       }
@@ -92,9 +100,24 @@ class StaffTrainingListComponent extends React.Component{
     this.props.addTab(this.inspectViewTabName,this.inspectViewTabName, Form.create()(this.inspectView), props);
   }
 
+  /* 删除当前行 */
+  deleteCurRow = (props) => {
+    let CurId = props.item.trainingId;
+    $.ajax({
+      type: "post",
+      url: deleteOneStaffTrainingService,
+      data: {trainingId:CurId},
+      async: false,
+      success:function(d){
+        message.success('删除成功!');
+      }
+    });
+    getAllStaffTrainingData();
+  }
+
   /* 新增培训与考核记录 */
   addNewTrainRecord = () => {
-    const form = this.formRef.props.form;
+    const form = this.form;
     form.validateFields((err,values) => {
       if(err){
         return;
@@ -109,7 +132,7 @@ class StaffTrainingListComponent extends React.Component{
 	data: tmpData,
 	async: false,
 	success:function(d){
-	  message.success("添加成功!");i
+	  message.success("添加成功!");
 	}
       });
 
@@ -122,8 +145,8 @@ class StaffTrainingListComponent extends React.Component{
     });
   }
 
-  saveFormRef = (formRef) => {
-    this.formRef = formRef;
+  saveFormRef = (form) => {
+    this.form = form;
   }
 
   /* 调出新增对话框 */
@@ -136,20 +159,16 @@ class StaffTrainingListComponent extends React.Component{
     this.setState({ visible: false });
   }
 
-  componentDidMount() {
-    this.props.form.validateFields();
-  }
-
   getAll = () => {
-    $.get(getAllStaffTrainingsService,null,(res)=>{
-      let traindata = res.data;
-      let store = getStore();
-      store.dispatch(setItems(traindata,'StaffTraining'));
-    });
+    getAllStaffTrainingData();
   }
 
   componentWillMount() {
     this.getAll();
+  }
+
+  handleTrainee = () => {
+    this.props.addTab(this.traineeViewTabName,this.traineeViewTabName,Form.create()(this.traineeView),null);
   }
 
   render(){
@@ -157,30 +176,32 @@ class StaffTrainingListComponent extends React.Component{
     const columns=this.columns;
     return (
         <div>
-          <Table columns={columns}
+          <Table
+	        columns={columns}
 	        dataSource={this.state.data}
 	        loading={this.state.loading}
 	        onChange={this.refreshData}
           />
           <div>
-            <Button type="primary" loading={this.state.loading} onClick={ this.showModal } >
-              新增
-            </Button>
-	    <StaffTrainingAddView
-	      wrappedComponentRef = { this.saveFormRef }
-	      visible = { this.state.visible }
-	      onCancel = { this.handleCancel }
-	      onCreate = { this.addNewTrainRecord }
-	    />
+	    <Row gutter={16}>
+	      <Col className="gutter-row" span={6}>
+                <Button type="danger" onClick={ this.showModal } >
+                  新增
+                </Button>
+	        <StaffTrainingAddView
+	          ref = { this.saveFormRef }
+	          visible = { this.state.visible }
+	          onCancel = { this.handleCancel }
+	          onCreate = { this.addNewTrainRecord }
+	        />
+	      </Col>
+	      <Col className="gutter-row" span={6}>
+	        <Button type="primary" onClick={ this.handleTrainee }>
+		  人员
+		</Button>
+	      </Col>
+	    </Row>
 	  </div>
-	  <div>
-	    <Button 
-	      type="danger"
-	      /* TO DO: onClick = { this.deleteOneStaffTraining } */
-	    >
-	      删除
-	    </Button>
-          </div>
         </div>
     );
   }

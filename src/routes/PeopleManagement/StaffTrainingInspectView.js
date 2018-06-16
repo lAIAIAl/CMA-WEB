@@ -1,18 +1,116 @@
 import React, { Component,PropTypes } from 'react';
-import { Form, Input, Tooltip, Icon, Cascader,Select, Row, Col, Checkbox, Button, DatePicker, InputNumber, Card } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader,Select, Row, Col, Checkbox, Button, DatePicker, InputNumber, Card, Divider, message } from 'antd';
 
-import { getAllStaffTrainingsSerice } from 'services';
+import { getAllStaffTrainingsSerice, modifyOneStaffTrainingService } from 'services';
 import $ from 'lib/jquery-3.3.1';
 import { getStore } from 'store/globalStore';
 import { setItems } from 'common/basic/reducers/ItemReducer';
 import { getAllStaffTrainingData } from './FetchData';
+import StaffTrainingInspectParticipatorView from './StaffTrainingInspectParticipatorView';
+import StaffTrainingModifyView from './StaffTrainingModifyView';
+import AddTraineeView from './AddTraineeView';
 
 const FormItem = Form.Item;
 
-class StaffTrainingInspectView extends React.Component{
+const StaffTrainingInspectView = Form.create()(class extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.unsubscribe = getStore().subscribe(this.refreshData);
+    this.inspectTabName = '查看参与人员';
+    this.inspectParticipatorView = StaffTrainingInspectParticipatorView;
+    this.addTraineeTabName = '添加参与人员';
+    this.addTraineeView = AddTraineeView;
+  }
+
+  state = {
+    visible: false,
+    item: null,//用于存储当前对象
+  };
+
+  refreshData = () => {
+    let data = getStore().getState().StaffTraining.items;
+    let curItem = null;
+    for(var i = data.length-1;i>=0;i--){
+      if(data[i].trainingId == this.props.item.trainingId)
+        curItem = data[i];
+    }
+    this.setState({
+      item: curItem,
+    });
+  }
+
+  componentWillUnmount(){
+    this.unsubscribe();
+  }
+
+  componentWillMount(){
+    getAllStaffTrainingData();
+    this.refreshData();
+  }
+
+  handleCreate = () => {
+    const form = this.form;
+    form.validateFields((err,values) => {
+      if(err){
+        return;
+      }
+
+      let tmpData = values;//用户修改后的数据
+      tmpData.trainingId = this.state.item.trainingId;//隐式禁止用户修改编号，防止同号冲突引起的bug
+      tmpData.trainingDate = tmpData.trainingDate.format("YYYY-MM-DD");
+      this.setState({ item: tmpData });
+
+      $.ajax({
+        type: "post",
+	url: modifyOneStaffTrainingService,
+	data: {
+	  trainingId: tmpData.trainingId,
+	  program: tmpData.program,
+	  trainingDate: tmpData.trainingDate,
+	  place: tmpData.place,
+	  presenter: tmpData.presenter,
+	  content: tmpData.content,
+	  note: tmpData.note,
+	},
+	async: false,
+	success: function(d){
+	  message.success("修改成功!");
+	}
+      });
+
+      form.resetFields();
+
+      this.setState({ visible: false});//撤除对话框
+
+      getAllStaffTrainingData();
+
+    });
+  }
+
+  saveFormRef = (form) => {
+    this.form = form;
+  }
+
+  showModal = () => {
+    this.setState({ visible: true });
+  }
+
+  handleCancel = () => {
+    this.setState({ visible: false });
+  }
+
+  inspectParticipator = (props) => {
+    this.props.addTab(this.inspectTabName,this.inspectTabName,Form.create()(this.inspectParticipatorView),props);
+  }
+
+  addTrainee = () => {
+    this.props.addTab(this.addTraineeTabName,this.addTraineeTabName,Form.create()(this.addTraineeView),null);
+  }
 
   render(){
-    let standard = this.props.item;
+    const { visible, item } = this.state;
+    let standard = this.state.item;
     const formItems = [];
 
     const formItemLayout = {
@@ -93,13 +191,56 @@ class StaffTrainingInspectView extends React.Component{
       </Card>
     );
 
+    var props = this.props;
+
     return(
-      <Form>
-        { formItems }
-      </Form>
+      <div>
+
+        <Form>
+          { formItems }
+        </Form>
+
+        <div>
+          <Row gutter={16}>
+	    <Col className="gutter-row" span={6}>
+	      <Button
+	        type="primary"
+		onClick={ () => {this.inspectParticipator(props)} }
+	      >
+	        查看参与人员
+	      </Button>
+	    </Col>
+	    <Col className="gutter-row" span={6}>
+	      <Button
+	        type="primary"
+		onClick={ this.addTrainee }
+	      >
+	        添加参与人员
+	      </Button>
+	    </Col>
+	    <Col className="gutter-row" span={6}>
+	      <Button
+	        type="primary"
+		onClick={this.showModal}
+	      >
+	        修改培训信息
+	      </Button>
+	      <StaffTrainingModifyView
+	        ref = {this.saveFormRef}
+		visible = {this.state.visible}
+		defaultVal = {this.state.item}
+		onCancel = {this.handleCancel}
+		onCreate = {this.handleCreate}
+	      />
+	    </Col>
+	  </Row>
+        </div>
+
+      </div>
     );
   }
 
-}
+});
 
-export default StaffTrainingInspectView
+export default StaffTrainingInspectView;
+
