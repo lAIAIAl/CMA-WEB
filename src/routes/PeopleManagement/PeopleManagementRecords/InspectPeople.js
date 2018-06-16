@@ -4,8 +4,8 @@ import {Table, Divider, Modal, Avatar, Upload, message, Select, DatePicker, Inpu
 
 import AddStuffFile from './AddStuffFile';
 import InspectStuffFile from './InspectStuffFile';
-import AuthInspectView from 'routes/Peoplemanagement/Auth/AuthInspectView';
-import StaffQualificationInspect from 'routes/Peoplemanagement/StaffQualification/StaffQualificationInspect'
+import StaffAuthInspect from 'routes/Peoplemanagement/Auth/StaffAuthInspect';
+import StaffQualificationPersonalView from 'routes/Peoplemanagement/StaffQualification/StaffQualificationPersonalView'
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 
@@ -120,7 +120,7 @@ class extends React.Component {
       let props = {
         item : this.props.item,
       }
-      this.props.addTab("授权信息", "授权信息", AuthInspectView, props);
+      this.props.addTab("授权信息", "授权信息", StaffAuthInspect, props);
     }
 
     handleInspectQual = () => {
@@ -128,7 +128,7 @@ class extends React.Component {
       let props = {
         item : this.props.item,
       }
-      this.props.addTab("资质信息", "资质信息", StaffQualificationInspect, props);
+      this.props.addTab("资质信息", "资质信息", StaffQualificationPersonalView, props);
     }
 
     render() {
