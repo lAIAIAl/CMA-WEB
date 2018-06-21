@@ -122,12 +122,16 @@ export const addOneStaffTrainingService = baseAddress + '/cma/StaffTraining/addO
 export const deleteOneStaffTrainingService = baseAddress + '/cma/StaffTraining/deleteOne';//url: 4.10
 export const getStaffTrainingPeopleService = baseAddress + '/cma/StaffTraining/getTrainingPeople';//url:4.2
 export const modifyOneStaffTrainingService = baseAddress + '/cma/StaffTraining/modifyOne';//url: 4.8
-export const getAllByStaffService = baseAddress + 'cma/StaffTraining/getAllByStaff';//url: 4.3
-export const getOnePersonalTrainService = baseAddress + 'cma/StaffTraining/getOne';//url: 4.4
-export const addTraineeService = baseAddress + 'cma/StaffTraining/addTrainingPeople';//url: 4.6
-export const addTrainingResultService = baseAddress + 'cma/StaffTraining/addTrainingResult';//url: 4.7
-export const staffTrainingModifyResultService = baseAddress + 'cma/StaffTraining/modifyResult';//url: 4.9
-export const deleteTrainingPeopleResultService = baseAddress + 'cma/StaffTraining/deleteTrainingPeople';//url: 4.11
+export const getAllByStaffService = baseAddress + '/cma/StaffTraining/getAllByStaff';//url: 4.3
+export const getOnePersonalTrainService = baseAddress + '/cma/StaffTraining/getOne';//url: 4.4
+export const addTraineeService = baseAddress + '/cma/StaffTraining/addTrainingPelple';//url: 4.6
+export const addTrainingResultService = baseAddress + '/cma/StaffTraining/addTrainingResult';//url: 4.7
+export const staffTrainingModifyResultService = baseAddress + '/cma/StaffTraining/modifyResult';//url: 4.9
+export const deleteTrainingPeopleResultService = baseAddress + '/cma/StaffTraining/deleteTrainingPeople';//url: 4.11
 
 //period check
 export const periodCheckGetAllService = baseAddress + '/cma/IntermediateChecksPlan/getAll';//url: 1.1
+export const periodCheckAddOneService = baseAddress + '/cma/IntermediateChecksPlan/addOne';//url: 1.3
+export const periodCheckDeleteOneService = baseAddress + '/cma/IntermediateChecksPlan/deleteOne';//url: 1.5
+export const periodCheckModifyOneService = baseAddress + '/cma/IntermediateChecksPlan/modifyOne';//url: 1.4
+export const periodCheckGetOneService = baseAddress + '/cma/IntermediateChecksPlan/getOne';//url: 1.2

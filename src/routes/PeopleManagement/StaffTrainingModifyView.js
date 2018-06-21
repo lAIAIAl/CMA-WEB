@@ -26,12 +26,6 @@ const StaffTrainingModifyView = Form.create()( class extends React.Component{
       >
         <Form layout="vertical">
 	  
-          <FormItem
-	    label='培训编号'
-	  >
-	    {getFieldDecorator('trainingId',{initialValue: previousData.trainingId, rules: [{ required: true, message: '培训编号必填' }],})(<Input style={{ width:width }} />)}
-	  </FormItem>
-
 	  <FormItem
 	    label='培训名称'
 	  >

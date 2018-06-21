@@ -28,16 +28,6 @@ const StaffTrainingAddView = Form.create()( class extends React.Component {
       <Form layout="vertical">
  
 	    <FormItem
-	      label='培训编号'
-	    >
-	      {getFieldDecorator('trainingId', {
-	          rules: [{ required: true, message: '培训编号必填' }],
-	        })(
-		  <Input style={{ width:width }} />
-	      )}
-	    </FormItem>
-	 
-	    <FormItem
 	      label='培训名称'
 	    >
 	    {getFieldDecorator('program',{
@@ -51,7 +41,7 @@ const StaffTrainingAddView = Form.create()( class extends React.Component {
 	      label='培训日期'
 	    >
 	    {getFieldDecorator('trainingDate',{
-	        rules: [{ required: true, message: '培训日期必填' }],
+	      rules: [{ required: true, message: '培训日期必填' }],
 	    })(
 	        <DatePicker style={{ width:width }} />
 	    )}

@@ -20,6 +20,15 @@ import SuperviseList from 'routes/Supervise/SuperviseList';
 import SupervisePlans from 'routes/Supervise/SupervisePlans';
 import SuperviseRecord from 'routes/Supervise/SuperviseRecord';
 
+//PeriodCheck
+import RecordComponent from "./IntermediateChecks/RecordComponent"
+import PeriodCheckListView from './PeriodCheck/PeriodCheckListView';
+
+//training
+import TrainingApplication from 'routes/TrainingManagement/TrainingApplication';
+import AnnualTrainingMain from 'routes/Annual/AnnualTrainingMain';
+import TrainingRecordMain from 'routes/TrainingRecord/TrainingRecordMain';
+
 const tabsmap = 
 [
     {
@@ -42,6 +51,7 @@ const tabsmap =
         path: '/role_list',
         component: ItemContainer('role', RoleListView)
     },
+    //peoplemanagement
     {
         path: '/PeopleManagementRecords',
         component: ItemContainer('StaffManagement',PeopleManagementRecordsView)
@@ -66,6 +76,7 @@ const tabsmap =
         path: '/resigner_list',
         component: ItemContainer('Resigner', Rcomponent)
     },
+    //supervise
     {
         path: '/Supervise',
         component: ItemContainer('Supervise', SuperviseList)
@@ -78,6 +89,29 @@ const tabsmap =
         path: '/SuperviseRecord_fake',
         component: ItemContainer('SuperviseRecord', SuperviseRecord)
     },
+    //peiriodcheck
+    {
+        path: '/record_list',
+        component: ItemContainer('Record',RecordComponent)
+    },
+    {
+        path: '/periodcheck_list',
+        component: ItemContainer('PeriodCheck',PeriodCheckListView)
+    },
+    //training
+    {
+        path:'/application_list',
+        component: ItemContainer('Application',TrainingApplication)
+    },
+    {
+        path:'/annualPlan_list',
+        component:ItemContainer('AnnualTrainingMain',AnnualTrainingMain)
+    },
+    {
+        path:'/trainingRecord_list',
+        component:ItemContainer('TrainingRecordMain',TrainingRecordMain)
+    }
+    //
 ]
 
 export default tabsmap

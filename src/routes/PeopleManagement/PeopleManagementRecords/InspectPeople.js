@@ -5,7 +5,8 @@ import {Table, Divider, Modal, Avatar, Upload, message, Select, DatePicker, Inpu
 import AddStuffFile from './AddStuffFile';
 import InspectStuffFile from './InspectStuffFile';
 import StaffAuthInspect from 'routes/Peoplemanagement/Auth/StaffAuthInspect';
-import StaffQualificationPersonalView from 'routes/Peoplemanagement/StaffQualification/StaffQualificationPersonalView'
+import StaffQualificationPersonalView from 'routes/Peoplemanagement/StaffQualification/StaffQualificationPersonalView';
+import TrainDetailView from './TrainDetailView';
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 
@@ -131,6 +132,13 @@ class extends React.Component {
       this.props.addTab("资质信息", "资质信息", StaffQualificationPersonalView, props);
     }
 
+    handleTrains = () => {
+      let props = {
+        item: this.props.item,
+      }
+      this.props.addTab("培训信息", "培训信息", TrainDetailView, props);
+    }
+
     render() {
     	let people = this.state.item;
 
@@ -250,7 +258,7 @@ class extends React.Component {
 					    <FormItem
 					    {...formItemLayout}
 					    >
-            				<a>已参加培训</a>
+            				<a onClick={this.handleTrains}>已参加培训</a>
 			        	</FormItem>
 			        </Col>
 			    </Row>            	

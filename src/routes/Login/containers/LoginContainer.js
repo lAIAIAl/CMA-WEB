@@ -80,7 +80,55 @@ const initialState =
         	//moduleIcon: "eye",
         	modulePath: "/index/Supervise",
         	menuPath: "/Supervise",
-    	}
+    	},
+    	{
+			id:"2",
+			code:"2",
+			name:"期间核查",
+			modulePath:"/index/system",
+			menus:[
+				{
+					id:"2-0",
+					code:"2-0",
+					name:"期间核查记录",
+					menuPath:"/record_list"
+				},{
+					id:"2-1",
+					code:"2-1",
+					name:"期间核查计划",
+					menuPath:"/periodcheck_list"
+				}
+			],
+		},
+		{
+        id: "3",
+        code: "3",
+        name: "培训管理",
+        modulePath: "/index/system",
+        menus:[
+        	{
+	        id: "3-1",
+	        code: "3-1",
+	        name: "培训申请",
+	        modulePath: "/index/TrainingManagement",
+	        menuPath: "/application_list"
+        	},
+        	{
+	        id: "3-2",
+	        code: "3-2",
+	        name: "年度培训计划",
+	        modulePath: "/index/Annual",
+	        menuPath: "/annualPlan_list"
+        	},
+        	{
+	        id: "3-3",
+	        code: "3-3",
+	        name: "培训记录",
+	        modulePath: "/index/TrainingRecord",
+	        menuPath: "/trainingRecord_list"
+        	}
+        ]
+    }
     ]
 }
 

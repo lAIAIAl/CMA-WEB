@@ -6,6 +6,7 @@ import moment from 'moment';
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 import StaffAuthorizationView from './StaffAuthorizationView';
+import {getAuthorization} from './StaffAuthorizationView';
 
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
@@ -96,6 +97,7 @@ const MonthPicker = DatePicker.MonthPicker;
       visible: false,
     });
     this.getAllStaff();
+    getAuthorization();
     console.log(this.props.form.getFieldsValue());
     this.props.form.resetFields();
     }
@@ -115,7 +117,7 @@ const MonthPicker = DatePicker.MonthPicker;
 		const width = '100%';
 		return(
 		<div>
-            <Card key='0' title='授权信息' style={{marginBottom: 20}}>
+            <Card key='0' title='授权信息'  style={{marginBottom: 20}}>
 				<Row key='0'>
 					<Col span={12}>
 				        <FormItem
@@ -172,15 +174,15 @@ const MonthPicker = DatePicker.MonthPicker;
 				</Row>
 		    </Card>
 		    <Button className="add" type="primary" onClick={this.showModal}>修改</Button>
-                <Modal title="授权信息" visible={this.state.visible} onOk={this.handleModify} onCancel={this.handleCancel}>
+                <Modal title="授权信息"  visible={this.state.visible} onOk={this.handleModify} onCancel={this.handleCancel}>
                 <Form layout="horizontal">
                     <FormItem {...formItemLayout}label ="被授权人:" hasFeedback>
                     {getFieldDecorator('id',{ rules: [{required: true, message: '请选择被授权人!'}],
                     })(<Select
                         showSearch
                         style={{ width: 200 }}
-                        placeholder="Select a person"
                         optionFilterProp="resigner"
+                        placeholder="请选择被授权人"
                         onChange={this.handleChange}
                         onFocus={this.handleFocus}
                         onBlur={this.handleBlur}
@@ -194,8 +196,8 @@ const MonthPicker = DatePicker.MonthPicker;
                     })(<Select
                         showSearch
                         style={{ width: 200 }}
-                        placeholder="Select a person"
                         optionFilterProp="resigner"
+                        placeholder="请选择授权人"
                         onChange={this.handleChange}
                         onFocus={this.handleFocus}
                         onBlur={this.handleBlur}
@@ -207,7 +209,7 @@ const MonthPicker = DatePicker.MonthPicker;
                     <FormItem {...formItemLayout} label= "授权内容:" hasFeedback>
                     {
                           getFieldDecorator('content', {rules :[{required: true, message: '请输入授权内容！'}],
-                          })
+                          initialValue:  this.state.item.content,})
                           (<Input  style = {{width:100,offset:4}}/>)
                     }
                     </FormItem>

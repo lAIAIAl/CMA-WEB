@@ -12,7 +12,6 @@ import { getAllStaffTrainingsService, addOneStaffTrainingService, deleteOneStaff
 /* 子组件 */
 import StaffTrainingInspectView from "./StaffTrainingInspectView";
 import StaffTrainingAddView from "./StaffTrainingAddView";
-import StaffTrainingTraineeView from "./StaffTrainingTraineeView";
 
 const FormItem = Form.Item;
 
@@ -25,9 +24,6 @@ class StaffTrainingListComponent extends React.Component{
 
     this.inspectViewTabName = '培训与考核详情';
     this.inspectView = StaffTrainingInspectView;
-
-    this.traineeViewTabName = '人员与培训操作';
-    this.traineeView = StaffTrainingTraineeView;
 
     this.columns=[
       {
@@ -167,10 +163,6 @@ class StaffTrainingListComponent extends React.Component{
     this.getAll();
   }
 
-  handleTrainee = () => {
-    this.props.addTab(this.traineeViewTabName,this.traineeViewTabName,Form.create()(this.traineeView),null);
-  }
-
   render(){
     const { loading, visible } = this.state;
     const columns=this.columns;
@@ -194,11 +186,6 @@ class StaffTrainingListComponent extends React.Component{
 	          onCancel = { this.handleCancel }
 	          onCreate = { this.addNewTrainRecord }
 	        />
-	      </Col>
-	      <Col className="gutter-row" span={6}>
-	        <Button type="primary" onClick={ this.handleTrainee }>
-		  人员
-		</Button>
 	      </Col>
 	    </Row>
 	  </div>
