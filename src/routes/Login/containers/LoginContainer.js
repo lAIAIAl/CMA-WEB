@@ -101,34 +101,41 @@ const initialState =
 			],
 		},
 		{
-        id: "3",
-        code: "3",
-        name: "培训管理",
-        modulePath: "/index/system",
-        menus:[
-        	{
-	        id: "3-1",
-	        code: "3-1",
-	        name: "培训申请",
-	        modulePath: "/index/TrainingManagement",
-	        menuPath: "/application_list"
-        	},
-        	{
-	        id: "3-2",
-	        code: "3-2",
-	        name: "年度培训计划",
-	        modulePath: "/index/Annual",
-	        menuPath: "/annualPlan_list"
-        	},
-        	{
-	        id: "3-3",
-	        code: "3-3",
-	        name: "培训记录",
-	        modulePath: "/index/TrainingRecord",
-	        menuPath: "/trainingRecord_list"
-        	}
-        ]
-    }
+	        id: "3",
+	        code: "3",
+	        name: "培训管理",
+	        modulePath: "/index/system",
+	        menus:[
+	        	{
+		        id: "3-1",
+		        code: "3-1",
+		        name: "培训申请",
+		        modulePath: "/index/TrainingManagement",
+		        menuPath: "/application_list"
+	        	},
+	        	{
+		        id: "3-2",
+		        code: "3-2",
+		        name: "年度培训计划",
+		        modulePath: "/index/Annual",
+		        menuPath: "/annualPlan_list"
+	        	},
+	        	{
+		        id: "3-3",
+		        code: "3-3",
+		        name: "培训记录",
+		        modulePath: "/index/TrainingRecord",
+		        menuPath: "/trainingRecord_list"
+	        	}
+	        ]
+    	},
+    	{
+    		id: "4",       
+        	code: "4",      
+        	name: "管理评审",
+        	modulePath: "/ManagementReview",
+        	menuPath: "/ManagementReview",
+    	}
     ]
 }
 

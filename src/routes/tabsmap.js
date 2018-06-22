@@ -29,6 +29,9 @@ import TrainingApplication from 'routes/TrainingManagement/TrainingApplication';
 import AnnualTrainingMain from 'routes/Annual/AnnualTrainingMain';
 import TrainingRecordMain from 'routes/TrainingRecord/TrainingRecordMain';
 
+//management review
+import ManagementReviewList from 'routes/ManagementReview/ManagementReviewList';
+
 const tabsmap = 
 [
     {
@@ -110,8 +113,12 @@ const tabsmap =
     {
         path:'/trainingRecord_list',
         component:ItemContainer('TrainingRecordMain',TrainingRecordMain)
-    }
-    //
+    },
+    //management review
+    {
+    	path:'/ManagementReview',
+    	component:ItemContainer('ManagementReview', ManagementReviewList)
+    },
 ]
 
 export default tabsmap
