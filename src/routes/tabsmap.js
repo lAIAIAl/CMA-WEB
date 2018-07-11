@@ -31,6 +31,7 @@ import TrainingRecordMain from 'routes/TrainingRecord/TrainingRecordMain';
 
 //management review
 import ManagementReviewList from 'routes/ManagementReview/ManagementReviewList';
+import ManagementReviewDetail from 'routes/ManagementReview/ManagementReviewDetail';
 
 const tabsmap = 
 [
@@ -119,6 +120,10 @@ const tabsmap =
     	path:'/ManagementReview',
     	component:ItemContainer('ManagementReview', ManagementReviewList)
     },
+    {
+        path:'/ManagementReviewDetail_fake',
+        component:ItemContainer('ManagementReviewDetail', ManagementReviewDetail)
+    }
 ]
 
 export default tabsmap

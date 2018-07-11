@@ -3,26 +3,20 @@ import {Form, Button, Row, Col, Card, Table, message, Modal, Input, DatePicker} 
 const { Column, ColumnGroup } = Table;
 const FormItem = Form.Item;
 
+import ManagementReviewDetail from './ManagementReviewDetail';
 
 import {getStore} from 'store/globalStore';
 import {setItems} from 'common/basic/reducers/ItemReducer';
 
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
+import {getManagementReviewList} from './RequestFunction';
 
 const ManagementReviewList = Form.create()(
 class extends React.Component{
 
 	state = {
-		managementreviewlist : [{
-			"key":0,
-    		"year": 2017,
-    		"date":"2017-06-21",
-  			},{
-  			"key":1,
-    		"year": 2018,
-    		"date":"2018-06-21",
-  		}],
+		managementreviewlist : [],
 		selectedRowKeys: [],
 		visible: false,
 	};
@@ -37,11 +31,14 @@ class extends React.Component{
 	}
 
 	componentWillMount() {
-		//
+		getManagementReviewList();
 	}
 
 	refreshData = () => {
-		//
+		let data = getStore().getState().ManagementReview.items;
+		this.setState({
+			managementreviewlist: data
+		})
 	}
 
 
@@ -51,7 +48,7 @@ class extends React.Component{
       		if (err) {
       		  	return;
       		}
-      		
+
       		let temp = values;
 
       		temp.year = temp.date.format("YYYY");
@@ -121,6 +118,10 @@ class extends React.Component{
     	this.formRef = formRef;
   	}
 
+  	handleInspect = (record) => {
+  		this.props.addTab(record.year + '年管理评审', record.year + '年管理评审', ManagementReviewDetail, 
+  			{year : record.year});
+  	}
 
 	render() {
 
@@ -149,19 +150,15 @@ class extends React.Component{
 			render: (text, record) => {
 
 				return (
-				  	<a>
+				  	<a
+				  		onClick={() => {this.handleInspect(record)}}
+				  	>
 				  		查看详情
 				  	</a>
 				);
 			}
 		}
 		];
-/*
-		return (
-			<p>
-				123123
-			</p>
-		);*/
 
 		return (
 			<div>

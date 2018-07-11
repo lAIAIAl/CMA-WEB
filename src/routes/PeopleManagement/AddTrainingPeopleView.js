@@ -4,6 +4,8 @@ import { Form, Card, Icon, Row, Col, Input, InputNumber, Select, Button,message 
 import $ from 'lib/jquery-3.3.1';
 import { addTraineeService } from "services";
 
+import { getAllStaffTrainingData } from './FetchData';
+
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -34,43 +36,29 @@ const AddTrainingPeopleView = Form.create()(class extends React.Component{
 
   addTrainees = (props) => {
     let curTrain = props.trainingId;
-    const id = this.props.form.getFieldValue('id');
-    console.log("train ",curTrain, " staff ",id);
+    let id = this.props.form.getFieldValue('id');
+    
     var datas=[];
     var oneData = {};
-    oneData["id"] = id;
+    oneData["id"] = parseInt(id);
     datas.push(oneData);
     var jsonString = JSON.stringify(datas);
     var epc=eval("("+jsonString+")");
-    console.log('test',epc[0].id);
     var finalData = {
       trainingId: curTrain,
       data: epc
     };
-    {/*
-    fetch("http://119.23.38.100:8080/cma/StaffTraining/addTrainingPelple",{
+    fetch("http://119.23.38.100:8080/cma/StaffTraining/addTrainingPeople",{
       method: 'POST',
       body: JSON.stringify(finalData),
       headers: new Headers({
         'Content-Type': 'application/json'
       })
     }).then(res => res.json())
-    .catch(error => console.error('Error:',error))
-    .then(response => console.log('Success:',response));
-    */}
-    $.ajax({
-      type: "post",
-      url: "http://119.23.38.100:8080/cma/StaffTraining/addTrainingPelple",
-      contentType: "application/json",
-      data: JSON.stringify(finalData),
-      async: false,
-      success: function(d){
-        message.success('添加成功!');
-      },
-      error: function(){
-        message.error('添加失败!');
-      }
-    });
+    .catch(error => message.error('添加失败!'))
+    .then(response => message.success('添加成功!'));
+    this.fetchStaffInfo();
+    getAllStaffTrainingData();
     this.props.form.resetFields();
   }
 

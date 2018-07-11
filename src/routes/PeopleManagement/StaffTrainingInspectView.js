@@ -282,6 +282,14 @@ const StaffTrainingInspectView = Form.create()(class extends React.Component{
 	        添加参与人员
 	      </Button>
 	    </Col>
+	    <Col className="gutter-row" span={6}>
+	    <Button
+	      type="dashed"
+	      onClick={ () => { this.fetchStaffData(this.props) } }
+	    >
+	      刷新
+	    </Button>
+	    </Col>
 	  </Row>
         </div>
 
