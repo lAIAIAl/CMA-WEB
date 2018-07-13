@@ -54,17 +54,20 @@ class extends React.Component{
       		temp.year = temp.date.format("YYYY");
       		temp.date = temp.date.format("YYYY-MM-DD");
 
-/*	  		$.ajax({
+	  		$.ajax({
 			    type: "post",
-			    url: baseAddress+"/cma/Supervision/approveOne",
+			    url: baseAddress+"/cma/ManagementReview/addOne",
 			    data: temp,
 			    async: false,
 			    success: function (d) {
-
+			    	message.success("新增成功");
+				},
+				error: function (d) {
+			    	message.error("新增失败");
 				}
-			});*/
-			console.log(temp);
-
+			});
+			//console.log(temp);
+			getManagementReviewList();
   			
       		form.resetFields();
 
@@ -83,18 +86,20 @@ class extends React.Component{
   			let x = this.state.managementreviewlist.findIndex(function(x){
   				return x.key == selectedRowKeys[i];
   			});
-  			let deleteId = this.state.managementreviewlist[x].id;
+  			let deleteId = this.state.managementreviewlist[x].year;
   			
-/*  			$.ajax({
+  			$.ajax({
 		      	type: "post",
-		      	url: baseAddress+"/cma/Supervision/deleteOne",
-		      	data: {id:deleteId},
+		      	url: baseAddress+"/cma/ManagementReview/deleteOne",
+		      	data: {year : deleteId},
 		      	async:false,
 		      	success: function (d) {
 		      		
 		      	}
-		    });*/
+		    });
   		}
+
+  		getManagementReviewList();
 
 		this.setState({
 			selectedRowKeys: [],
@@ -160,6 +165,8 @@ class extends React.Component{
 		}
 		];
 
+		let example = baseAddress + '/cma/ManagementReview/getExample';
+
 		return (
 			<div>
 				<Table
@@ -171,15 +178,21 @@ class extends React.Component{
 
 				<Button
 					type='primary'
-					style={{margin:'10px 20px 0px 0px'}}
+					style={{margin:'10px 20px 10px 0px'}}
 					onClick={this.showModal}
 				>新增</Button>
 
 				<Button
 					type='danger'
-					style={{margin:'10px 20px 0px 0px'}}
+					style={{margin:'10px 20px 10px 0px'}}
 					onClick={this.handleDelete}
 				>删除</Button>
+
+				<br/>
+				<a
+					style={{margin:'10px 20px 0px 0px'}}
+					href={example}
+				>下载样表</a>
 
 				<AddForm
 			          	wrappedComponentRef={this.saveFormRef}

@@ -135,7 +135,85 @@ const initialState =
         	name: "管理评审",
         	modulePath: "/ManagementReview",
         	menuPath: "/ManagementReview",
-    	}
+    	},
+    	{
+	        id: "5",
+	        code: "5",
+	        name: "样品管理",
+	        modulePath: "/index/system",
+	        menus:[
+        	{
+		        id: "5-1",
+		        code: "5-1",
+		        name: "样品接收登记",
+		        modulePath: "/index/SampleReceive",
+		        menuPath: "/sampleReceive_list"
+	        },
+	        {
+		        id: "5-2",
+		        code: "5-2",
+		        name: "样品室样品进出",
+		        modulePath: "/index/SampleIo",
+		        menuPath: "/sampleIo_list"
+	        }]
+    	},
+    	{
+            id: "6",
+            code: "6",
+            name: "内审管理",
+            modulePath: "/index/InternalAudit",
+            menuPath: "/InternalAudit",
+        },
+        {
+	    	id: "7",
+	    	code: "7",
+	    	name: "仪器设备管理",
+	    	modulePath: "/index/system",
+	    	menus: [
+	    		{
+	    			id: "7-0",
+	    			code: "7-0",
+	    			name: "仪器设备信息",
+	    			modulePath: "/index/equipment",
+	    			menuPath: "/er_list"
+	    		},
+	            {
+	                id: "7-1",
+	                code: "7-1",
+	                name: "仪器设备验收",
+	                modulePath: "/index/equipment",
+	                menuPath: "/err_list"
+	            },
+	            {
+	                id: "7-2",
+	                code: "7-2",
+	                name: "仪器设备使用",
+	                modulePath: "/index/equipment",
+	                menuPath: "/eur_list"
+	            },
+	            {
+	                id: "7-3",
+	                code: "7-3",
+	                name: "仪器设备维修保养",
+	                modulePath: "/index/equipment",
+	                menuPath: "/emr_list"
+	            },
+	            {
+	                id: "7-4",
+	                code: "7-4",
+	                name: "仪器设备使用申请",
+	                modulePath: "/index/equipment",
+	                menuPath: "/ear_list"
+	            }
+	    	]
+    	},
+    	{
+            id: "8",
+            code: "8",
+            name: "标准管理",
+            modulePath: "/index/StandardManagement",
+            menuPath: "/StandardManagement",
+        },
     ]
 }
 

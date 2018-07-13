@@ -60,7 +60,7 @@ const PeriodCheckInspectView = Form.create()(class extends React.Component{
           let props ={
               item:res.data,
           };
-          this.props.addTab("期间核查记录","期间核查记录",RecordInspectView,props);
+          this.props.addTab(props.item.recordId+"-期间核查记录",props.item.recordId+"-期间核查记录",RecordInspectView,props);
       });
 
     }

@@ -33,6 +33,23 @@ import TrainingRecordMain from 'routes/TrainingRecord/TrainingRecordMain';
 import ManagementReviewList from 'routes/ManagementReview/ManagementReviewList';
 import ManagementReviewDetail from 'routes/ManagementReview/ManagementReviewDetail';
 
+//Sample
+import SampleReceiveList from 'routes/SampleManagement/SampleReceiveList';
+import SampleIoList from 'routes/SampleManagement/SampleIoList';
+
+//InternalAudit
+import InternalAuditComponent from "./InternalAudit/InternalAuditComponent";
+
+//Equipment
+import EquipmentRecord from 'routes/Equipment/EquipmentRecord';
+import EquipmentReceiveRecord from 'routes/Equipment/EquipmentReceiveRecord';
+import EquipmentUseRecord from 'routes/Equipment/EquipmentUseRecord';
+import EquipmentMaintenanceRecord from 'routes/Equipment/EquipmentMaintenanceRecord';
+import EquipmentApplicationRecord from 'routes/Equipment/EquipmentApplicationRecord';
+
+//StandardManagement
+import StandardManagement from 'routes/StandardManagement/StandardManagement';
+
 const tabsmap = 
 [
     {
@@ -123,7 +140,47 @@ const tabsmap =
     {
         path:'/ManagementReviewDetail_fake',
         component:ItemContainer('ManagementReviewDetail', ManagementReviewDetail)
-    }
+    },
+    //Sample
+    {
+        path:'/sampleReceive_list',
+        component:ItemContainer('ReceiveList', SampleReceiveList)
+    },
+    {
+        path:'/sampleIo_list',
+        component:ItemContainer('IoList',SampleIoList)
+    },
+    //InternalAudit
+    {
+        path:'/InternalAudit',
+        component:InternalAuditComponent
+    },
+    //Equipment
+    {
+        path: '/er_list',
+        component: ItemContainer('EquipmentRecord', EquipmentRecord)
+    },
+    {
+        path: '/err_list',
+        component: ItemContainer('EquipmentReceiveRecord', EquipmentReceiveRecord)
+    },
+    {
+        path: '/eur_list',
+        component: ItemContainer('EquipmentUseRecord', EquipmentUseRecord)
+    },
+    {
+        path: '/emr_list',
+        component: ItemContainer('EquipmentMaintenanceRecord', EquipmentMaintenanceRecord)
+    },
+    {
+        path: '/ear_list',
+        component: ItemContainer('EquipmentApplicationRecord', EquipmentApplicationRecord)
+    },
+    //StandardManagement
+    {
+        path: '/StandardManagement',
+        component: ItemContainer('StandardManagement', StandardManagement)
+    },
 ]
 
 export default tabsmap

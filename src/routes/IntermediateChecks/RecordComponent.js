@@ -203,7 +203,7 @@ class RecordForm extends React.Component {
     }
 
     showCurRowMessage = (props) => {
-        this.props.addTab("核查记录信息", "核查记录信息", RecordInspectView, props);
+        this.props.addTab(props.item.recordId+"-核查记录信息",props.item.recordId+ "-核查记录信息", RecordInspectView, props);
     }
     handleTableChange = (pagination, filters) => {
         const pager = {...this.state.pagination};

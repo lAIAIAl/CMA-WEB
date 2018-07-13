@@ -2,25 +2,26 @@ import React from 'react';
 import {Form, Button, Row, Col, Card, Table, message, Modal, Input, DatePicker, Upload, Icon} from 'antd';
 const { Column, ColumnGroup } = Table;
 const FormItem = Form.Item;
-
+const Search = Input.Search;
 
 import {getStore} from 'store/globalStore';
 import {setItems} from 'common/basic/reducers/ItemReducer';
 
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
-import {getManagementReviewDetail} from './RequestFunction';
+import {getStandards} from './RequestFunction';
 
-const ManagementReviewDetail = Form.create()(
+const StandardManagement = Form.create()(
 class extends React.Component{
 
 	state = {
-		filelist: [],
+		standardlist: [],
 		selectedRowKeys: [],
 		visible: false,
 		visible2: false,
 		file: {},
 		modifyingId: -1,
+		search: ""
 	};
 
 	constructor(props){
@@ -33,135 +34,21 @@ class extends React.Component{
 	}
 
 	componentWillMount() {
-		getManagementReviewDetail(this.props.year);
+		getStandards();
 	}
-
-	handleCreate = () => {
-    	const form = this.formRef.props.form;
-    	form.validateFields((err, values) => {
-      		if (err) {
-      		  	return;
-      		}
-
-      		let temp = values;
-
-      		temp.year = this.props.year;
-      		const formData = new FormData();
-			formData.append('year', this.props.year);
-      		formData.append('fileName', temp.fileName);
-      		formData.append('file', this.state.file);
-
-      		console.log(formData.get('year'));
-      		console.log(formData.get('fileName'));
-      		console.log(formData.get('file'));
-
-	  		$.ajax({
-			    type: "post",
-			    url: baseAddress+"/cma/ManagementReview/addOneFile",
-			    data: formData,
-			    cache: false,
-			    processData: false,
-                contentType: false,
-			    async: false,
-			    success: function (d) {
-			    	message.success("新增成功");
-				},
-				error: function (d) {
-			    	message.error("新增失败");
-				} 
-			});
-
-			getManagementReviewDetail(this.props.year);
-  			
-      		form.resetFields();
-
-      		this.setState({ 
-      			visible: false ,
-      		});
-      		
-    	});
-  	}
-
-  	handleModify = () => {
-  		const form = this.formRef2.props.form;
-    	form.validateFields((err, values) => {
-      		if (err) {
-      		  	return;
-      		}
-
-      		let temp = values;
-
-      		temp.year = this.props.year;
-      		temp.fileId = this.state.modifyingId;
-      		const formData = new FormData();
-
-      		formData.append('fileId', temp.fileId);
-			formData.append('year', this.props.year);
-      		formData.append('fileName', temp.fileName);
-      		formData.append('file', this.state.file);
-
-	  		$.ajax({
-			    type: "post",
-			    url: baseAddress+"/cma/ManagementReview/modifyOneFile",
-			    data: formData,
-			    processData: false,
-                contentType: false,
-			    async: false,
-			    success: function (d) {
-			    	message.success("修改成功");
-				},
-				error: function (d) {
-			    	message.error("修改失败");
-				} 
-			});
-			
-  			
-      		form.resetFields();
-
-      		this.setState({ 
-      			visible2: false ,
-      		});
-      		
-    	});
-  	}
 
 	refreshData = () => {
-		let data = getStore().getState().ManagementReviewDetail.items;
-
-		//console.log(data);
+		let temp = getStore().getState().StandardManagement.items;
+		let data = [];
+		for (var i = temp.length - 1; i >= 0; i--) {
+			if(temp[i].fileName.match(this.state.search) != null){
+				data.push(temp[i]);
+			}
+		}
 
 		this.setState({
-			filelist: data
+			standardlist: data
 		})
-	}
-
-	handleDelete = () => {
-
-  		const {selectedRowKeys } = this.state;
-
-  		for (let i = selectedRowKeys.length - 1; i >= 0; i--) {
-  			let x = this.state.filelist.findIndex(function(x){
-  				return x.key == selectedRowKeys[i];
-  			});
-  			let deleteId = this.state.filelist[x].fileId;
-  			
-  			$.ajax({
-		      	type: "post",
-		      	url: baseAddress+"/cma/ManagementReview/deleteOneFile",
-		      	data: {fileId : deleteId},
-		      	async:false,
-		      	success: function (d) {
-		      		
-		      	}
-		    });
-  		}
-
-  		getManagementReviewDetail(this.props.year);
-
-		this.setState({
-			selectedRowKeys: [],
-		});
-
 	}
 
 	onSelectChange = (selectedRowKeys) => {
@@ -201,6 +88,122 @@ class extends React.Component{
   		});
   	}
 
+  	handleDelete = () => {
+
+  		const {selectedRowKeys } = this.state;
+
+  		for (let i = selectedRowKeys.length - 1; i >= 0; i--) {
+  			let x = this.state.standardlist.findIndex(function(x){
+  				return x.key == selectedRowKeys[i];
+  			});
+  			let deleteId = this.state.standardlist[x].fileId;
+  			
+  			$.ajax({
+		      	type: "post",
+		      	url: baseAddress+"/cma/StandardManagement/deleteOne",
+		      	data: {fileId : deleteId},
+		      	async:false,
+		      	success: function (d) {
+		      		
+		      	}
+		    });
+  		}
+
+  		getStandards();
+
+		this.setState({
+			selectedRowKeys: [],
+		});
+	}
+
+	handleCreate = () => {
+    	const form = this.formRef.props.form;
+    	form.validateFields((err, values) => {
+      		if (err) {
+      		  	return;
+      		}
+
+      		let temp = values;
+
+      		temp.year = this.props.year;
+      		const formData = new FormData();
+      		formData.append('file', this.state.file);
+
+      		console.log(formData.get('file'));
+
+	  		$.ajax({
+			    type: "post",
+			    url: baseAddress+"/cma/StandardManagement/addOne",
+			    data: formData,
+			    cache: false,
+			    processData: false,
+                contentType: false,
+			    async: false,
+			    success: function (d) {
+			    	message.success("新增成功");
+				},
+				error: function (d) {
+			    	message.error("新增失败");
+				} 
+			});
+
+			getStandards();
+  			
+      		form.resetFields();
+
+      		this.setState({ 
+      			visible: false ,
+      		});
+      		
+    	});
+  	}
+
+  	handleModify = () => {
+  		const form = this.formRef2.props.form;
+    	form.validateFields((err, values) => {
+      		if (err) {
+      		  	return;
+      		}
+
+      		let temp = values;
+
+      		temp.year = this.props.year;
+      		temp.fileId = this.state.modifyingId;
+      		const formData = new FormData();
+
+      		formData.append('fileId', temp.fileId);
+      		formData.append('file', this.state.file);
+
+	  		$.ajax({
+			    type: "post",
+			    url: baseAddress+"/cma/StandardManagement/modifyOne",
+			    data: formData,
+			    processData: false,
+                contentType: false,
+			    async: false,
+			    success: function (d) {
+			    	message.success("修改成功");
+				},
+				error: function (d) {
+			    	message.error("修改失败");
+				} 
+			});
+			
+  			
+      		form.resetFields();
+
+      		this.setState({ 
+      			visible2: false ,
+      		});
+      		
+    	});
+  	}
+
+  	handleSearch = (value) => {
+  		this.state.search = value;
+  		this.refreshData();
+  	}
+
 	render(){
 		const {selectedRowKeys} = this.state;
 
@@ -211,7 +214,7 @@ class extends React.Component{
 
 		const columns = [
 		{
-			title : '文档名',
+			title : '标准名',
 			dataIndex : 'fileName',
 			key : 'fileName',
 		},
@@ -220,7 +223,7 @@ class extends React.Component{
 			dataIndex: 'remark',
 			key: 'remark',
 			render: (text, record) => {
-				let filesrc = baseAddress + '/cma/ManagementReview/downloadFile?fileId=' + record.fileId;
+				let filesrc = baseAddress + '/cma/StandardManagement/downloadFile?fileId=' + record.fileId;
 				let fileName = record.fileName;
 				return (
 					<div>
@@ -231,8 +234,7 @@ class extends React.Component{
 				  		修改
 				  	</a>
 				  	<a
-				  		href = {filesrc}
-				  		download = {fileName}
+				  		href={filesrc}
 				  	>
 				  		下载
 				  	</a>
@@ -241,13 +243,19 @@ class extends React.Component{
 			}
 		}
 		];
-
-		return (
+		return(
 			<div>
+				<Card>
+	      		<Search
+			      	placeholder="按标准名查询"
+			      	onSearch={value => this.handleSearch(value)}
+			      	style={{ width: 200 }}
+			    />
+	      		</Card>
 				<Table
 					rowSelection={rowSelection} 
 					columns = {columns}
-					dataSource = {this.state.filelist}
+					dataSource = {this.state.standardlist}
 				>
 				</Table>
 				<Button
@@ -276,11 +284,13 @@ class extends React.Component{
 			          	onCreate={this.handleModify}
 			          	setFile={this.setFile}
 			    />
-		    </div>
+			</div>
 		);
 	}
-})
-//
+
+}
+);
+
 const UploadForm = Form.create()(
 class extends React.Component{
 
@@ -317,20 +327,13 @@ class extends React.Component{
 		return (
 			<Modal
 	            visible={visible}
-	            title="上传管理评审文档"
+	            title="上传管理标准文档"
 	            okText="确定"
 	            onCancel={onCancel}
 	            onOk={onCreate}
 	        >
 		        <Form layout="vertical">
-		            <FormItem label="文档名">
-		                {getFieldDecorator('fileName', {
-		                    rules: [{ required: true, message: '请输入文档名！' }],
-		                })(
-		                        <Input />
-		                )}
-		            </FormItem>
-		            <FormItem label="文档">
+		            <FormItem label="标准文档">
 		                {getFieldDecorator('file', {
 		                    rules: [{ required: true, message: '请选择需要上传的文档！' }],
 		                })(
@@ -349,4 +352,4 @@ class extends React.Component{
 )
 
 
-export default ManagementReviewDetail;
+export default StandardManagement;
