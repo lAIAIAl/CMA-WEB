@@ -135,3 +135,13 @@ export const periodCheckAddOneService = baseAddress + '/cma/IntermediateChecksPl
 export const periodCheckDeleteOneService = baseAddress + '/cma/IntermediateChecksPlan/deleteOne';//url: 1.5
 export const periodCheckModifyOneService = baseAddress + '/cma/IntermediateChecksPlan/modifyOne';//url: 1.4
 export const periodCheckGetOneService = baseAddress + '/cma/IntermediateChecksPlan/getOne';//url: 1.2
+
+//test capacity
+export const testCapacityGetAllService = baseAddress + '/cma/TestAbility/getAll'; //url: 1.1
+export const testCapacityAddOneService = baseAddress + '/cma/TestAbility/addOne'; //url: 1.2
+export const testCapacityModifyOneService = baseAddress + '/cma/TestAbility/modifyOne'; //url: 1.3
+export const testCapacityGetAnnexService = baseAddress + '/cma/TestAbility/getAnnex'; //url: 1.4
+export const testCapacityGetAllItemService = baseAddress + '/cma/TestAbility/getAllItem'; //url: 1.5
+export const testCapacityAddOneItemService = baseAddress + '/cma/TestAbility/addOneItem'; //url: 1.6
+export const testCapacityDeleteOneItemService = baseAddress + '/cma/TestAbility/deleteOneItem'; //url: 1.7
+

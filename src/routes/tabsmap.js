@@ -50,6 +50,13 @@ import EquipmentApplicationRecord from 'routes/Equipment/EquipmentApplicationRec
 //StandardManagement
 import StandardManagement from 'routes/StandardManagement/StandardManagement';
 
+//test capacity
+import TestCapacityView from 'routes/TestCapacity/TestCapacityView';
+
+//ExternalReview
+import ExternalReviewList from 'routes/ExternalReview/ExternalReviewList';
+import ExternalReviewDetail from 'routes/ExternalReview/ExternalReviewDetail';
+
 const tabsmap = 
 [
     {
@@ -181,6 +188,20 @@ const tabsmap =
         path: '/StandardManagement',
         component: ItemContainer('StandardManagement', StandardManagement)
     },
+    //testcapacity
+    {
+        path: '/testcapacity_list',
+        component: ItemContainer('TestCapacity',TestCapacityView)
+    },
+    //ExternalReview
+    {
+        path: '/ExternalReview',
+        component: ItemContainer('ExternalReviewList', ExternalReviewList)
+    },
+    {
+        path: '/ExternalReview_detail',
+        component: ItemContainer('ExternalReviewDetail', ExternalReviewDetail)
+    }
 ]
 
 export default tabsmap

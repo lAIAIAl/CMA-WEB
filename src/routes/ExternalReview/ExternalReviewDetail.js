@@ -9,9 +9,9 @@ import {setItems} from 'common/basic/reducers/ItemReducer';
 
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
-import {getManagementReviewDetail} from './RequestFunction';
+import {getExternalReviewDetail} from './RequestFunction';
 
-const ManagementReviewDetail = Form.create()(
+const ExternalReviewDetail = Form.create()(
 class extends React.Component{
 
 	state = {
@@ -33,7 +33,7 @@ class extends React.Component{
 	}
 
 	componentWillMount() {
-		getManagementReviewDetail(this.props.year);
+		getExternalReviewDetail(this.props.year);
 	}
 
 	handleCreate = () => {
@@ -48,16 +48,14 @@ class extends React.Component{
       		temp.year = this.props.year;
       		const formData = new FormData();
 			formData.append('year', this.props.year);
-      		formData.append('fileName', temp.fileName);
       		formData.append('file', this.state.file);
 
       		console.log(formData.get('year'));
-      		console.log(formData.get('fileName'));
       		console.log(formData.get('file'));
 
 	  		$.ajax({
 			    type: "post",
-			    url: baseAddress+"/cma/ManagementReview/addOneFile",
+			    url: baseAddress+"/cma/ExternalReviewManagement/addOneFile",
 			    data: formData,
 			    cache: false,
 			    processData: false,
@@ -71,7 +69,7 @@ class extends React.Component{
 				} 
 			});
 
-			getManagementReviewDetail(this.props.year);
+			getExternalReviewDetail(this.props.year);
   			
       		form.resetFields();
 
@@ -96,13 +94,11 @@ class extends React.Component{
       		const formData = new FormData();
 
       		formData.append('fileId', temp.fileId);
-			formData.append('year', this.props.year);
-      		formData.append('fileName', temp.fileName);
       		formData.append('file', this.state.file);
 
 	  		$.ajax({
 			    type: "post",
-			    url: baseAddress+"/cma/ManagementReview/modifyOneFile",
+			    url: baseAddress+"/cma/ExternalReviewManagement/modifyOneFile",
 			    data: formData,
 			    processData: false,
                 contentType: false,
@@ -115,7 +111,6 @@ class extends React.Component{
 				} 
 			});
 			
-			getManagementReviewDetail(this.props.year);
   			
       		form.resetFields();
 
@@ -127,7 +122,7 @@ class extends React.Component{
   	}
 
 	refreshData = () => {
-		let data = getStore().getState().ManagementReviewDetail.items;
+		let data = getStore().getState().ExternalReviewDetail.items;
 
 		//console.log(data);
 
@@ -148,7 +143,7 @@ class extends React.Component{
   			
   			$.ajax({
 		      	type: "post",
-		      	url: baseAddress+"/cma/ManagementReview/deleteOneFile",
+		      	url: baseAddress+"/cma/ExternalReviewManagement/deleteOneFile",
 		      	data: {fileId : deleteId},
 		      	async:false,
 		      	success: function (d) {
@@ -157,7 +152,7 @@ class extends React.Component{
 		    });
   		}
 
-  		getManagementReviewDetail(this.props.year);
+  		getExternalReviewDetail(this.props.year);
 
 		this.setState({
 			selectedRowKeys: [],
@@ -221,7 +216,7 @@ class extends React.Component{
 			dataIndex: 'remark',
 			key: 'remark',
 			render: (text, record) => {
-				let filesrc = baseAddress + '/cma/ManagementReview/downloadFile?fileId=' + record.fileId;
+				let filesrc = baseAddress + '/cma/ExternalReviewManagement/downloadFile?fileId=' + record.fileId;
 				let fileName = record.fileName;
 				return (
 					<div>
@@ -324,13 +319,6 @@ class extends React.Component{
 	            onOk={onCreate}
 	        >
 		        <Form layout="vertical">
-		            <FormItem label="文档名">
-		                {getFieldDecorator('fileName', {
-		                    rules: [{ required: true, message: '请输入文档名！' }],
-		                })(
-		                        <Input />
-		                )}
-		            </FormItem>
 		            <FormItem label="文档">
 		                {getFieldDecorator('file', {
 		                    rules: [{ required: true, message: '请选择需要上传的文档！' }],
@@ -350,4 +338,4 @@ class extends React.Component{
 )
 
 
-export default ManagementReviewDetail;
+export default ExternalReviewDetail;

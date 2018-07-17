@@ -214,6 +214,20 @@ const initialState =
             modulePath: "/index/StandardManagement",
             menuPath: "/StandardManagement",
         },
+        {
+			id: "9",
+			code: "9",
+			name: "检测检验能力管理",
+			modulePath: "/index/TestCapacity",
+			menuPath: "/testcapacity_list"
+		},
+		{
+			id: "10",
+			code: "10",
+			name: "外部评审与上报管理",
+			modulePath: "/index/ExternalReview",
+			menuPath: "/ExternalReview"
+		},
     ]
 }
 
