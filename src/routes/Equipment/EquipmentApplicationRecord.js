@@ -30,7 +30,7 @@ export const getAllRecord = () =>{
 class EquipmentApplicationRecordView extends React.Component {
 	constructor(props) {
 		super(props);
-
+		this.unsubscribe = getStore().subscribe(this.refreshData);
 		this.state = {
 			visible: false,
 			allPlan: [],
@@ -73,8 +73,6 @@ class EquipmentApplicationRecordView extends React.Component {
 		this.setState({
 			selectvalue: value,
 		})
-		//console.log(value);
-		//console.log(this.state.selectvalue);
 	}
 
 	addOne = () => {
@@ -157,9 +155,11 @@ class EquipmentApplicationRecordView extends React.Component {
   		this.getAllEquip();
   		this.getAll();
   	}
+  	
   	componentWillUnmount() {
         this.unsubscribe();
 	}
+	
 	refreshData = () => {
 		this.setState({
 			allRecord: getStore().getState().EquipmentApplicationRecord.items
@@ -253,7 +253,7 @@ class EquipmentApplicationRecordView extends React.Component {
 						visible={this.state.visible}
 						onOk={this.addOne}
 						onCancel={this.handleCancel}
-					>
+						>
 						<Form layout="horizontal">
 							<FormItem {...formItemLayout} label = "申请人：" hasFeedback>
 								{getFieldDecorator('applicant',{
@@ -283,8 +283,8 @@ class EquipmentApplicationRecordView extends React.Component {
                         			})(
                         				<Checkbox.Group onChange={this.handleSelect}>
                         					<Row>
-                        						<Checkbox value={1}>1</Checkbox>
-                        						<Checkbox value={2}>2</Checkbox>
+                        						<Checkbox value={1}>1（服务器）</Checkbox>
+                        						<Checkbox value={2}>2（测试机）</Checkbox>
                         					</Row>
                         				</Checkbox.Group>
                         		)}

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {Row, Col, Card, Tabs, Select, Checkbox, Popconfirm,Upload, Button, Icon, Table, Form, Input, DatePicker, Modal, Tooltip, AutoComplete, message} from 'antd';
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
-//import AddView from 'common/basic/components/AddView';
 import {getAllRecord} from './TrainingRecordMain';
 
 const FormItem=Form.Item;
@@ -21,10 +20,10 @@ class TrainingRecordInspectView extends React.Component
 		super(props);
 
 		this.state = {
-        record: this.props.item.record,
-        visible:false,
-		    fileList: [],
-		    uploading: false,
+      record: this.props.item.record,
+      visible:false,
+		  fileList: [],
+		  uploading: false,
 		}
   }
 
@@ -34,8 +33,7 @@ class TrainingRecordInspectView extends React.Component
     tempwindow.location = url;
   }
 
-handleModify=()=>{
-
+  handleModify=()=>{
 		const {fileList} = this.state;
 
     var program = this.props.form.getFieldValue('program');
@@ -46,7 +44,7 @@ handleModify=()=>{
 		var note = this.props.form.getFieldValue('note') || '';
 
 		var formda = new FormData();
-        formda.append("trainingId",this.state.record.trainingId);
+    formda.append("trainingId",this.state.record.trainingId);
 		formda.append("program", program);
 		formda.append("trainingDate", trainingDate);
 		formda.append("place", place);
@@ -67,7 +65,7 @@ handleModify=()=>{
 			url: "http://119.23.38.100:8080/cma/StaffTraining/modifyOne",
 			data: formda,
 			processData: false,
-    		contentType: false,
+    	contentType: false,
 			async: false,
 			success: () => {
 				message.success("修改成功啦");
@@ -94,20 +92,21 @@ handleModify=()=>{
 		this.props.form.resetFields();
 
 		getAllRecord();
-}
+  }
 
-handleCancel=()=>{
+  handleCancel=()=>{
 		this.setState({
 			visible: false
 		})
-}
-showModal=()=>{
+  }
+  showModal=()=>{
 		this.setState({
 			visible: true
 		})
-}
+  }
+  
   render() {
-        const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
 		const formItemLayout =
 		{
 			labelCol: { span:6 },
@@ -115,25 +114,26 @@ showModal=()=>{
 		};
 
 		const addprops = {
-      		action: "http://119.23.38.100:8080/cma/StaffTraining/modifyOne",
-      		onRemove: (file) => {
-        		this.setState(({ fileList }) => {
-          			const index = fileList.indexOf(file);
-          			const newFileList = fileList.slice();
-          			newFileList.splice(index, 1);
-          			return {
-           				fileList: newFileList,
-          			};
-        		});
-      		},
-      		beforeUpload: (file) => {
-        		this.setState(({ fileList }) => ({
-          			fileList: [...fileList, file],
-        		}));
-        		return false;
-      		},
-      		fileList: this.state.fileList,
-    	}
+      action: "http://119.23.38.100:8080/cma/StaffTraining/modifyOne",
+      onRemove: (file) => {
+        this.setState(({ fileList }) => {
+          const index = fileList.indexOf(file);
+          const newFileList = fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+           	fileList: newFileList,
+          };
+        });
+      },
+      beforeUpload: (file) => {
+        this.setState(({ fileList }) => ({
+          fileList: [...fileList, file],
+        }));
+        return false;
+      },
+      fileList: this.state.fileList,
+    }
+    
     return (
       <Form>
         <Card key='0' title='培训详情' style={{marginBottom: 20}}>
@@ -179,7 +179,7 @@ showModal=()=>{
             <FormItem
               align="left"
               >
-              培训内容
+              培训内容：
               {this.state.record.content}
             </FormItem>
           </Row>
@@ -207,65 +207,64 @@ showModal=()=>{
             <Modal title="培训信息"  visible={this.state.visible} onOk={this.handleModify} onCancel={this.handleCancel}>
             <Form layout="horizontal">
 							<FormItem {...formItemLayout} label="培训项目名称：" hasFeedback>
-                        		{getFieldDecorator('program', {
-                          			rules: [{required: true, message: 'Please input the program!'}],
-                          			initialValue: this.state.record.program,
-                        		})(
-                        			<Input style ={{width: 100,offset:4}}/>
-                        		)}
-                      		</FormItem>
-                      		<FormItem {...formItemLayout} label="培训日期：" hasFeedback>
-                        		{getFieldDecorator('trainingDate', {
-                          			rules: [{required: true, message: 'Please input the trainingDate!'}],
-
-                        		})(
-                        			<DatePicker />
-                        		)}
-                      		</FormItem>
-                      		<FormItem {...formItemLayout} label="培训地点：" hasFeedback>
-                        		{getFieldDecorator('place', {
-                          			rules: [{required: true, message: 'Please input the place!'}],
-                          			initialValue: this.state.record.place,
-                        		})(
-                        			<Input style ={{width: 100,offset:4}}/>
-                        		)}
-                      		</FormItem>
-                      		<FormItem {...formItemLayout} label="主讲人：" hasFeedback>
-                        		{getFieldDecorator('presenter', {
-                          			rules: [{required: true, message: 'Please input the presenter!'}],
-                          			initialValue: this.state.record.presenter,
-                        		})(
-                        			<Input style ={{width: 100,offset:4}}/>
-                        		)}
-                      		</FormItem>
-                      		<FormItem {...formItemLayout} label="培训内容：" hasFeedback>
-                        		{getFieldDecorator('content', {
-                          			rules: [],
-                          			initialValue:  this.state.record.content,
-                        		})(
-                        			<Input style ={{width: 100,offset:4}}/>
-                        		)}
-                      		</FormItem>
-                      		<FormItem {...formItemLayout} label="备注：" hasFeedback>
-                        		{getFieldDecorator('note', {
-                          			rules: [],
-                          			initialValue:  this.state.record.note,
-                        		})(
-                        			<Input style ={{width: 100,offset:4}}/>
-                        		)}
-                      		</FormItem>
-                      	</Form>
+                {getFieldDecorator('program', {
+                  rules: [{required: true, message: 'Please input the program!'}],
+                  initialValue: this.state.record.program,
+                  })(
+                      <Input style ={{width: 100,offset:4}}/>
+                    )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="培训日期：" hasFeedback>
+                {getFieldDecorator('trainingDate', {
+                  rules: [{required: true, message: 'Please input the trainingDate!'}],
+                  })(
+                      <DatePicker />
+                    )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="培训地点：" hasFeedback>
+                {getFieldDecorator('place', {
+                  rules: [{required: true, message: 'Please input the place!'}],
+                  initialValue: this.state.record.place,
+                  })(
+                      <Input style ={{width: 100,offset:4}}/>
+                    )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="主讲人：" hasFeedback>
+                {getFieldDecorator('presenter', {
+                  rules: [{required: true, message: 'Please input the presenter!'}],
+                  initialValue: this.state.record.presenter,
+                  })(
+                      <Input style ={{width: 100,offset:4}}/>
+                    )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="培训内容：" hasFeedback>
+                {getFieldDecorator('content', {
+                  rules: [],
+                  initialValue:  this.state.record.content,
+                  })(
+                      <Input style ={{width: 100,offset:4}}/>
+                    )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="备注：" hasFeedback>
+                {getFieldDecorator('note', {
+                  rules: [],
+                  initialValue:  this.state.record.note,
+                  })(
+                      <Input style ={{width: 100,offset:4}}/>
+                    )}
+              </FormItem>
+            </Form>
 
 						<Form id="upfile">
-                      		<FormItem>培训信息文件</FormItem>
-                      			<Upload {...addprops}>
-                        			<Button>
-                          				<Icon type="upload" /> 添加文件
-                        			</Button>
-                      			</Upload>
-                    	</Form>
+              培训信息文件：
+                <Upload {...addprops}>
+                  <Button>
+                    <Icon type="upload" /> 添加文件
+                  </Button>
+                </Upload>
+            </Form>
 
-            </Modal>
+          </Modal>
       </Form>
     );
   }

@@ -98,7 +98,7 @@ const tabsmap =
     },
     {
         path: '/staff_quali_list',
-        component: StaffQualificationView,
+        component: ItemContainer('StaffQualificationView', StaffQualificationView),
     },
     {
         path: '/resigner_list',

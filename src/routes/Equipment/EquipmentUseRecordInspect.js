@@ -29,98 +29,99 @@ class EquipmentUseInspectView extends React.Component
 	}
 
 	showModal = () => {
-    	this.setState({
-    		visible: true,
-    	});
-  	}
+    this.setState({
+    	visible: true,
+    });
+  }
 
-  	handleModify = () => {
-  		this.props.form.validateFields((err, fieldsValue) => {
-      		if(err) {
-        		return ;
-      		}
-    	});
-
-      const formda = {
-        id: this.state.item.id,
-        equipmentId: this.props.form.getFieldValue('name'),
-        useDate: this.props.form.getFieldValue('useDate').format('YYYY-MM-DD'),
-        openDate: this.props.form.getFieldValue('openDate').format('HH:mm:ss'),
-        closeDate: this.props.form.getFieldValue('closeDate').format('HH:mm:ss'),
-        sampleNumber: this.props.form.getFieldValue('sampleNumber'),
-        testProject: this.props.form.getFieldValue('testProject'),
-        beforeUse: this.props.form.getFieldValue('beforeUse'),
-        afterUse: this.props.form.getFieldValue('afterUse'),
-        user: this.props.form.getFieldValue('user'),
-        remark: this.props.form.getFieldValue('remark'),
+  handleModify = () => {
+  	this.props.form.validateFields((err, fieldsValue) => {
+      if(err) {
+        return ;
       }
+    });
 
-      console.log(formda);
-
-  		this.setState({
-    		visible: false,
-    	});
-
-    	$.ajax({
-    		type: "post",
-    		url: "http://119.23.38.100:8080/cma/EquipmentUse/modifyOne",
-    		data: formda,
-    		async: false,
-    		success: () => {
-      			message.success("修改成功");
-            if(formda.equipmentId != this.props.item.equipmentId)
-              for(var j = this.state.allEquip.length-1; j >= 0; j--) {
-                if(formda.equipmentId == this.state.allEquip[j].id)
-                  this.setState({
-                    name: this.state.allEquip[j].name
-                  })
-                break;
-              }
-    		},
-    		error: () => {
-      			message.error("修改失败");
-    		}
-    	});
-
-      //getAllRecord();
-      this.getOne();
-
-    	this.props.form.resetFields();
-  	}
-
-  	handleCancel = () => {
-  		this.setState({
-    		visible: false,
-    	});
-  	}
-
-    handleSelectChange = (value) => {
-      console.log(value);
+    const formda = {
+      id: this.state.item.id,
+      equipmentId: this.props.form.getFieldValue('name'),
+      useDate: this.props.form.getFieldValue('useDate').format('YYYY-MM-DD'),
+      openDate: this.props.form.getFieldValue('openDate').format('HH:mm:ss'),
+      closeDate: this.props.form.getFieldValue('closeDate').format('HH:mm:ss'),
+      sampleNumber: this.props.form.getFieldValue('sampleNumber'),
+      testProject: this.props.form.getFieldValue('testProject'),
+      beforeUse: this.props.form.getFieldValue('beforeUse'),
+      afterUse: this.props.form.getFieldValue('afterUse'),
+      user: this.props.form.getFieldValue('user'),
+      remark: this.props.form.getFieldValue('remark'),
     }
 
-    getOne = () => {
-      $.get("http://119.23.38.100:8080/cma/EquipmentUse/getOne?id="+this.state.id, null,(res) =>{
-          let temp = res.data;
-          this.setState({
-            item: temp
-          })
-          //console.log(this.state.item);
+    console.log(formda);
+
+  	this.setState({
+    	visible: false,
+    });
+
+    $.ajax({
+    	type: "post",
+    	url: "http://119.23.38.100:8080/cma/EquipmentUse/modifyOne",
+    	data: formda,
+    	async: false,
+    	success: () => {
+      	message.success("修改成功");
+        if(formda.equipmentId != this.props.item.equipmentId)
+          for(var j = this.state.allEquip.length-1; j >= 0; j--) {
+            if(formda.equipmentId == this.state.allEquip[j].id)
+            {
+              this.setState({
+                name: this.state.allEquip[j].name
+              })
+              break;
+            }
+          }
+    	},
+    	error: () => {
+      	message.error("修改失败");
+    	}
+    });
+
+    this.getOne();
+
+    this.props.form.resetFields();
+  }
+
+  handleCancel = () => {
+  	this.setState({
+    	visible: false,
+    });
+  }
+
+  handleSelectChange = (value) => {
+    console.log(value);
+  }
+
+  getOne = () => {
+    $.get("http://119.23.38.100:8080/cma/EquipmentUse/getOne?id="+this.state.id, null,(res) =>{
+      let temp = res.data;
+      this.setState({
+        item: temp
       })
-    }
+      //console.log(this.state.item);
+    })
+  }
 
-    getAllEquip = () => {
-      $.get("http://119.23.38.100:8080/cma/Equipment/getAll", null,(res) =>{
-        let temp = res.data;
-        this.setState({
-          allEquip: temp
-        })
+  getAllEquip = () => {
+    $.get("http://119.23.38.100:8080/cma/Equipment/getAll", null,(res) =>{
+      let temp = res.data;
+      this.setState({
+        allEquip: temp
       })
-    }
+    })
+  }
 
-    componentWillMount() {
-      this.getAllEquip();
-      this.getOne();
-    }
+  componentWillMount() {
+    this.getAllEquip();
+    this.getOne();
+  }
 
 	render(){
 		const formItemLayout = 
@@ -139,11 +140,11 @@ class EquipmentUseInspectView extends React.Component
 				<Row key='0'>
 					<Col span={12}>
 						<FormItem
-                  align="left"		
-		        		>
+              align="left"		
+		        	>
                 设备名称：
 		        		{this.state.name}
-		        		</FormItem>
+		        </FormItem>
 					</Col>
           <Col span={12}>
             <FormItem
@@ -157,75 +158,75 @@ class EquipmentUseInspectView extends React.Component
 				<Row key='1'>
 					<Col span={12}>
 						<FormItem
-		        			align="left"		          			
-		        		>
+		        	align="left"		          			
+		        	>
                 开机时间：
 		        		{this.state.item.openDate}
-		        		</FormItem>
+		        </FormItem>
 					</Col>
           <Col span={12}>
             <FormItem
-                  align="left"                  
-                >
+              align="left"                  
+              >
                 关机时间：
                 {this.state.item.closeDate}
-                </FormItem>
+            </FormItem>
           </Col>
 				</Row>
         <Row key='2'>
           <Col span={12}>
             <FormItem
-                align="left"                  
+              align="left"                  
               >
                 样品编号：
                 {this.state.item.sampleNumber}
-                </FormItem>
+            </FormItem>
           </Col>
           <Col span={12}>
             <FormItem
-                align="left"      
+              align="left"      
               >
                 测试项目：
                 {this.state.item.testProject}
-                </FormItem>
+            </FormItem>
           </Col>
         </Row>
         <Row key='3'>
           <Col span={12}>
             <FormItem
-                align="left"      
+              align="left"      
               >
                 仪器使用前情况：
                 {this.state.item.beforeUse}
-                </FormItem>
+            </FormItem>
           </Col>
           <Col span={12}>
             <FormItem
-                align="left"      
+              align="left"      
               >
                 仪器使用后情况：
                 {this.state.item.afterUse}
-                </FormItem>
+            </FormItem>
           </Col>
         </Row>
         <Row key='4'>
           <Col span={12}>
             <FormItem
-                align="left"      
+              align="left"      
               >
                 使用人：
                 {this.state.item.user}
-                </FormItem>
+            </FormItem>
           </Col>
         </Row>
         <Row key='5'>
           <Col span={12}>
             <FormItem
-                align="left"      
+              align="left"      
               >
                 备注：
                 {this.state.item.remark}
-                </FormItem>
+            </FormItem>
           </Col>
         </Row>
 			</Card>
@@ -238,110 +239,111 @@ class EquipmentUseInspectView extends React.Component
 					</Button>
 					<Modal
 						title="修改设备使用记录"
-                    	visible={this.state.visible}
-                    	onOk={this.handleModify}
-                    	onCancel={this.handleCancel}
-                  	>
-                    <Form layout="horizontal">
+            visible={this.state.visible}
+            onOk={this.handleModify}
+            onCancel={this.handleCancel}
+            >
+              <Form layout="horizontal">
                       
-                      <FormItem {...formItemLayout } label="设备名称：" hasFeedback>
-                        {getFieldDecorator('name', {
-                          rules: [],
-                        })(
-                          <Select
-                            showSearch
-                            style={{ width: 150 }}
-                            placeholder={this.state.name}
-                            optionFilterProp="resigner"
-                            onChange={this.handleSelectChange}
-                            filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            >
-                              {options}
-                          </Select>
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout } label="设备名称：" hasFeedback>
+                  {getFieldDecorator('name', {
+                    rules: [],
+                    })(
+                        <Select
+                          showSearch
+                          style={{ width: 150 }}
+                          placeholder={this.state.name}
+                          optionFilterProp="resigner"
+                          onChange={this.handleSelectChange}
+                          filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                          >
+                            {options}
+                        </Select>
+                      )}
+                </FormItem>
                       
-                      <FormItem {...formItemLayout} label="使用日期：" hasFeedback>
-                        {getFieldDecorator('useDate', {
-                          rules: [],
-                          initialValue: moment(this.state.item.useDate, dateFormat),
-                        })(
-                          <DatePicker />
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout} label="使用日期：" hasFeedback>
+                  {getFieldDecorator('useDate', {
+                    rules: [],
+                    initialValue: moment(this.state.item.useDate, dateFormat),
+                    })(
+                        <DatePicker />
+                      )}
+                </FormItem>
 
-                      <FormItem {...formItemLayout} label="开机时间：" hasFeedback>
-                        {getFieldDecorator('openDate', {
-                          rules: [],
-                          initialValue: moment(this.state.item.openDate, timeFormat),
-                        })(
-                          <TimePicker />
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout} label="开机时间：" hasFeedback>
+                  {getFieldDecorator('openDate', {
+                    rules: [],
+                    initialValue: moment(this.state.item.openDate, timeFormat),
+                    })(
+                        <TimePicker />
+                      )}
+                </FormItem>
 
-                      <FormItem {...formItemLayout} label="关机时间：" hasFeedback>
-                        {getFieldDecorator('closeDate', {
-                          rules: [],
-                          initialValue: moment(this.state.item.closeDate, timeFormat),
-                        })(
-                          <TimePicker />
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout} label="关机时间：" hasFeedback>
+                  {getFieldDecorator('closeDate', {
+                    rules: [],
+                    initialValue: moment(this.state.item.closeDate, timeFormat),
+                    })(
+                        <TimePicker />
+                      )}
+                </FormItem>
 
-                      <FormItem {...formItemLayout} label="样品编号：" hasFeedback>
-                        {getFieldDecorator('sampleNumber', {
-                          rules: [],
-                          initialValue: this.state.item.sampleNumber,
-                        })(
-                          <Input style ={{width: 100,offset:4}}/>
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout} label="样品编号：" hasFeedback>
+                  {getFieldDecorator('sampleNumber', {
+                    rules: [],
+                    initialValue: this.state.item.sampleNumber,
+                    })(
+                        <Input style ={{width: 100,offset:4}}/>
+                      )}
+                </FormItem>
 
-                      <FormItem {...formItemLayout} label="测试项目：" hasFeedback>
-                        {getFieldDecorator('testProject', {
-                          rules: [],
-                          initialValue: this.state.item.testProject,
-                        })(
-                          <Input style ={{width: 100,offset:4}}/>
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout} label="测试项目：" hasFeedback>
+                  {getFieldDecorator('testProject', {
+                    rules: [],
+                    initialValue: this.state.item.testProject,
+                    })(
+                        <Input style ={{width: 100,offset:4}}/>
+                      )}
+                </FormItem>
 
-                      <FormItem {...formItemLayout} label="仪器使用前情况：" hasFeedback>
-                        {getFieldDecorator('beforeUse', {
-                          rules: [],
-                          initialValue: this.state.item.beforeUse,
-                        })(
-                          <Input style ={{width: 100,offset:4}}/>
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout} label="仪器使用前情况：" hasFeedback>
+                  {getFieldDecorator('beforeUse', {
+                    rules: [],
+                    initialValue: this.state.item.beforeUse,
+                    })(
+                        <Input style ={{width: 100,offset:4}}/>
+                      )}
+                </FormItem>
 
-                      <FormItem {...formItemLayout} label="仪器使用后情况：" hasFeedback>
-                        {getFieldDecorator('afterUse', {
-                          rules: [],
-                          initialValue: this.state.item.afterUse,
-                        })(
-                          <Input style ={{width: 100,offset:4}}/>
-                        )}
-                      </FormItem>
-                      <FormItem {...formItemLayout} label="使用人：" hasFeedback>
-                        {getFieldDecorator('user', {
-                          rules: [],
-                          initialValue: this.state.item.user,
-                        })(
-                          <Input style ={{width: 100,offset:4}}/>
-                        )}
-                      </FormItem>
-                      <FormItem {...formItemLayout} label="备注：" hasFeedback>
-                        {getFieldDecorator('remark', {
-                          rules: [],
-                          initialValue: this.state.item.remark,
-                        })(
-                          <Input style ={{width: 100,offset:4}}/>
-                        )}
-                      </FormItem>
+                <FormItem {...formItemLayout} label="仪器使用后情况：" hasFeedback>
+                  {getFieldDecorator('afterUse', {
+                    rules: [],
+                    initialValue: this.state.item.afterUse,
+                    })(
+                        <Input style ={{width: 100,offset:4}}/>
+                      )}
+                </FormItem>
+                      
+                <FormItem {...formItemLayout} label="使用人：" hasFeedback>
+                  {getFieldDecorator('user', {
+                    rules: [],
+                    initialValue: this.state.item.user,
+                    })(
+                        <Input style ={{width: 100,offset:4}}/>
+                      )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="备注：" hasFeedback>
+                  {getFieldDecorator('remark', {
+                    rules: [],
+                    initialValue: this.state.item.remark,
+                    })(
+                        <Input style ={{width: 100,offset:4}}/>
+                      )}
+                </FormItem>
 
-                    </Form>
-                  </Modal>
+              </Form>
+            </Modal>
 				</FormItem>
 			</Form>
 		);

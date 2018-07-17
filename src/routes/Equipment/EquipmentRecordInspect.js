@@ -27,78 +27,77 @@ class EquipmentInspectView extends React.Component
     	this.setState({
     		visible: true,
     	});
-  	}
+  }
 
-  	handleModify = () => {
-  		this.props.form.validateFields((err, fieldsValue) => {
-      		if(err) {
-        		return ;
-      		}
-    	});
-
-      const formda = {
-        id: this.state.item.id,
-        name: this.props.form.getFieldValue('name'),
-        model: this.props.form.getFieldValue('model'),
-        cpu: this.props.form.getFieldValue('cpu'),
-        memory: this.props.form.getFieldValue('memory'),
-        hardDisk: this.props.form.getFieldValue('hardDisk'),
-        equipmentNumber: this.props.form.getFieldValue('equipmentNumber'),
-        application: this.props.form.getFieldValue('application'),
-        state: parseInt(this.props.form.getFieldValue('state')),
+  handleModify = () => {
+  	this.props.form.validateFields((err, fieldsValue) => {
+      if(err) {
+        return ;
       }
+    });
 
-      console.log(formda);
+    const formda = {
+      id: this.state.item.id,
+      name: this.props.form.getFieldValue('name'),
+      model: this.props.form.getFieldValue('model'),
+      cpu: this.props.form.getFieldValue('cpu'),
+      memory: this.props.form.getFieldValue('memory'),
+      hardDisk: this.props.form.getFieldValue('hardDisk'),
+      equipmentNumber: this.props.form.getFieldValue('equipmentNumber'),
+      application: this.props.form.getFieldValue('application'),
+      state: parseInt(this.props.form.getFieldValue('state')),
+    }
 
-  		this.setState({
-    		visible: false,
-    	});
+    console.log(formda);
 
-    	$.ajax({
-    		type: "post",
-    		url: "http://119.23.38.100:8080/cma/Equipment/modifyOne",
-    		data: formda,
-    		async: false,
-    		success: () => {
-      			message.success("修改成功");
-    		},
-    		error: () => {
-      			message.error("修改失败");
-    		}
-    	});
+  	this.setState({
+    	visible: false,
+    });
 
-      //getAllRecord();
-      this.getOne();
+    $.ajax({
+    	type: "post",
+    	url: "http://119.23.38.100:8080/cma/Equipment/modifyOne",
+    	data: formda,
+    	async: false,
+    	success: () => {
+      	message.success("修改成功");
+    	},
+    	error: () => {
+      	message.error("修改失败");
+    	}
+    });
 
-    	this.props.form.resetFields();
-  	}
+    //getAllRecord();
+    this.getOne();
 
-  	handleCancel = () => {
-  		this.setState({
-    		visible: false,
-    	});
-  	}
+    this.props.form.resetFields();
+  }
 
-    getOne = () => {
-      $.get("http://119.23.38.100:8080/cma/Equipment/getOne?id="+this.state.id, null,(res) =>{
-          let temp = res.data;
+  handleCancel = () => {
+  	this.setState({
+    	visible: false,
+    });
+  }
 
-          if(temp.state == 0)
-            temp.state = "停用";
-          else
-            temp.state = "准用";
+  getOne = () => {
+    $.get("http://119.23.38.100:8080/cma/Equipment/getOne?id="+this.state.id, null,(res) =>{
+      let temp = res.data;
+
+      if(temp.state == 0)
+        temp.state = "停用";
+      else
+        temp.state = "准用";
           
-          
-          this.setState({
-            item: temp
-          })
-          //console.log(this.state.item);
+      this.setState({
+        item: temp
       })
-    }
+          //console.log(this.state.item);
+    })
+  }
 
-    componentWillMount() {
-      this.getOne();
-    }
+  componentWillMount() {
+    this.getOne();
+  }
 
 	render(){
 		const formItemLayout = 

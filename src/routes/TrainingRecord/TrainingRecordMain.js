@@ -147,6 +147,7 @@ class TrainingRecordMainView extends React.Component {
 			allRecord: getStore().getState().TrainingRecordMain.items
 		});
 	}
+
 	render()
 	{
 		const columns = [{
@@ -177,17 +178,14 @@ class TrainingRecordMainView extends React.Component {
 			width: '10%',
 			key: 'inspect',
 			render: (text, record) => {
-
-
 				var props = {
 					item: {
 						record,
-
 					}
 				}
 				return(
 					<div>
-						<Button onClick={() => this.handleAddTab(props)}>查看</Button>
+						<Button type="primary" onClick={() => this.handleAddTab(props)}>查看</Button>
 					</div>
 				);
 			}
@@ -200,7 +198,7 @@ class TrainingRecordMainView extends React.Component {
 				return(
 					<div>
 						<Popconfirm title="Sure to delete?" onConfirm={() => this.deleteOne(record.key)}>
-							<Button>删除</Button>
+							<Button type="danger">删除</Button>
 						</Popconfirm>
 					</div>
 				);
@@ -307,7 +305,7 @@ class TrainingRecordMainView extends React.Component {
                       	</Form>
 
                       	<Form id="upfile">
-                      		<FormItem>培训信息文件</FormItem>
+                      		培训信息文件：
                       			<Upload {...addprops}>
                         			<Button>
                           				<Icon type="upload" /> 添加文件

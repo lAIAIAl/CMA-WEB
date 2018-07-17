@@ -13,8 +13,6 @@ const formItemLayout = {
   wrapperCol: { span: 18 },
 };
 
-
-
 class AnnualTrainingPlanView extends React.Component
 {
 	constructor(props) {
@@ -113,6 +111,8 @@ class AnnualTrainingPlanView extends React.Component
 		this.setState({
 			approvevisible: false,
 		})
+
+		this.getAll();
 		this.props.form.resetFields();
 	}
 
@@ -132,6 +132,7 @@ class AnnualTrainingPlanView extends React.Component
 				message.error("删除失败哦");
 			}
 		});
+		this.getAll();
 	}
 
 	getAll = () => {
@@ -153,8 +154,6 @@ class AnnualTrainingPlanView extends React.Component
     			})
     		}
     	})
-
-    	
 	}
 
 	componentWillMount() {
@@ -202,7 +201,11 @@ class AnnualTrainingPlanView extends React.Component
 				}
 				return(
 					<div>
-						<Button onClick={() => this.handleAddTab(props)}>查看</Button>
+						<Button 
+							type="primary"
+							onClick={() => this.handleAddTab(props)}>
+							查看
+						</Button>
 					</div>
 				);
 			}
@@ -215,7 +218,11 @@ class AnnualTrainingPlanView extends React.Component
 				return(
 					<div>
 						<Popconfirm title="Sure to delete?" onConfirm={() => this.deleteOne(record.key)}>
-							<Button disabled={this.state.isApproved}>删除</Button>
+							<Button 
+								disabled={this.state.isApproved}
+								type="danger">
+								删除
+							</Button>
 						</Popconfirm>
 					</div>
 				);
@@ -240,7 +247,7 @@ class AnnualTrainingPlanView extends React.Component
 							新增
 						</Button>
 						<Modal
-							title="新增年度培训计划"
+							title="新增培训计划"
 							visible={this.state.addVisible}
 							onOk={this.addOne}
 							onCancel={this.onAddOk}>
@@ -315,7 +322,7 @@ class AnnualTrainingPlanView extends React.Component
 							批准
 						</Button>
 						<Modal
-							title="批准年度培训计划"
+							title="批准培训计划"
 							visible={this.state.approvevisible}
 							onOk={this.approveOne}
 							onCancel={this.onApproveOk}>

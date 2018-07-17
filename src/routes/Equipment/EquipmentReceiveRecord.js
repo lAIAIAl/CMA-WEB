@@ -30,7 +30,7 @@ export const getAllRecord = () =>{
 class EquipmentReceiveRecordView extends React.Component {
   constructor(props) {
     super(props);
-
+    this.unsubscribe = getStore().subscribe(this.refreshData);
     this.state = {
       visible: false,
       allPlan: [],

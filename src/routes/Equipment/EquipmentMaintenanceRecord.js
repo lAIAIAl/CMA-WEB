@@ -30,7 +30,7 @@ export const getAllRecord = () =>{
 class EquipmentMaintenanceRecordView extends React.Component {
   constructor(props) {
     super(props);
-
+    this.unsubscribe = getStore().subscribe(this.refreshData);
     this.state = {
       visible: false,
       allPlan: [],
@@ -161,9 +161,11 @@ class EquipmentMaintenanceRecordView extends React.Component {
     this.getAllEquip();
     this.getAll();
   }
+
   componentWillUnmount() {
     this.unsubscribe();
   }
+
   refreshData = () => {
     this.setState({
       allRecord: getStore().getState().EquipmentMaintenanceRecord.items
@@ -221,8 +223,8 @@ class EquipmentMaintenanceRecordView extends React.Component {
         return (
           <div>
             <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(record.key)}>
-                      <Button type="danger">删除</Button>
-                  </Popconfirm>
+              <Button type="danger">删除</Button>
+            </Popconfirm>
           </div>
         );
         },
@@ -233,17 +235,19 @@ class EquipmentMaintenanceRecordView extends React.Component {
           <Col span={6}>
             设备名称：
             {getFieldDecorator('sid',{
-                        rules: [],
-                    })(<Select
-                        showSearch
-                        style={{ width: 100 }}
-                        placeholder="选择一个设备"
-                        optionFilterProp="resigner"
-                        onChange={this.handleSelectChange}
-                        filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              rules: [],
+              })(
+                  <Select
+                    showSearch
+                    style={{ width: 100 }}
+                    placeholder="选择一个设备"
+                    optionFilterProp="resigner"
+                    onChange={this.handleSelectChange}
+                    filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     >
-                        {searchoptions}
-                    </Select>)}
+                      {searchoptions}
+                  </Select>
+                )}
           </Col>
           <Col span={4}>
             <Button
@@ -279,17 +283,17 @@ class EquipmentMaintenanceRecordView extends React.Component {
                 {getFieldDecorator('equipmentId',{
                   rules:[{required: true, message: "请选择设备!"}],
                   })(
-                    <Select
+                      <Select
                         showSearch
                         style={{ width: 150 }}
                         placeholder="请选择一个设备"
                         optionFilterProp="resigner"
                         onChange={this.handleSelectChange}
                         filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                        {options}
-                    </Select>
-                  )}
+                        >
+                          {options}
+                      </Select>
+                    )}
               </FormItem>
               <FormItem {...formItemLayout} label="记录日期：" hasFeedback>
                 {getFieldDecorator('maintenanceDate', {

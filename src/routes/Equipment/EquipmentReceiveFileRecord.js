@@ -90,33 +90,33 @@ class EquipmentReceiveFileRecordView extends React.Component {
 
   onDelete = (key) => {
     $.ajax({
-        type: "post",
-        url: "http://119.23.38.100:8080/cma/EquipmentReceive/deleteAttachment",
-        data: {attachmentId: key},
-        async: false,
-        success:function(d) {
-            message.success("删除成功");
-        }
-      });
+      type: "post",
+      url: "http://119.23.38.100:8080/cma/EquipmentReceive/deleteAttachment",
+      data: {attachmentId: key},
+      async: false,
+      success:function(d) {
+        message.success("删除成功");
+      }
+    });
 
-      this.getAll();
+    this.getAll();
   }
 
   getAll = () => {
-      $.get("http://119.23.38.100:8080/cma/EquipmentReceive/getAllAttachmentNameById?id="+this.state.id, null,(res) =>{
-          let temp = res.data;
-          for(var i = temp.length-1; i >= 0; i--) {
-            temp[i].key = temp[i].attachmentId;
-          }
-          this.setState({
-            allPlan: temp
-          })
+    $.get("http://119.23.38.100:8080/cma/EquipmentReceive/getAllAttachmentNameById?id="+this.state.id, null,(res) =>{
+      let temp = res.data;
+      for(var i = temp.length-1; i >= 0; i--) {
+        temp[i].key = temp[i].attachmentId;
+      }
+      this.setState({
+        allPlan: temp
       })
-    }
+    })
+  }
 
-    componentWillMount() {
-      this.getAll();
-    }
+  componentWillMount() {
+    this.getAll();
+  }
   
   render() 
   {
@@ -133,6 +133,7 @@ class EquipmentReceiveFileRecordView extends React.Component {
       dataIndex: 'action',
       colSpan: 2,
       key: 'inspect',
+      width: '10%',
       render: (text, record) => {
         return (
           <div>
@@ -145,37 +146,39 @@ class EquipmentReceiveFileRecordView extends React.Component {
       dataIndex: 'action',
       colSpan: 0,
       key: 'delete',
+      width: '10%',
       render: (text, record) => {
         return (
           <div>
             <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(record.key)}>
-                      <Button type="danger">删除</Button>
-                  </Popconfirm>
+              <Button type="danger">删除</Button>
+            </Popconfirm>
           </div>
         );
         },
     }]
 
     const addprops = {
-          action: "http://119.23.38.100:8080/cma/EquipmentReceive/addAttachment",
-          onRemove: (file) => {
-            this.setState(({ fileList }) => {
-                const index = fileList.indexOf(file);
-                const newFileList = fileList.slice();
-                newFileList.splice(index, 1);
-                return {
-                  fileList: newFileList,
-                };
-            });
-          },
-          beforeUpload: (file) => {
-            this.setState(({ fileList }) => ({
-                fileList: [...fileList, file],
-            }));
-            return false;
-          },
-          fileList: this.state.fileList,
-      }
+      action: "http://119.23.38.100:8080/cma/EquipmentReceive/addAttachment",
+      onRemove: (file) => {
+        this.setState(({ fileList }) => {
+          const index = fileList.indexOf(file);
+          const newFileList = fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList: newFileList,
+          };
+        });
+      },
+      beforeUpload: (file) => {
+        this.setState(({ fileList }) => ({
+          fileList: [...fileList, file],
+        }));
+        return false;
+      },
+      fileList: this.state.fileList,
+    }
+    
     return (
       <Form>
         
@@ -201,7 +204,7 @@ class EquipmentReceiveFileRecordView extends React.Component {
             onCancel={this.handleOk}
           >
             <Form id="upfile">
-              <FormItem>附属文件</FormItem>
+              附属文件：
                 <Upload {...addprops}>
                   <Button>
                     <Icon type="upload" /> 添加文件

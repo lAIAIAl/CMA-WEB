@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Row, Col, Card, Tabs, Select, Checkbox, Popconfirm, Button, Icon, Table, Form, Input, DatePicker, Modal, Tooltip, AutoComplete, message} from 'antd';
 
-
 import $ from 'lib/jquery-3.3.1';
-//import AddView from 'common/basic/components/AddView';
 
 const FormItem=Form.Item;
 const Option=Select.Option;
@@ -89,6 +87,7 @@ class AnnualTrainingPlanInspectView extends React.Component
     })
     console.log(newapp);
 
+    this.refresh();
     this.props.form.resetFields();
   }
 
@@ -119,73 +118,73 @@ class AnnualTrainingPlanInspectView extends React.Component
           <Row key='0'>
             <Col span={12}>
               <FormItem
-                  {...formItemLayout}
-                    label="培训项目"
+                align="left"
                 >
-                {this.state.record.trainProject}
+                  培训项目：
+                  {this.state.record.trainProject}
               </FormItem>
             </Col>
           </Row>
           <Row key='1'>
             <Col span={12}>
               <FormItem
-                  {...formItemLayout}
-                    label="培训对象"
+                align="left"
                 >
-                {this.state.record.people}
+                  培训对象：
+                  {this.state.record.people}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
-                  {...formItemLayout}
-                    label="培训方式"
+                align="left"
                 >
-                {this.state.record.method}
+                  培训方式：
+                  {this.state.record.method}
               </FormItem>
             </Col>
           </Row>
           <Row key='2'>
             <Col span={12}>
               <FormItem
-                  {...formItemLayout}
-                    label="培训课时"
+                align="left"
                 >
-                {this.state.record.trainingTime}
+                  培训课时：
+                  {this.state.record.trainingTime}
               </FormItem>
             </Col>
           </Row>
           <Row key='3'>
             <Col span={12}>
               <FormItem
-                  {...formItemLayout}
-                    label="培训开始时间"
+                align="left"
                 >
-                {this.state.record.startTime}
+                  培训开始时间：
+                  {this.state.record.startTime}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
-                  {...formItemLayout}
-                    label="培训结束时间"
+                align="left"
                 >
-                {this.state.record.endTime}
+                  培训结束时间：
+                  {this.state.record.endTime}
               </FormItem>
             </Col>
           </Row>
           <Row key='4'>
             <Col span={12}>
               <FormItem
-                  {...formItemLayout}
-                    label="备注"
+                align="left"
                 >
-                <a onClick={this.showNote}>查看</a>
-                <Modal
-                  title="备注"
-                  visible={this.state.notevisible}
-                  onOk={this.onNoteOk}
-                  onCancel={this.onNoteOk}>
-                  {this.state.record.note}
-                </Modal>
+                  备注：
+                  <a onClick={this.showNote}>查看</a>
+                  <Modal
+                    title="备注"
+                    visible={this.state.notevisible}
+                    onOk={this.onNoteOk}
+                    onCancel={this.onNoteOk}>
+                    {this.state.record.note}
+                  </Modal>
               </FormItem>
             </Col>
           </Row>

@@ -30,7 +30,7 @@ export const getAllRecord = () =>{
 class EquipmentRecordView extends React.Component {
 	constructor(props) {
 		super(props);
-
+		this.unsubscribe = getStore().subscribe(this.refreshData);
 		this.state = {
 			visible: false,
 			allPlan: [],
@@ -76,7 +76,6 @@ class EquipmentRecordView extends React.Component {
 			//state: parseInt(this.props.form.getFieldValue('state')),
 			//createDate: this.props.form.getFieldValue('createDate').format('YYYY-MM-DD'),
 		}
-
 		console.log(newapp);
 
 		$.ajax({
@@ -188,6 +187,7 @@ class EquipmentRecordView extends React.Component {
 			title: '操作',
 			dataIndex: 'action',
 			colSpan: 2,
+			width: '8%',
 			key: 'inspect',
 			render: (text, record) => {
 				var props = 
@@ -204,6 +204,7 @@ class EquipmentRecordView extends React.Component {
 			title: '操作',
 			dataIndex: 'action',
 			colSpan: 0,
+			width: '8%',
 			key: 'delete',
 			render: (text, record) => {
 				return (

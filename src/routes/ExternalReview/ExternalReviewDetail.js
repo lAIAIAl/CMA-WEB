@@ -110,7 +110,7 @@ class extends React.Component{
 			    	message.error("修改失败");
 				} 
 			});
-			
+			getExternalReviewDetail(this.props.year);
   			
       		form.resetFields();
 

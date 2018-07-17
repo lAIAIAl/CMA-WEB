@@ -18,26 +18,19 @@ const formTailLayout = {
   wrapperCol: { span: 8, offset: 4 },
 };
 
-
 class AnnualTrainingView extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			visible: false,
-			allList: [{
-				year: 2017,
-				author: "天天",
-			}, {
-				year: 2018,
-				author: "cccy",
-			}],
 			allPlan: [],
 		}
 	}
 
 	handleAddTab = (props) => {
-		this.props.addTab(props.item.year+"年度计划", props.item.year+"年度计划", AnnualTrainingPlan, props);
+		var title = props.item.year+'年度计划';
+		this.props.addTab(title, title, AnnualTrainingPlan, props);
 	}
 
 	showModal = () => {
@@ -87,6 +80,7 @@ class AnnualTrainingView extends React.Component {
 			visible: false
 		})
 
+		this.getAll();
 		this.props.form.resetFields();
 	}
 
@@ -109,6 +103,10 @@ class AnnualTrainingView extends React.Component {
 	render() 
 	{
 		const { getFieldDecorator } = this.props.form;
+		var year = [];
+		for(var i = 2020; i >= 2006; i--)
+			year.push({key: i,value: i});
+		const options = year.map(d => <Option key={d.key}>{d.value}</Option>);
 
 		const columns = [{
 			title: '年份',
@@ -122,8 +120,7 @@ class AnnualTrainingView extends React.Component {
 			title: '编制日期',
 			dataIndex: 'createDate',
 			key: 'createDate',
-		},
-		{
+		},{
 			title: '批准人',
 			dataIndex: 'approver',
 			key: 'approver',
@@ -131,8 +128,7 @@ class AnnualTrainingView extends React.Component {
 			title: '批准日期',
 			dataIndex: 'approveDate',
 			key: 'approveDate',
-		},
-		{
+		},{
 			title: '操作',
 			dataIndex: 'action',
 			key: 'inspect',
@@ -143,11 +139,12 @@ class AnnualTrainingView extends React.Component {
 				}
 				return (
 					<div>
-						<Button onClick={() => this.handleAddTab(props)}>查看</Button>
+						<Button type="primary" onClick={() => this.handleAddTab(props)}>查看</Button>
 					</div>
 				);
 			},
 		}]
+		
 		return (
 			<Form>
 				
@@ -179,28 +176,12 @@ class AnnualTrainingView extends React.Component {
 									})(<Select
                         				showSearch
                         				style={{ width: 100 }}
-                        				placeholder="Select the year"
+                        				placeholder="请选择年份"
                         				optionFilterProp="year"
                         				onChange={this.handleSelectChange}
                         				filterOption={(input, option) => option.props.year.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     					>
-                    					<OptGroup >
-                        					<Option key="2019">2019</Option>
-                        					<Option key="2018">2018</Option>
-                        					<Option key="2017">2017</Option>
-                        					<Option key="2016">2016</Option>
-                        					<Option key="2015">2015</Option>
-                        					<Option key="2014">2014</Option>
-                        					<Option key="2013">2013</Option>
-                        					<Option key="2012">2012</Option>
-                        					<Option key="2011">2011</Option>
-                        					<Option key="2010">2010</Option>
-                        					<Option key="2009">2009</Option>
-                        					<Option key="2008">2008</Option>
-                        					<Option key="2007">2007</Option>
-                        					<Option key="2006">2006</Option>
-                        					<Option key="2005">2005</Option>
-                        				</OptGroup>
+                    					{options}
                    						</Select>
 									)}
 							</FormItem>
