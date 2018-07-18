@@ -228,6 +228,32 @@ const initialState =
 			modulePath: "/index/ExternalReview",
 			menuPath: "/ExternalReview"
 		},
+		{
+			id: "11",
+			code: "11",
+			name: "质量体系管理",
+			modulePath: "/index/QualitySystem",
+			menus: [
+			  {
+			    id: "11-0",
+			    code: "11-0",
+			    name: "质量手册",
+			    menuPath: "/QSmanual_list"
+			  },
+			  {
+			    id: "11-1",
+			    code: "11-1",
+			    name: "程序文件",
+			    menuPath: "/QSprogram_list"
+			  },
+			  {
+			    id: "11-2",
+			    code: "11-2",
+			    name: "作业指导书",
+			    menuPath: "/QSinstruction_list"
+			  }
+			],
+		}
     ]
 }
 

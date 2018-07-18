@@ -145,3 +145,31 @@ export const testCapacityGetAllItemService = baseAddress + '/cma/TestAbility/get
 export const testCapacityAddOneItemService = baseAddress + '/cma/TestAbility/addOneItem'; //url: 1.6
 export const testCapacityDeleteOneItemService = baseAddress + '/cma/TestAbility/deleteOneItem'; //url: 1.7
 
+//quality system management
+export const qualityManualUploadService = baseAddress + '/cma/QualityManual/upload'; //url: 1.1
+export const qualityManualGetCurrentService = baseAddress + '/cma/QualityManual/getCurrent'; //url: 1.2
+export const qualityManualGetCurrentFileService = baseAddress + '/cma/QualityManual/getCurrentFile'; //url: 1.3
+export const qualityManualGetAllHistoryService = baseAddress + '/cma/QualityManual/getAllHistory'; //url: 1.4
+export const qualityManualGetHistoryFileService = baseAddress + '/cma/QualityManual/getHistoryFile'; //url: 1.5
+export const qualityManualModifyService = baseAddress + '/cma/QualityManual/modify'; //url: 1.6
+export const qualityManualApproveService = baseAddress + '/cma/QualityManual/approve'; //url: 1.8
+export const qualityManualDeleteService = baseAddress + '/cma/QualityManual/delete'; //url: 1.7 
+
+//QS
+export const qualityProgramUploadService = baseAddress + '/cma/ProgramFile/upload'; //url: 2.1
+export const qualityProgramGetCurrentService = baseAddress + '/cma/ProgramFile/getCurrent'; //url: 2.2
+export const qualityProgramGetCurrentFileService = baseAddress + '/cma/ProgramFile/getCurrentFile'; //url: 2.3
+export const qualityProgramGetAllHistoryService = baseAddress + '/cma/ProgramFile/getAllHistory'; //url: 2.4
+export const qualityProgramGetHistoryFileService = baseAddress + '/cma/ProgramFile/getHistoryFile'; //url: 2.5
+export const qualityProgramModifyService = baseAddress + '/cma/ProgramFile/modify'; //url: 2.6
+export const qualityProgramApproveService = baseAddress + '/cma/ProgramFile/approve'; //url: 2.8
+export const qualityProgramDeleteService = baseAddress + '/cma/ProgramFile/delete'; //url: 2.7
+
+export const qualityInstructionUploadService = baseAddress + '/cma/OperatingInstruction/upload'; //url: 3.1
+export const qualityInstructionGetCurrentService = baseAddress + '/cma/OperatingInstruction/getCurrent'; //url: 3.2
+export const qualityInstructionGetCurrentFileService = baseAddress + '/cma/OperatingInstruction/getCurrentFile'; //url: 3.3
+export const qualityInstructionGetAllHistoryService = baseAddress + '/cma/OperatingInstruction/getAllHistory'; //url: 3.4
+export const qualityInstructionGetHistoryFileService = baseAddress + '/cma/OperatingInstruction/getHistoryFile'; //url: 3.5
+export const qualityInstructionModifyService = baseAddress + '/cma/OperatingInstruction/modify'; //url: 3.6
+export const qualityInstructionApproveService = baseAddress + '/cma/OperatingInstruction/approve'; //url: 3.8
+export const qualityInstructionDeleteService = baseAddress + '/cma/OperationInstruction/delete';//url: 3.7

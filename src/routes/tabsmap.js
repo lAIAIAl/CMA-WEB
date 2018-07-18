@@ -57,6 +57,11 @@ import TestCapacityView from 'routes/TestCapacity/TestCapacityView';
 import ExternalReviewList from 'routes/ExternalReview/ExternalReviewList';
 import ExternalReviewDetail from 'routes/ExternalReview/ExternalReviewDetail';
 
+//quality system management
+import QSManualView from 'routes/QualitySystem/QSManualView';
+import QSProgramView from 'routes/QualitySystem/QSProgramView';
+import QSInstructionView from 'routes/QualitySystem/QSInstructionView';
+
 const tabsmap = 
 [
     {
@@ -201,7 +206,20 @@ const tabsmap =
     {
         path: '/ExternalReview_detail',
         component: ItemContainer('ExternalReviewDetail', ExternalReviewDetail)
-    }
+    },
+    //QS management
+    {
+        path: '/QSmanual_list',
+        component: ItemContainer('QSmanual',QSManualView)
+    },
+    {
+        path: '/QSprogram_list',
+    component: ItemContainer('QSprogram',QSProgramView)
+    },
+    {
+        path: '/QSinstruction_list',
+    component: ItemContainer('QSinstruction',QSInstructionView)
+    },
 ]
 
 export default tabsmap
