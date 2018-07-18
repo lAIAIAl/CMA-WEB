@@ -59,7 +59,7 @@ class App extends React.Component {
 
     showCurRowMessage = (props) =>
     {
-        this.props.addTab("离任人员信息","离任人员信息",ResignerInspectView,props);
+        this.props.addTab(props.name+"-离任人员信息",props.name+"-离任人员信息",ResignerInspectView,props);
     }
 
 

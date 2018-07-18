@@ -1,14 +1,14 @@
 import React, { Component,PropTypes } from 'react';
-import { Form, Input, Tooltip, Icon, Cascader,Select, Row, Col, Checkbox, Button, DatePicker, InputNumber, Card, Divider, message } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader,Select, Table, Row, Col, Checkbox, Button, DatePicker, InputNumber, Card, Divider, message } from 'antd';
 
-import { getAllStaffTrainingsSerice, modifyOneStaffTrainingService } from 'services';
+import { getAllStaffTrainingsSerice, modifyOneStaffTrainingService, getStaffTrainingPeopleService } from 'services';
 import $ from 'lib/jquery-3.3.1';
 import { getStore } from 'store/globalStore';
 import { setItems } from 'common/basic/reducers/ItemReducer';
 import { getAllStaffTrainingData } from './FetchData';
-import StaffTrainingInspectParticipatorView from './StaffTrainingInspectParticipatorView';
 import StaffTrainingModifyView from './StaffTrainingModifyView';
-import AddTraineeView from './AddTraineeView';
+import StaffDetailView from './StaffDetailView';
+import AddTrainingPeopleView from './AddTrainingPeopleView';
 
 const FormItem = Form.Item;
 
@@ -17,16 +17,74 @@ const StaffTrainingInspectView = Form.create()(class extends React.Component{
   constructor(props){
     super(props);
     this.unsubscribe = getStore().subscribe(this.refreshData);
-    this.inspectTabName = '查看参与人员';
-    this.inspectParticipatorView = StaffTrainingInspectParticipatorView;
-    this.addTraineeTabName = '添加参与人员';
-    this.addTraineeView = AddTraineeView;
+    this.columns = [
+      {
+        title: '人员编号',
+	dataIndex: 'id',
+	key: 'id',
+	sorter:(a,b) => a.id-b.id,
+      },
+      {
+        title: '人员姓名',
+	dataIndex: 'name',
+	key: 'name',
+      },
+      {
+        title: '操作',
+	dataIndex: 'operation',
+	key: 'operation',
+	render: (text,record) => {
+	  var props = {
+	    item: record,//当前人员对象数据(id+name)
+	  };
+	  return(
+	    <Row gutter={ 16 }>
+	      <Col className="gutter-row" span={6}>
+	        <a href="javascript:void(0);" onClick={ () => { this.showCurStaff(props) } }>详情</a>
+	      </Col>
+	    </Row>
+	  );
+	}
+      }
+    ];
   }
 
   state = {
     visible: false,
     item: null,//用于存储当前对象
+    parData: [],
+    loading: false,
   };
+
+  showCurStaff = (props) => {
+    this.props.addTab('人员的培训信息', '人员的培训信息', Form.create()(StaffDetailView), props);
+  }
+
+  fetchStaffData = (props) => {
+    let curTrain = props.item.trainingId;
+    let tmp = null;
+    $.ajax({
+      type: "get",
+      url: getStaffTrainingPeopleService,
+      data: {
+        trainingId: curTrain
+      },
+      async: false,
+      success:function(d){
+        tmp = d.data;
+      },
+      error:function(){
+        message.error('获取失败!');
+      }
+    });
+    this.setState({
+      parData: tmp
+    });
+  }
+
+  addTrainee = (props) => {
+    this.props.addTab('添加参与人员', '添加参与人员', Form.create()(AddTrainingPeopleView), props);
+  }
 
   refreshData = () => {
     let data = getStore().getState().StaffTraining.items;
@@ -47,6 +105,7 @@ const StaffTrainingInspectView = Form.create()(class extends React.Component{
   componentWillMount(){
     getAllStaffTrainingData();
     this.refreshData();
+    this.fetchStaffData(this.props);
   }
 
   handleCreate = () => {
@@ -100,17 +159,11 @@ const StaffTrainingInspectView = Form.create()(class extends React.Component{
     this.setState({ visible: false });
   }
 
-  inspectParticipator = (props) => {
-    this.props.addTab(this.inspectTabName,this.inspectTabName,Form.create()(this.inspectParticipatorView),props);
-  }
-
-  addTrainee = () => {
-    this.props.addTab(this.addTraineeTabName,this.addTraineeTabName,Form.create()(this.addTraineeView),null);
-  }
-
   render(){
-    const { visible, item } = this.state;
-    let standard = this.state.item;
+    const { visible, item, loading, parData } = this.state;
+    const columns = this.columns;
+
+    var standard = this.state.item;
     const formItems = [];
 
     const formItemLayout = {
@@ -191,8 +244,6 @@ const StaffTrainingInspectView = Form.create()(class extends React.Component{
       </Card>
     );
 
-    var props = this.props;
-
     return(
       <div>
 
@@ -200,24 +251,14 @@ const StaffTrainingInspectView = Form.create()(class extends React.Component{
           { formItems }
         </Form>
 
+	<Table
+	  columns={columns}
+	  dataSource={parData}
+	  loading={loading}
+	/>
+
         <div>
           <Row gutter={16}>
-	    <Col className="gutter-row" span={6}>
-	      <Button
-	        type="primary"
-		onClick={ () => {this.inspectParticipator(props)} }
-	      >
-	        查看参与人员
-	      </Button>
-	    </Col>
-	    <Col className="gutter-row" span={6}>
-	      <Button
-	        type="primary"
-		onClick={ this.addTrainee }
-	      >
-	        添加参与人员
-	      </Button>
-	    </Col>
 	    <Col className="gutter-row" span={6}>
 	      <Button
 	        type="primary"
@@ -227,11 +268,27 @@ const StaffTrainingInspectView = Form.create()(class extends React.Component{
 	      </Button>
 	      <StaffTrainingModifyView
 	        ref = {this.saveFormRef}
-		visible = {this.state.visible}
-		defaultVal = {this.state.item}
+		visible = {visible}
+		defaultVal = {item}
 		onCancel = {this.handleCancel}
 		onCreate = {this.handleCreate}
 	      />
+	    </Col>
+	    <Col className="gutter-row" span={6}>
+	      <Button
+	        type="primary"
+		onClick={ () => { this.addTrainee(standard) } }
+	      >
+	        添加参与人员
+	      </Button>
+	    </Col>
+	    <Col className="gutter-row" span={6}>
+	    <Button
+	      type="dashed"
+	      onClick={ () => { this.fetchStaffData(this.props) } }
+	    >
+	      刷新
+	    </Button>
 	    </Col>
 	  </Row>
         </div>

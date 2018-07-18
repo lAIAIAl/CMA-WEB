@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Icon, Row, Col, Button, Card} from 'antd';
 import {Table, Divider, Modal, Avatar, Radio, message} from 'antd';
 const { Column, ColumnGroup } = Table;
+const Search = Input.Search;
 
 import {baseAddress} from 'services';
 import OperationComponent from 'common/basic/components/OperationComponent';
@@ -50,6 +51,7 @@ function sendMessage(url, OPTION, sendData, sucessAction, failAction){
 class PeopleManagementRecordsViewF extends React.Component{
 
 	state = {
+		searchName: "",
 	    selectedRowKeys: [], // Check here to configure the default column
 	    peopleData: [{
 	    	"key": "1",
@@ -93,8 +95,15 @@ class PeopleManagementRecordsViewF extends React.Component{
 	}
 
 	refreshData = () => {
+		let data = getStore().getState().StaffManagement.items;
+		let temp = [];
+		for (var i = data.length - 1; i >= 0; i--) {
+			if(data[i].name.match(this.state.searchName) != null)
+				temp.push(data[i]);
+		}
+
 		this.setState({
-			peopleData:getStore().getState().StaffManagement.items
+			peopleData : temp
 		});
 	}
 
@@ -213,6 +222,11 @@ class PeopleManagementRecordsViewF extends React.Component{
     	this.setState({ selectedRowKeys });
   	}
 
+  	handleSearch = (value) => {
+  		this.state.searchName = value;
+  		this.refreshData();
+  	}
+
   	render() {
 	  	const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
@@ -268,28 +282,11 @@ class PeopleManagementRecordsViewF extends React.Component{
 	    return (
 	    	<div>
 	    		<Card>
-	      		<Form layout="inline" onSubmit={this.handleSubmit}>
-			        <FormItem
-			        	label='按人员姓名查询'
-			          	validateStatus={peopleNameError ? 'error' : ''}
-			          	help={peopleNameError || ''}
-			        >
-		          	{getFieldDecorator('peopleName', {
-		            	rules: [{ required: true, message: '请输入人员姓名！' }],
-		          		})(
-		            	<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="人员姓名" />
-		          	)}
-		        	</FormItem>
-	        
-		        	<FormItem>
-			          	<Button
-			            	type="primary"
-			            	htmlType="submit"
-			            	disabled={hasErrors(getFieldsError())}
-			          	>查询
-			          	</Button>
-		        	</FormItem>
-	      		</Form>
+	      		<Search
+			      	placeholder="按人员姓名查询"
+			      	onSearch={value => this.handleSearch(value)}
+			      	style={{ width: 200 }}
+			    />
 	      		</Card>
 
 	      			<Table 

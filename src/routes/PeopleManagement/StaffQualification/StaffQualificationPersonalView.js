@@ -46,7 +46,7 @@ class TestViewForm extends React.Component
 
   handleAddTab = (props) => {
     console.log(props);
-    this.props.addTab("人员资质信息", "人员资质信息", StaffQualificationInspect, props);
+    this.props.addTab("人员资质详情", "人员资质详情", StaffQualificationInspect, props);
   }
 
   //新增时
@@ -76,44 +76,45 @@ class TestViewForm extends React.Component
       }
     });
 
-   const {fileList} = this.state;
+    const {fileList} = this.state;
 
-   var pid = this.props.item.id;
-   var qname = this.props.form.getFieldValue('qualificationName');
-   var formda = new FormData();
-   formda.append("id", pid);
-   formda.append("qualificationName", qname);
-   fileList.forEach((file) => {
-    formda.append("qualificationImage", file);
-   });
+    var pid = this.props.item.id;
+    var qname = this.props.form.getFieldValue('qualificationName');
+    var formda = new FormData();
+    formda.append("id", pid);
+    formda.append("qualificationName", qname);
+    fileList.forEach((file) => {
+      formda.append("qualificationImage", file);
+    });
 
-   this.setState({
-    visible:false,
-    uploading: true,
-   });
+    this.setState({
+      visible:false,
+      uploading: true,
+    });
 
-  $.ajax({
-    type: "post",
-    url: "http://119.23.38.100:8080/cma/StaffQualification/addOne",
-    data: formda,
-    processData: false,
-    contentType: false,
-    async: false,
-    success: () => {
-      message.success("新增成功");
-      this.setState({
-        fileList: [],
-        uploading: false,
-      });
-    },
-    error: () => {
-      message.error("新增失败");
-      this.setState({
-        uploading: false,
-      });
-    }
-   });
+    $.ajax({
+      type: "post",
+      url: "http://119.23.38.100:8080/cma/StaffQualification/addOne",
+      data: formda,
+      processData: false,
+      contentType: false,
+      async: false,
+      success: () => {
+        message.success("新增成功");
+        this.setState({
+          fileList: [],
+          uploading: false,
+        });
+      },
+      error: () => {
+        message.error("新增失败");
+        this.setState({
+          uploading: false,
+        });
+      }
+    });
 
+    this.onRec();
     this.props.form.resetFields();
   }
 
@@ -140,14 +141,16 @@ class TestViewForm extends React.Component
     console.log(key);
     let id = key;
     $.ajax({
-    type: "post",
-    url: "http://119.23.38.100:8080/cma/StaffQualification/deleteOne",
-    data: {qualificationId: id},
-    async: false,
-    success:function(d) {
-      message.success("删除成功");
-    }
-   });
+      type: "post",
+      url: "http://119.23.38.100:8080/cma/StaffQualification/deleteOne",
+      data: {qualificationId: id},
+      async: false,
+      success:function(d) {
+        message.success("删除成功");
+      }
+    });
+
+    this.onRec();
   }
 
   onRecNPD = () => {
@@ -159,7 +162,9 @@ class TestViewForm extends React.Component
         name: temp.name,
         position: temp.position,
         department: temp.department,
-      })
+      },//() => {console.log(this.state)}
+      )
+
     });
   }
 
@@ -174,8 +179,9 @@ class TestViewForm extends React.Component
         temp[i].position = this.state.position;
         temp[i].department = this.state.department;
         temp[i].id = this.props.item.id;
+        //console.log(i);
       }
-      //console.log(name);
+      //console.log(temp[0].name);
 
       this.setState({
         fileData: temp
@@ -223,7 +229,7 @@ class TestViewForm extends React.Component
       key: 'qualificationImage',
       render: (text, record) => {
         return (
-          <a onClick={() => this.handleImage(record.key)}>查看</a>
+          <a onClick={() => this.handleImage(record.key)}>下载</a>
         );
       }
     }, {
@@ -247,7 +253,7 @@ class TestViewForm extends React.Component
         }
         return (
           <div>
-            <Button onClick={() => this.handleAddTab(props)}>Inspect</Button> 
+            <Button type="primary" onClick={() => this.handleAddTab(props)}>查看</Button> 
           </div> 
         );
       },
@@ -260,7 +266,7 @@ class TestViewForm extends React.Component
         return (
           <div>
             <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(record.key)}>
-              <Button>Delete</Button>
+              <Button type="danger">删除</Button>
             </Popconfirm>
           </div>
         );
@@ -290,66 +296,64 @@ class TestViewForm extends React.Component
       fileList: this.state.fileList,
     }
     return(
-			   <Form>
-                <FormItem>
-                	<Button
-                		type="primary"
-                		icon="sync"
-                    onClick={this.onRec}
-                	>
-                	refresh
-                	</Button>
-                </FormItem>
+			<Form>
+        <FormItem>
+          <Button
+            type="primary"
+            icon="sync"
+            onClick={this.onRec}
+            >
+            刷新
+          </Button>
+        </FormItem>
 
-                <FormItem>
-                	<Button
-                		type="primary"
-                    onClick={this.showModal}
-                		>
-                	增加
-                	</Button>
-                  
-                  <Modal
-                    title="新增人员资质信息"
-                    visible={this.state.visible}
-                    onOk={this.handleAdd}
-                    onCancel={this.handleCancel}
-                  >
-                    <Form layout="horizontal">
+        <FormItem>
+          <Button
+            type="primary"
+            onClick={this.showModal}
+            >
+            新增
+          </Button>      
+            <Modal
+              title="新增人员资质信息"
+              visible={this.state.visible}
+              onOk={this.handleAdd}
+              onCancel={this.handleCancel}
+              >
+                <Form layout="horizontal">
                       
-                      <FormItem {...formItemLayout} label = "人员名称：">
-                        {this.props.item.name}  
-                      </FormItem>
+                  <FormItem {...formItemLayout} label = "人员名称：">
+                    {this.props.item.name}  
+                  </FormItem>
                       
-                      <FormItem {...formItemLayout} label="资质名称：" hasFeedback>
-                        {getFieldDecorator('qualificationName', {
-                          rules: [{required: true, message: 'Please input the qualificationname!'}],
-                          initialValue: '',
-                        })(
+                  <FormItem {...formItemLayout} label="资质名称：" hasFeedback>
+                    {getFieldDecorator('qualificationName', {
+                      rules: [{required: true, message: 'Please input the qualificationname!'}],
+                      initialValue: '',
+                      })(
                         <Input style ={{width: 100,offset:4}}/>
                         )}
-                      </FormItem>
-                    </Form>
+                  </FormItem>
+                </Form>
 
-                    <Form id="upfile">
-                      <FormItem>资质证书扫描件</FormItem>
-                      <Upload {...addprops}>
-                        <Button>
-                          <Icon type="upload" /> 添加图片文件
-                        </Button>
-                      </Upload>
-                    </Form>
+                <Form id="upfile">
+                  资质证书扫描件：
+                    <Upload {...addprops}>
+                      <Button>
+                        <Icon type="upload" /> 添加图片文件
+                      </Button>
+                    </Upload>
+                </Form>
 
-                  </Modal>
-                </FormItem>
-                <FormItem>
-          			<Table columns={columns} dataSource={this.state.fileData} rowKey="key"/>
-                </FormItem>
+            </Modal>
+        </FormItem>
+        <FormItem>
+          <Table columns={columns} dataSource={this.state.fileData} rowKey="key"/>
+        </FormItem>
 			</Form>
 		);
 	}
 }
-
 
 const StaffQualificationPersonalView = Form.create()(TestViewForm);
 export default StaffQualificationPersonalView

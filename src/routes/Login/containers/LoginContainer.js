@@ -80,7 +80,180 @@ const initialState =
         	//moduleIcon: "eye",
         	modulePath: "/index/Supervise",
         	menuPath: "/Supervise",
-    	}
+    	},
+    	{
+			id:"2",
+			code:"2",
+			name:"期间核查",
+			modulePath:"/index/system",
+			menus:[
+				{
+					id:"2-0",
+					code:"2-0",
+					name:"期间核查记录",
+					menuPath:"/record_list"
+				},{
+					id:"2-1",
+					code:"2-1",
+					name:"期间核查计划",
+					menuPath:"/periodcheck_list"
+				}
+			],
+		},
+		{
+	        id: "3",
+	        code: "3",
+	        name: "培训管理",
+	        modulePath: "/index/system",
+	        menus:[
+	        	{
+		        id: "3-1",
+		        code: "3-1",
+		        name: "培训申请",
+		        modulePath: "/index/TrainingManagement",
+		        menuPath: "/application_list"
+	        	},
+	        	{
+		        id: "3-2",
+		        code: "3-2",
+		        name: "年度培训计划",
+		        modulePath: "/index/Annual",
+		        menuPath: "/annualPlan_list"
+	        	},
+	        	{
+		        id: "3-3",
+		        code: "3-3",
+		        name: "培训记录",
+		        modulePath: "/index/TrainingRecord",
+		        menuPath: "/trainingRecord_list"
+	        	}
+	        ]
+    	},
+    	{
+    		id: "4",       
+        	code: "4",      
+        	name: "管理评审",
+        	modulePath: "/ManagementReview",
+        	menuPath: "/ManagementReview",
+    	},
+    	{
+	        id: "5",
+	        code: "5",
+	        name: "样品管理",
+	        modulePath: "/index/system",
+	        menus:[
+        	{
+		        id: "5-1",
+		        code: "5-1",
+		        name: "样品接收登记",
+		        modulePath: "/index/SampleReceive",
+		        menuPath: "/sampleReceive_list"
+	        },
+	        {
+		        id: "5-2",
+		        code: "5-2",
+		        name: "样品室样品进出",
+		        modulePath: "/index/SampleIo",
+		        menuPath: "/sampleIo_list"
+	        }]
+    	},
+    	{
+            id: "6",
+            code: "6",
+            name: "内审管理",
+            modulePath: "/index/InternalAudit",
+            menuPath: "/InternalAudit",
+        },
+        {
+	    	id: "7",
+	    	code: "7",
+	    	name: "仪器设备管理",
+	    	modulePath: "/index/system",
+	    	menus: [
+	    		{
+	    			id: "7-0",
+	    			code: "7-0",
+	    			name: "仪器设备信息",
+	    			modulePath: "/index/equipment",
+	    			menuPath: "/er_list"
+	    		},
+	            {
+	                id: "7-1",
+	                code: "7-1",
+	                name: "仪器设备验收",
+	                modulePath: "/index/equipment",
+	                menuPath: "/err_list"
+	            },
+	            {
+	                id: "7-2",
+	                code: "7-2",
+	                name: "仪器设备使用",
+	                modulePath: "/index/equipment",
+	                menuPath: "/eur_list"
+	            },
+	            {
+	                id: "7-3",
+	                code: "7-3",
+	                name: "仪器设备维修保养",
+	                modulePath: "/index/equipment",
+	                menuPath: "/emr_list"
+	            },
+	            {
+	                id: "7-4",
+	                code: "7-4",
+	                name: "仪器设备使用申请",
+	                modulePath: "/index/equipment",
+	                menuPath: "/ear_list"
+	            }
+	    	]
+    	},
+    	{
+            id: "8",
+            code: "8",
+            name: "标准管理",
+            modulePath: "/index/StandardManagement",
+            menuPath: "/StandardManagement",
+        },
+        {
+			id: "9",
+			code: "9",
+			name: "检测检验能力管理",
+			modulePath: "/index/TestCapacity",
+			menuPath: "/testcapacity_list"
+		},
+		{
+			id: "10",
+			code: "10",
+			name: "外部评审与上报管理",
+			modulePath: "/index/ExternalReview",
+			menuPath: "/ExternalReview"
+		},
+		{
+			id: "11",
+			code: "11",
+			name: "质量体系管理",
+			modulePath: "/index/QualitySystem",
+			menus: [
+			  {
+			    id: "11-0",
+			    code: "11-0",
+			    name: "质量手册",
+			    menuPath: "/QSmanual_list"
+			  },
+			  {
+			    id: "11-1",
+			    code: "11-1",
+			    name: "程序文件",
+			    menuPath: "/QSprogram_list"
+			  },
+			  {
+			    id: "11-2",
+			    code: "11-2",
+			    name: "作业指导书",
+			    menuPath: "/QSinstruction_list"
+			  }
+			],
+		}
     ]
 }
 

@@ -44,7 +44,7 @@ class extends React.Component {
                 formData.append('id', this.props.item.id);
                 formData.append('fileLocation', temp.fileLocation);
       			
-                console.log(temp);
+                console.log(formData.get('fileImage'));
       			$.ajax({
 		      		type: "post",
 		      		url: baseAddress+"/cma/StaffFile/addOne",

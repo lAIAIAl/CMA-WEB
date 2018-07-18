@@ -7,7 +7,8 @@ import StaffAuthInspect from './StaffAuthInspect';
 import moment from 'moment';
 import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
-
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
 
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
@@ -28,9 +29,21 @@ const formTailLayout = {
   wrapperCol: { span: 8, offset: 4 },
 };
 
+export const getAuthorization = () =>{
+	$.get(baseAddress+"/cma/StaffAuthorization/getAll" , null,(res)=>{
+  		let data = res.data;
+  		for (var i = data.length - 1; i >= 0; i--) {
+  			data[i].key = data[i].authorizationId;
+  		}
+  		let store = getStore();
+ 		store.dispatch(setItems(data, 'Authorization'));
+  	});
+}
+
 class EditableTableForm extends React.Component {
   constructor(props) {
     super(props);
+    this.unsubscribe = getStore().subscribe(this.refreshData);
     this.columns = [{
       title: '姓名',
       dataIndex: 'name',
@@ -39,15 +52,36 @@ class EditableTableForm extends React.Component {
       title: '部门',
       dataIndex: 'department',
       key: 'department',
+            filters: [{
+                    text: '档案室',
+                    value: '档案室',
+                }, {
+                    text: '测试部',
+                    value: '测试部',
+                },{
+                    text:'样品室',
+                    value:'样品室',
+                },{
+                    text:'市场部',
+                    value:'市场部',
+                },{
+                    text:'质量部',
+                    value:'质量部',
+                }
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) => record.department.indexOf(value) === 0,
     }, {
       title: '职位',
       dataIndex: 'position',
       key: 'position',
-    },{
+    },
+    /*{
       title: '授权内容',
       dataIndex: 'content',
       key:'content',
-    },{
+    },*/
+    {
       title: '授权人姓名',
       dataIndex: 'authorizerName',
       key:'authorizerName',
@@ -55,11 +89,13 @@ class EditableTableForm extends React.Component {
       title: '授权时间',
       dataIndex: 'authorizerDate',
       key:'authorizerDate',
+      defaultSortOrder: 'descend',
+      sorter: (a, b) =>  (a.authorizerDate.replace("-","")>b.authorizerDate.replace("-",""))?1:-1,
     },{
     title: '操作',
     colSpan: 2,
     dataIndex: 'check',
-    width: '5%',
+    width: '7%',
     key: 'check',
     render:(text,record)=>{
         let AuthData:null;
@@ -76,7 +112,7 @@ class EditableTableForm extends React.Component {
         }
         return(
         <div>
-             <Button onClick={()=>{this.handleInspect(props)}}>查看</Button>
+             <Button type="primary" onClick={()=>{this.handleInspect(props)}}>查看</Button>
         </div>
         );
         },
@@ -84,12 +120,12 @@ class EditableTableForm extends React.Component {
     title: '操作',
     colSpan: 0,
     dataIndex: 'delete',
-    width: '5%',
+    width:'7%',
     key:'delete',
       render: (text, record) => {
         return (
             <Popconfirm title="确定删除?" onConfirm={() => this.onDelete(record.key)}>
-               <Button>Delete</Button>
+               <Button type="danger">删除</Button>
             </Popconfirm>
         );
       },/*
@@ -157,8 +193,14 @@ class EditableTableForm extends React.Component {
 	});
 	 this.getAll();
   }
-
-
+	componentWillUnmount() {
+        this.unsubscribe();
+	}
+	refreshData = () => {
+		this.setState({
+			AuthData: getStore().getState().Authorization.items
+		});
+	}
   showModal = () => {
     this.setState({
       visible: true,
@@ -258,7 +300,7 @@ class EditableTableForm extends React.Component {
     this.props.form.resetFields();
   }
   handleInspect = (props) => {
-    this.props.addTab("授权详情", "授权详情", AuthInspectView, props);
+    this.props.addTab(props.item.name+"授权详情", props.item.name+"授权详情", AuthInspectView, props);
   }
   Inspect=(props)=>{
     this.props.addTab("记录详情","记录详情",StaffAuthInspect,props);
@@ -273,10 +315,9 @@ class EditableTableForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const columns= this.columns;
     return (
-     <Form>
-     <FormItem>
-      <div>
-        姓名：
+        <Form>
+            <FormItem>
+                    姓名：
                     {getFieldDecorator('id',{ rules: [{required: true, message: '请选择被授权人!'}],
                     })(<Select
                         showSearch
@@ -288,68 +329,74 @@ class EditableTableForm extends React.Component {
                         onBlur={this.handleBlur}
                         filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     >
-                        {options}
+                    {options}
                     </Select>)}
-        <Button type="primary" icon="search" onClick={this.search}>
-            Search
-        </Button>
-      <Button onClick={this.getAll}> 刷新页面</Button>
-      <Button onClick={this.getAllStaff}> 刷新下拉框人员</Button>
-        <Button className="editable-add-btn" type="primary" onClick={this.showModal}>新增岗位记录</Button>
-        <Modal title="新增授权信息" visible={this.state.visible} onOk={this.handleAdd} onCancel={this.handleCancel}>
-        <Form layout="horizontal">
-            <FormItem {...formItemLayout}label ="被授权人:" hasFeedback>
-
-                    {getFieldDecorator('id',{ rules: [{required: true, message: '请选择被授权人!'}],
-                    })(<Select
-                        showSearch
-                        style={{ width: 200 }}
-                        placeholder="Select a person"
-                        optionFilterProp="resigner"
-                        onChange={this.handleChange}
-                        onFocus={this.handleFocus}
-                        onBlur={this.handleBlur}
-                        filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                        {options}
-                    </Select>)}
-
+                    <Button type="primary" icon="search" onClick={this.search}>
+                    Search
+                    </Button>
             </FormItem>
-            <FormItem {...formItemLayout} label= "授权人:" hasFeedback>
-                    {getFieldDecorator('authorizerId',{ rules: [{required: true, message: '请选择授权人!'}],
-                    })(<Select
-                        showSearch
-                        style={{ width: 200 }}
-                        placeholder="Select a person"
-                        optionFilterProp="resigner"
-                        onChange={this.handleChange}
-                        onFocus={this.handleFocus}
-                        onBlur={this.handleBlur}
-                        filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                        {options}
-                    </Select>)}
+            <FormItem>
+                <Col span={8}>
+                    <Button type="primary" onClick={this.getAll}> 刷新页面</Button>
+                </Col>
+                <Col span={8}>
+                    <Button type="primary" onClick={this.getAllStaff}> 刷新下拉框人员</Button>
+                </Col>
+                <Col span={8}>
+                    <Button className="editable-add-btn" type="primary" onClick={this.showModal}>新增授权信息</Button>
+                </Col>
+                        <Modal title="新增授权信息" visible={this.state.visible} onOk={this.handleAdd} onCancel={this.handleCancel}>
+                            <Form layout="horizontal">
+                                <FormItem {...formItemLayout}label ="被授权人:" hasFeedback>
+                                    {getFieldDecorator('id',{ rules: [{required: true, message: '请选择被授权人!'}],
+                                    })(<Select
+                                    showSearch
+                                    style={{ width: 200 }}
+                                    placeholder="Select a person"
+                                    optionFilterProp="resigner"
+                                    onChange={this.handleChange}
+                                    onFocus={this.handleFocus}
+                                    onBlur={this.handleBlur}
+                                    filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                    {options}
+                                    </Select>)}
+                                </FormItem>
+                                <FormItem {...formItemLayout} label= "授权人:" hasFeedback>
+                                    {getFieldDecorator('authorizerId',{ rules: [{required: true, message: '请选择授权人!'}],
+                                    })(<Select
+                                    showSearch
+                                    style={{ width: 200 }}
+                                    placeholder="Select a person"
+                                    optionFilterProp="resigner"
+                                    onChange={this.handleChange}
+                                    onFocus={this.handleFocus}
+                                    onBlur={this.handleBlur}
+                                    filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                    {options}
+                                    </Select>)}
+                                </FormItem>
+                                <FormItem {...formItemLayout} label= "授权内容:" hasFeedback>
+                                    { getFieldDecorator('content', {rules :[{required: true, message: '请输入授权内容！'}],
+                                    })
+                                    (<Input  style = {{width:100,offset:4}}/>)
+                                    }
+                                </FormItem>
+                                <FormItem {...formItemLayout} label= "授权时间:" hasFeedback>
+                                    {getFieldDecorator('authorizerDate', {
+                                    rules: [{required: true, message: '请输入授权时间!'}],
+                                    })(
+                                    <DatePicker format="YYYY-MM-DD" />
+                                    )}
+                                </FormItem>
+                            </Form>
+                        </Modal>
             </FormItem>
-            <FormItem {...formItemLayout} label= "授权内容:" hasFeedback>
-            {
-                  getFieldDecorator('content', {rules :[{required: true, message: '请输入授权内容！'}],
-                  })
-                  (<Input  style = {{width:100,offset:4}}/>)
-            }
+            <FormItem>
+                <Table dataSource={this.state.AuthData} columns={columns} />
             </FormItem>
-            <FormItem {...formItemLayout} label= "授权时间:" hasFeedback>
-                        {getFieldDecorator('authorizerDate', {
-                          rules: [{required: true, message: '请输入授权时间!'}],
-                        })(
-                          <DatePicker format="YYYY-MM-DD" />
-                        )}
-            </FormItem>
-            </Form>
-            </Modal>
-      </div>
-        <Table bordered dataSource={this.state.AuthData} columns={columns} />
-      </FormItem>
-      </Form>
+        </Form>
     );
   }
 }

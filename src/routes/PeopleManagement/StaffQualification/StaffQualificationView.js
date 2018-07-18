@@ -4,8 +4,10 @@ import {Row, Col, Card, Tabs, Select, Checkbox, Upload, Popconfirm, Button, Icon
 
 import StaffQualificationInspect from './StaffQualificationInspect'
 import StaffQualificationPersonalView from './StaffQualificationPersonalView'
-import {baseAddress} from 'services/index'
+import {baseAddress} from 'services'
 import $ from 'lib/jquery-3.3.1';
+import {getStore} from 'store/globalStore';
+import {setItems} from 'common/basic/reducers/ItemReducer';
 
 const FormItem=Form.Item;
 const InputGroup = Input.Group;
@@ -28,7 +30,7 @@ class TestViewForm extends React.Component
 {
   constructor(props) {
     super(props);
-
+    this.unsubscribe = getStore().subscribe(this.refreshData);
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
@@ -49,12 +51,13 @@ class TestViewForm extends React.Component
     this.handleSelectChange=this.handleSelectChange.bind(this);
   }
 
+  //detail
   handleAddTab = (props) => {
-    console.log(props);
-    this.props.addTab("人员资质信息", "人员资质信息", StaffQualificationInspect, props);
+    //console.log(props);
+    this.props.addTab("人员资质详情", "人员资质详情", StaffQualificationInspect, props);
   }
 
-  //新增时
+  //new
   showModal = () => {
     this.setState({
       visible: true,
@@ -73,7 +76,7 @@ class TestViewForm extends React.Component
     });
   }
 
-  //新增时数据的上传
+  //upload new
   handleAdd = () => {
     this.props.form.validateFields((err, fieldsValue) => {
       if(err) {
@@ -83,45 +86,43 @@ class TestViewForm extends React.Component
 
     const {fileList} = this.state;
 
-   var pid = this.props.form.getFieldValue('pid');
-   var qname = this.props.form.getFieldValue('qualificationName');
-   var formda = new FormData();
-   formda.append("id", pid);
-   formda.append("qualificationName", qname);
-   fileList.forEach((file) => {
-    formda.append("qualificationImage", file);
-   });
+    var pid = this.props.form.getFieldValue('pid');
+    var qname = this.props.form.getFieldValue('qualificationName');
+    var formda = new FormData();
+    formda.append("id", pid);
+    formda.append("qualificationName", qname);
+    fileList.forEach((file) => {
+      formda.append("qualificationImage", file);
+    });
 
-   this.setState({
-    visible:false,
-    uploading: true,
-   });
-   //var request = new XMLHttpRequest();
-   //request.open("POST", "http://119.23.38.100:8080/cma/StaffQualification/addOne");
-   //request.send(formda);
+    this.setState({
+      visible:false,
+      uploading: true,
+    });
 
-  $.ajax({
-    type: "post",
-    url: "http://119.23.38.100:8080/cma/StaffQualification/addOne",
-    data: formda,
-    processData: false,
-    contentType: false,
-    async: false,
-    success: () => {
-      message.success("新增成功");
-      this.setState({
-        fileList: [],
-        uploading: false,
-      });
-    },
-    error: () => {
-      message.error("新增失败");
-      this.setState({
-        uploading: false,
-      });
-    }
-   });
+    $.ajax({
+      type: "post",
+      url: "http://119.23.38.100:8080/cma/StaffQualification/addOne",
+      data: formda,
+      processData: false,
+      contentType: false,
+      async: false,
+      success: () => {
+        message.success("新增成功");
+        this.setState({
+          fileList: [],
+          uploading: false,
+        });
+      },
+      error: () => {
+        message.error("新增失败");
+        this.setState({
+          uploading: false,
+        });
+      }
+    });
 
+    this.onRec();
     this.props.form.resetFields();
   }
 
@@ -144,20 +145,23 @@ class TestViewForm extends React.Component
     });
   }
 
+  //delete
   onDelete = (key) => {
     console.log(key);
     let id = key;
     $.ajax({
-    type: "post",
-    url: "http://119.23.38.100:8080/cma/StaffQualification/deleteOne",
-    data: {qualificationId: id},
-    async: false,
-    success:function(d) {
-      message.success("删除成功");
-    }
-   });
+      type: "post",
+      url: "http://119.23.38.100:8080/cma/StaffQualification/deleteOne",
+      data: {qualificationId: id},
+      async: false,
+      success:function(d) {
+        message.success("删除成功");
+      }
+    });
+    this.onRec();
   }
 
+  //initialize
   onRecNPD = () => {
     $.get("http://119.23.38.100:8080/cma/StaffFile/getAll", null,(res) =>{
       let temp = res.data;
@@ -182,6 +186,7 @@ class TestViewForm extends React.Component
     })
   }
 
+  //download pictures
   handleImage = (key) => {
     console.log(key);
     const url = "http://119.23.38.100:8080/cma/StaffQualification/getImage?qualificationId="+key;
@@ -189,16 +194,9 @@ class TestViewForm extends React.Component
     tempwindow.location = url;
   }
 
+  //search by id
   handleSearch = (key) => {
     const newid = this.props.form.getFieldValue('id');
-
-    /*var props = {
-      item: {
-        id: newid,
-      }
-    }
-    this.props.addTab("个人资质信息","个人资质信息",StaffQualificationPersonalView,props);
-    */
     $.get("http://119.23.38.100:8080/cma/StaffQualification/getAllByStaff?id="+newid, null,(res) =>{
       let temp = res.data;
       for(var i = temp.length-1; i >= 0; i--) {
@@ -243,10 +241,17 @@ class TestViewForm extends React.Component
     this.onRecNPD();
     this.onRec();
   }
+  componentWillUnmount() {
+        this.unsubscribe();
+  }
+  refreshData = () => {
+    this.setState({
+      allRecord: getStore().getState().StaffQualificationView.items
+    });
+  }
 
 	render()
 	{
-    //const options = this.state.fileData.map(d => <Option key={d.qualificationId}>{d.name}</Option>);
     const options = this.state.allPeople.map(d => <Option key={d.id}>{d.name}</Option>);
     const peopleoptions = this.state.allPeople.map(d => <Option key={d.id}>{d.name}</Option>);
     
@@ -272,7 +277,7 @@ class TestViewForm extends React.Component
       key: 'qualificationImage',
       render: (text, record) => {
         return (
-          <a onClick={() => this.handleImage(record.key)}>查看</a>
+          <a onClick={() => this.handleImage(record.key)}>下载</a>
         );
       }
     }, {
@@ -296,7 +301,7 @@ class TestViewForm extends React.Component
         }
         return (
           <div>
-            <Button onClick={() => this.handleAddTab(props)}>Inspect</Button> 
+            <Button type="primary" onClick={() => this.handleAddTab(props)}>查看</Button> 
           </div> 
         );
       },
@@ -309,7 +314,7 @@ class TestViewForm extends React.Component
         return (
           <div>
             <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(record.key)}>
-              <Button>Delete</Button>
+              <Button type="danger">删除</Button>
             </Popconfirm>
           </div>
         );
@@ -346,97 +351,101 @@ class TestViewForm extends React.Component
     }
     return(
 			<Form>
-				        <FormItem {...formItemLayout} label = "人员名称：">
-                    {getFieldDecorator('id',{
-                        rules: [],
-                    })(<Select
-                        showSearch
-                        style={{ width: 100 }}
-                        placeholder="Select a person"
-                        optionFilterProp="resigner"
-                        onChange={this.handleSelectChange}
-                        filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                        {options}
-                    </Select>)}
-                </FormItem>
-
-                <FormItem>
-                	<Button
-                		type="primary"
-                		icon="search"
-                    onClick={() => this.handleSearch(this.state.searchId)}
-                	>
-                	search
-                	</Button>
-                </FormItem>
-
-                <FormItem>
-                	<Button
-                		type="primary"
-                    onClick={this.showModal}
-                		>
-                	增加
-                	</Button>
-                  
-                  <Modal
-                    title="新增人员资质信息"
-                    visible={this.state.visible}
-                    onOk={this.handleAdd}
-                    onCancel={this.handleCancel}
+        <FormItem>
+          <Col span={6}>
+				    人员名称：
+            {getFieldDecorator('id',{
+              rules: [],
+              })(<Select
+                  showSearch
+                  style={{ width: 150 }}
+                  placeholder="请选择一个人员"
+                  optionFilterProp="staff"
+                  onChange={this.handleSelectChange}
+                  filterOption={(input, option) => option.props.staff.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
-                    <Form layout="horizontal">
+                    {options}
+                  </Select>)}
+          </Col>
+          <Col span={4}>
+            <Button
+              type="primary"
+              icon="search"
+              onClick={() => this.handleSearch(this.state.searchId)}
+              >
+                搜索
+            </Button>
+          </Col>
+        </FormItem>
+
+        <FormItem>
+          <Col span={4}>
+            <Button
+              type="primary"
+              onClick={this.showModal}
+              >
+                新增
+            </Button>
+          </Col>
+            <Modal
+              title="新增人员资质信息"
+              visible={this.state.visible}
+              onOk={this.handleAdd}
+              onCancel={this.handleCancel}
+              >
+                <Form layout="horizontal">
                       
-                      <FormItem {...formItemLayout} label = "人员名称：">
-                        {getFieldDecorator('pid',{
-                              rules: [],
-                          })(<Select
-                              showSearch
-                              style={{ width: 100 }}
-                              placeholder="Select a person"
-                              optionFilterProp="resigner"
-                              onChange={this.handleSelectChange}
-                              filterOption={(input, option) => option.props.resigner.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                        {peopleoptions}
-                    </Select>)}
-                </FormItem>
+                  <FormItem {...formItemLayout} label="人员名称：">
+                    {getFieldDecorator('pid',{
+                      rules: [{required: true, message: '请选择一个人员!'}],
+                      })( <Select
+                            showSearch
+                            style={{ width: 100 }}
+                            placeholder="请选择一个人员"
+                            optionFilterProp="staff"
+                            onChange={this.handleSelectChange}
+                            filterOption={(input, option) => option.props.staff.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                              {peopleoptions}
+                            </Select>)}
+                  </FormItem>
                       
-                      <FormItem {...formItemLayout} label="资质名称：" hasFeedback>
-                        {getFieldDecorator('qualificationName', {
-                          rules: [{required: true, message: 'Please input the qualificationname!'}],
-                          initialValue: '',
-                        })(
+                  <FormItem {...formItemLayout} label="资质名称：" hasFeedback>
+                    {getFieldDecorator('qualificationName', {
+                      rules: [{required: true, message: '请输入资质名称!'}],
+                      initialValue: '',
+                      })(
                         <Input style ={{width: 100,offset:4}}/>
                         )}
-                      </FormItem>
-                    </Form>
+                  </FormItem>
+                </Form>
 
-                    <Form id="upfile">
-                      <FormItem>资质证书扫描件</FormItem>
-                      <Upload {...addprops}>
-                        <Button>
-                          <Icon type="upload" /> 添加图片文件
-                        </Button>
-                      </Upload>
-                    </Form>
+                <Form id="upfile">
+                  资质证书扫描件:
+                    <Upload {...addprops}>
+                      <Button>
+                        <Icon type="upload" /> 添加图片文件
+                      </Button>
+                    </Upload>
+                </Form>
 
-                  </Modal>
-                	<Button type="primary" onClick={this.onRec}>
-                	查看全部
-                	</Button>
-                </FormItem>
-                <FormItem>
-                	<span style={{ marginLeft: 8 }}>
-            			{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-          			</span>
-          			<Table rowSelection={rowSelection} columns={columns} dataSource={this.state.fileData} rowKey="key"/>
-                </FormItem>
+            </Modal>
+          <Col span={4}>
+            <Button type="primary" onClick={this.onRec}>
+              刷新
+            </Button>
+          </Col>
+        </FormItem>
+        <FormItem>
+          <span style={{ marginLeft: 8 }}>
+            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+          </span>
+          <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.fileData} rowKey="key"/>
+        </FormItem>
 			</Form>
 		);
 	}
 }
-
 
 const StaffQualificationView = Form.create()(TestViewForm);
 export default StaffQualificationView
