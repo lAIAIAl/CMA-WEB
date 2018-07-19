@@ -162,11 +162,11 @@ class SelfInspectionList extends React.Component {
             <div>
                 <FormItem>
                     <div>
-                        <Col span={1}>
-                            <Button type="primary" onClick={this.showModal}>
+                        <Button type="primary" 
+                            style={{margin:'0px 10px 0px 0px'}}
+                            onClick={this.showModal}>
                                 新增
-                            </Button>
-                        </Col>
+                        </Button>
                         <Button type="primary" onClick={this.downLoad}>
                             下载模版
                         </Button>

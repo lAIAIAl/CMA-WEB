@@ -253,11 +253,9 @@ class RecordForm extends React.Component {
                 <Form>
                 <FormItem>
                     <div>
-                        <Col span={1}>
-                    <Button type="primary" onClick={this.showModal}>新增
+                    <Button type="primary" style={{margin:'0px 10px 0px 0px'}} onClick={this.showModal}>新增
                     </Button>
-                        </Col>
-                    <Button type="primary" onClick={this.refresh}>刷新
+                    <Button type="primary" style={{margin:'0px 10px 0px 0px'}} onClick={this.refresh}>刷新
                     </Button>
                     </div>
                 </FormItem>
