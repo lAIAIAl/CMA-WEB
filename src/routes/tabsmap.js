@@ -62,6 +62,18 @@ import QSManualView from 'routes/QualitySystem/QSManualView';
 import QSProgramView from 'routes/QualitySystem/QSProgramView';
 import QSInstructionView from 'routes/QualitySystem/QSInstructionView';
 
+//Institution
+import Introduction from 'routes/TestingInstitution/Introduction';
+import TestingInstitutionResource from 'routes/TestingInstitution/TestingInstitutionResource';
+import Certificate from 'routes/TestingInstitution/Certificate';
+
+//CapacityVerification
+import CapacityVerificationPlan from "./CapacityVerification/CapacityVerificationPlan";
+import CapacityVerificationView from "./CapacityVerification/CapacityVerificationView";
+
+//SelfInspection
+import SelfInspectionComponent from "./SelfInspection/SelfInspectionComponent";
+
 const tabsmap = 
 [
     {
@@ -219,6 +231,34 @@ const tabsmap =
     {
         path: '/QSinstruction_list',
     component: ItemContainer('QSinstruction',QSInstructionView)
+    },
+    //Institution
+    {
+        path:'/resource_list',
+        component:TestingInstitutionResource
+    },
+    {
+        path:'/introduction_list',
+        component:Introduction
+    },
+    {
+        path:'/certificate_list',
+        component:Certificate
+    },
+    //SelfInspection
+    {
+        path:'/SelfInspection',
+        component:SelfInspectionComponent
+    },
+
+    //CapacityVerification
+    {
+        path:'/CapacityVerification',
+        component:ItemContainer('VerificationPlan',CapacityVerificationPlan)
+    },
+    {
+        path:'/CapacityVerification_1',
+        component:ItemContainer('VerificationProcess',CapacityVerificationView)
     },
 ]
 

@@ -7,6 +7,8 @@ import {baseAddress} from 'services';
 import $ from 'lib/jquery-3.3.1';
 import SampleIoList from './SampleIoList';
 import SampleText from './SampleText';
+import {getSampleIo} from './SampleIoList';
+import {getSampleReceive} from './SampleReceiveList';
 
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
@@ -28,13 +30,14 @@ const formTailLayout = {
     wrapperCol: { span: 8, offset: 4 },
 };
 
+
 class SIIForm extends React.Component{
     constructor(props)
     {
         super(props);
 		this.state = {
 		    StaffData:[],
-		item:null,
+		    item:null,
 		/*{
 		    sampleNumber:3,
 		    sampleName:"www",
@@ -47,6 +50,7 @@ class SIIForm extends React.Component{
 		    obtainer:"cy",
 		    note:"no趴笨",
 		},*/
+		    softwareState:"0",
 			visible: false,
 			sampleData: null,
 			dataSource: this.props.dataSource,
@@ -61,7 +65,6 @@ class SIIForm extends React.Component{
 		}
 		console.log(this.props.item.sampleIoId);
 		this.state.item = item;
-
     }
     showModal = () => {
             this.setState({
@@ -108,7 +111,19 @@ class SIIForm extends React.Component{
     	    success: function (d) {
     	    }
     	});
-    	getApplication();
+    	getSampleIo();
+    }
+    refreshVise=()=>{
+        $.get(baseAddress+"/cma/SampleIo/getOne?sampleIoId="+this.props.item.sampleIoId ,null,(res)=>{
+            console.log(res.data);
+            this.setState({
+                vise:res.data.isReceipt,
+            })
+        });
+        console.log(this.state.vise);
+    }
+    componentWillMount(){
+        this.refreshVise();
     }
     handleAddText=()=>{
         const newData={
@@ -123,14 +138,14 @@ class SIIForm extends React.Component{
             receiveDate:this.props.form.getFieldValue('receiveDate').format('YYYY-MM-DD'),
             sender:this.props.form.getFieldValue('sender'),
             receiver:this.props.form.getFieldValue('receiver'),
-            others:this.props.form.getFieldValue('others'),
-            ReadMe:this.props.form.getFieldValue('ReadMe'),
-            Application:this.props.form.getFieldValue('Application'),
-            MaterialReceipt:this.props.form.getFieldValue('MaterialReceipt'),
-            Function:this.props.form.getFieldValue('Function'),
-            Confirmations:this.props.form.getFieldValue('Confirmations'),
-            Introduction:this.props.form.getFieldValue('Introduction'),
-            Guarantee:this.props.form.getFieldValue('Guarantee'),
+            other:this.props.form.getFieldValue('other'),
+            readMe:this.props.form.getFieldValue('ReadMe'),
+            application:this.props.form.getFieldValue('Application'),
+            materialReceipt:this.props.form.getFieldValue('MaterialReceipt'),
+            functions:this.props.form.getFieldValue('Function'),
+            confirmations:this.props.form.getFieldValue('Confirmations'),
+            introduction:this.props.form.getFieldValue('Introduction'),
+            guarantee:this.props.form.getFieldValue('Guarantee'),
             softwareSample:this.props.form.getFieldValue('softwareSample'),
         };
         console.log(newData);
@@ -147,6 +162,7 @@ class SIIForm extends React.Component{
             addVise: false,
         });
         this.props.form.resetFields();
+        this.refreshVise();
     }
     handleModify=()=>{
         const newData = {
@@ -186,26 +202,33 @@ class SIIForm extends React.Component{
         this.state.item.obtainer=newData.obtainer;
         this.state.item.obtainDate=newData.obtainDate;
         this.props.form.resetFields();
+        getSampleIo();
+        getSampleReceive();
     }
     showMessage=()=>{
         var props={
             sampleId:this.props.item.sampleId,
         }
-        this.props.addTab("样品接收单","样品接收单",SampleText,props);
+        this.props.addTab(this.state.item.sampleName+"的样品接收单",this.state.item.sampleName+"的样品接收单",SampleText,props);
     }
     render(){
         const { getFieldDecorator } = this.props.form;
         const width = '100%';
-        if(this.state.item.sampleState==0)
-            this.state.item.sampleState="待处理";
-        else if(this.state.item.sampleState==1)
-            this.state.item.sampleState="待测";
-        else if(this.state.item.sampleState==2)
-            this.state.item.sampleState="测毕";
-        else if(this.state.item.sampleState==3)
-            this.state.item.sampleState="已处理";
+        if(this.state.item.sampleState==0||this.state.item.sampleState=="待处理")
+            {this.state.softwareState="待处理";this.state.item.sampleState=0}
+        else if(this.state.item.sampleState==1||this.state.item.sampleState=="待测")
+            {this.state.softwareState="待测";this.state.item.sampleState=1}
+        else if(this.state.item.sampleState==2||this.state.item.sampleState=="测毕")
+            {this.state.softwareState="测毕";this.state.item.sampleState=2}
+        else if(this.state.item.sampleState==3||this.state.item.sampleState=="已处理")
+            {this.state.softwareState="已处理";this.state.item.sampleState=3}
+        console.log(this.state.item.sampleState);
+        console.log(this.state.softwareState);
         return(
             <div>
+                <Form>
+                <Button type="primary" onClick={this.refreshVise}>刷新</Button>
+                </Form>
                 <Card key='0' title="样品接收登记详情" style={{marginBottom: 20}}>
                     <Row key='0'>
                         <Col span={8}>
@@ -237,7 +260,7 @@ class SIIForm extends React.Component{
                         <Col span={12}>
                             <FormItem align="left" >
                                 样品状态：
-                                {this.state.item.sampleState}
+                                {this.state.softwareState}
                             </FormItem>
                         </Col>
                     </Row>
@@ -297,7 +320,7 @@ class SIIForm extends React.Component{
                                  (<Input  style = {{width:200,offset:4}}/>) }
                             </FormItem>
                             <FormItem {...formItemLayout}label ="样品状态:" hasFeedback>
-                                {getFieldDecorator('sampleState', {rules :[{required: true, message: '请选择样品状态！'}],
+                                {getFieldDecorator('sampleState', {rules :[{required: true, message: '请选择样品状态！'}],initialValue:this.state.item.sampleState,
                                 })
                                 (
                                     <RadioGroup name={"样品状态:"} disabled={this.props.disable}    >
@@ -338,10 +361,10 @@ class SIIForm extends React.Component{
                         </Form>
                     </Modal>
                 <Col span={8}>
-                    <Button type= "primary" onClick={this.showMessage} disabled={!this.state.item.isReceipt}>查看接收单</Button>
+                    <Button type= "primary" onClick={this.showMessage} disabled={!this.state.vise}>查看接收单</Button>
                 </Col>
                 <Col span={8}>
-                    <Button type= "primary" onClick={this.show2Modal} disabled={!this.state.item.isReceipt}>填写接收单</Button>
+                    <Button type= "primary" onClick={this.show2Modal} disabled={this.state.vise}>填写接收单</Button>
                 </Col>
                     <Modal title="添加接收单" width={780} visible={this.state.addVise} onOk={this.handleAddText} onCancel={this.handle2Cancel}>
                         <Form layout="horizontal">
@@ -355,10 +378,6 @@ class SIIForm extends React.Component{
                             </FormItem>
                             <FormItem {...formItemLayout} label= "合同登记编号:" hasFeedback>
                                 { getFieldDecorator('contractId', {rules :[{required: true, message: '请输入合同登记编号！'}]})
-                                 (<Input  style = {{width:200,offset:4}}/>) }
-                            </FormItem>
-                            <FormItem {...formItemLayout} label= "软件产品名:" hasFeedback>
-                                { getFieldDecorator('sampleName2', {rules :[{required: true, message: '请输入软件产品名！'}]})
                                  (<Input  style = {{width:200,offset:4}}/>) }
                             </FormItem>
                             <FormItem {...formItemLayout}label ="检测类型:" hasFeedback>
@@ -476,7 +495,7 @@ class SIIForm extends React.Component{
                                 }
                             </FormItem>
                             <FormItem {...formItemLayout} label= "其他材料:" hasFeedback>
-                                { getFieldDecorator('others')
+                                { getFieldDecorator('other')
                                  (<Input  style = {{width:200,offset:4}}/>) }
                             </FormItem>
                             <FormItem {...formItemLayout} label= "电子媒介:" hasFeedback>
