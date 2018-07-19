@@ -27,10 +27,34 @@ const formTailLayout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 8, offset: 4 },
 };
-
+export const getSampleReceive = () =>{
+	$.get(baseAddress+"/cma/SampleReceive/getAll" , null,(res)=>{
+  		let data = res.data;
+  		for (var i = data.length - 1; i >= 0; i--) {
+  			data[i].key = data[i].id;
+            switch(data[i].sampleState){
+                case 0:
+                    data[i].sampleState = "待处理";
+                break;
+                case 1:
+                    data[i].sampleState = "待测";
+                break;
+                case 2:
+                    data[i].sampleState = "测毕";
+                break;
+                case 3:
+                    data[i].sampleState = "已处理";
+                break;
+            }
+  		}
+  		let store = getStore();
+ 		store.dispatch(setItems(data, 'ReceiveList'));
+  	});
+}
 class SampleReceiveForm extends React.Component {
     constructor(props){
         super(props);
+        this.unsubscribe = getStore().subscribe(this.refreshData);
         this.columns = [
         {
             title:'样品编号',
@@ -51,6 +75,22 @@ class SampleReceiveForm extends React.Component {
             title:'状态',
             dataIndex:'sampleState',
             key:'sampleState',
+            filters: [{
+                    text: '待处理',
+                    value: '待处理',
+                }, {
+                    text: '待测',
+                    value: '待测',
+                },{
+                    text:'测毕',
+                    value:'测毕',
+                },{
+                    text:'已处理',
+                    value:'已处理',
+                }
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) => record.sampleState.indexOf(value) === 0,
         },
         {
             title:'接收日期',
@@ -132,6 +172,14 @@ class SampleReceiveForm extends React.Component {
   		    })
   		});
   	}
+	refreshData = () => {
+		this.setState({
+			receiveData: getStore().getState().ReceiveList.items
+		});
+	}
+	componentWillUnmount() {
+        this.unsubscribe();
+	}
     onDelete = (key) => {
   	    $.ajax({
 	        type: "post",
@@ -167,7 +215,7 @@ class SampleReceiveForm extends React.Component {
         });
     }
     handleInspect = (props) => {
-        this.props.addTab("样品接收详情","样品接收详情",SampleReceiveInspect,props);
+        this.props.addTab(props.item.sampleName+"的登记详情",props.item.sampleName+"的登记详情",SampleReceiveInspect,props);
     }
     handleAdd=()=>{
         const newData = {

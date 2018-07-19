@@ -253,6 +253,49 @@ const initialState =
 			    menuPath: "/QSinstruction_list"
 			  }
 			],
+		},
+		{
+	        id: "12",
+	        code: "12",
+	        name: "检测机构管理",
+	        modulePath: "/index/system",
+	        menus:[
+	        	{
+		        id: "12-1",
+		        code: "12-1",
+		        name: "检测机构信息",
+		        modulePath: "/index/Introduction",
+		        menuPath: "/introduction_list"
+	        	},
+	        	{
+		        id: "12-2",
+		        code: "12-2",
+		        name: "检测机构资源",
+		        modulePath: "/index/Resource",
+		        menuPath: "/resource_list"
+	        	},
+	        	{
+	        	id :"12-3",
+	        	code:"12-3",
+	        	name:"认证材料",
+	        	modulePath:"/index/Certificate",
+	        	menuPath:"/certificate_list"
+	        	}
+	        ]
+    	},
+    	{
+            id: "13",
+            code: "13",
+            name: "自查管理",
+            modulePath: "/index/SelfInspection",
+            menuPath: "/SelfInspection",
+        },
+		{
+            id: "14",
+            code: "14",
+            name: "能力验证管理",
+            modulePath: "/index/CapacityVerification",
+            menuPath: "/CapacityVerification",
 		}
     ]
 }

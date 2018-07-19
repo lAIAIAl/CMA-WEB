@@ -28,9 +28,35 @@ const formTailLayout = {
   wrapperCol: { span: 8, offset: 4 },
 };
 
+export const getSampleIo = () =>{
+	$.get(baseAddress+"/cma/SampleIo/getAll" , null,(res)=>{
+  		let data = res.data;
+  		for (var i = data.length - 1; i >= 0; i--) {
+  			data[i].key = data[i].id;
+            switch(data[i].sampleState){
+                case 0:
+                    data[i].sampleState = "待处理";
+                break;
+                case 1:
+                    data[i].sampleState = "待测";
+                break;
+                case 2:
+                    data[i].sampleState = "测毕";
+                break;
+                case 3:
+                    data[i].sampleState = "已处理";
+                break;
+            }
+  		}
+  		let store = getStore();
+ 		store.dispatch(setItems(data, 'IoList'));
+  	});
+}
+
 class SampleIoForm extends React.Component {
     constructor(props){
         super(props);
+        this.unsubscribe = getStore().subscribe(this.refreshData);
         this.columns = [
         {
             title:'样品编号',
@@ -51,6 +77,22 @@ class SampleIoForm extends React.Component {
             title:'状态',
             dataIndex:'sampleState',
             key:'sampleState',
+            filters: [{
+                    text: '待处理',
+                    value: '待处理',
+                }, {
+                    text: '待测',
+                    value: '待测',
+                },{
+                    text:'测毕',
+                    value:'测毕',
+                },{
+                    text:'已处理',
+                    value:'已处理',
+                }
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) => record.sampleState.indexOf(value) === 0,
         },
         {
             title:'送样日期',
@@ -73,16 +115,16 @@ class SampleIoForm extends React.Component {
             width: '7%',
             key: 'check',
             render:(text,record)=>{
-                let receiveData:null;
-                let dataSource = this.state.receiveData;
-                for(var i=this.state.receiveData.length-1;i>=0;i--)
+                let IoReceiveData:null;
+                let dataSource = this.state.IoReceiveData;
+                for(var i=this.state.IoReceiveData.length-1;i>=0;i--)
                 {
-                    if(record.sampleIoId==this.state.receiveData[i].sampleIoId)
-                        receiveData = this.state.receiveData[i];
+                    if(record.sampleIoId==this.state.IoReceiveData[i].sampleIoId)
+                        IoReceiveData = this.state.IoReceiveData[i];
                 }
                 var props ={
                     item: record,
-                    receiveData:receiveData,
+                    IoReceiveData:IoReceiveData,
                     dataSource: dataSource,
                 }
                 return(
@@ -108,7 +150,7 @@ class SampleIoForm extends React.Component {
         }
         ];
         this.state={
-            receiveData:[],
+            IoReceiveData:[],
             allSample:[],
             visible:false,
         };
@@ -149,10 +191,18 @@ class SampleIoForm extends React.Component {
   			        test[i].sampleState="已处理";
   		    }
   		    this.setState({
-  		        receiveData: test
+  		        IoReceiveData: test
   		    })
   		});
   	}
+	refreshData = () => {
+		this.setState({
+			IoReceiveData: getStore().getState().IoList.items
+		});
+	}
+	componentWillUnmount() {
+        this.unsubscribe();
+	}
     onDelete = (key) => {
   	    $.ajax({
 	        type: "post",
@@ -188,7 +238,7 @@ class SampleIoForm extends React.Component {
         });
     }
     handleInspect = (props) => {
-        this.props.addTab("样品室记录详情","样品室记录详情",SampleIoInspect,props);
+        this.props.addTab("样品室"+props.item.sampleName+"记录详情","样品室"+props.item.sampleName+"记录详情",SampleIoInspect,props);
     }
     handleAdd=()=>{
         const sampleId=this.props.form.getFieldValue('sampleId');
@@ -253,9 +303,10 @@ class SampleIoForm extends React.Component {
   	{
         const options= this.state.allSample.map(allSample => <Option key={allSample.sampleId}>{allSample.sampleName}</Option>);
         console.log(options);
-        const { receiveData } = this.state;
+        const { IoReceiveData } = this.state;
         const { getFieldDecorator } = this.props.form;
         const columns= this.columns;
+        console.log(IoReceiveData);
         return(
             <Form>
                 <FormItem>
@@ -323,7 +374,7 @@ class SampleIoForm extends React.Component {
                         </Modal>
                 </FormItem>
                 <FormItem>
-                    <Table dataSource={this.state.receiveData} columns={columns} />
+                    <Table dataSource={this.state.IoReceiveData} columns={columns} />
                 </FormItem>
             </Form>
         );
