@@ -421,6 +421,21 @@ class CapacityVerificationView extends React.Component{
         });
     }
 
+    deleteFile=()=>{
+        const key = this.state.item.planId;
+        $.ajax({
+            type:"post",
+            url:"http://119.23.38.100:8080/cma/CapacityVerification/deleteAnalysis",
+            data:{id:key},
+            async:false,
+            success:function(d){
+
+                alert(d.msg);
+            }
+        });
+
+    }
+
 
     render()
     {
@@ -461,13 +476,17 @@ class CapacityVerificationView extends React.Component{
         return(
             <div>
                 <FormItem>
-                    <Col span={2}>
-                        <Button type="primary" onClick={this.showModal4}>
-                            上传分析报告
-                        </Button>
-                    </Col>
-                    <Button type="primary" onClick={this.downLoad}>
+                    <Button style={{margin:'0px 10px 0px 0px'}} type="primary" onClick={this.showModal4}>
+                        上传分析报告
+                    </Button>
+                    <Button style={{margin:'0px 10px 0px 0px'}} type="primary" onClick={this.downLoad}>
                         下载分析报告
+                    </Button>
+                    <Button type="primary"
+                            type="danger"
+                            style={{margin:'0px 10px 0px 0px'}}
+                            onClick={this.deleteFile}>
+                        删除分析报告
                     </Button>
                 </FormItem>
                 <Card key='0' title='能力验证计划' style={{marginBottom: 20}}>
