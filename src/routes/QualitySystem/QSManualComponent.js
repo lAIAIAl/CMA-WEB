@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Form, Row, Col, Button, Card, Icon, Upload, Table, Input, Divider, Select, message } from 'antd';
+import { Form, Row, Col, Button, Card, Icon, Upload, Table, Input, Divider, Select, Tooltip, message } from 'antd';
 
 import $ from 'lib/jquery-3.3.1';
 import { getStore } from 'store/globalStore';
@@ -11,6 +11,7 @@ import { qualityManualUploadService, qualityManualGetCurrentService, qualityManu
 import QSManualAddView from './QSManualAddView';
 import QSManualDetailView from './QSManualDetailView';
 import QSManualModifyView from './QSManualModifyView';
+import QSManualMDView from './QSManualMDView';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -25,18 +26,18 @@ class QSManualComponent extends React.Component{
         title: '文件编号',
 	dataIndex: 'fileId',
 	key: 'fileId',
-	sorter: (a,b) => a.fileId-b.fileId,
+	sorter: (a,b) => a.fileId>b.fileId,
       },
       {
-        title: '文件名',
+        title: '文件名称',
 	dataIndex: 'fileName',
 	key: 'fileName',
       },
       {
-        title: '最后修改时间',
+        title: '更新时间',
 	dataIndex: 'modifyTime',
 	key: 'modifyTime',
-	sorter: (a,b) => a.modifyTime-b.modifyTime,
+	sorter: (a,b) => a.modifyTime>b.modifyTime,
       },
       {
         title: '操作',
@@ -67,12 +68,62 @@ class QSManualComponent extends React.Component{
 	}
       }
     ];
+    this.rows=[
+      {
+        title: '文件编号',
+	dataIndex: 'fileId',
+	key: 'fileId',
+	sorter: (a,b) => a.fileId>b.fileId,
+      },
+      {
+        title: '文件名称',
+	dataIndex: 'fileName',
+	key: 'fileName',
+      },
+      {
+        title: '操作人员',
+	dataIndex: 'modifier',
+	key: 'modifier',
+      },
+      {
+        title: '操作',
+	dataIndex: 'operation',
+	key: 'operation',
+	width: '40%',
+	render:(text,record)=>{
+	  let curUn = null;
+	  for(var j=this.state.unData.length-1;j>=0;j--){
+	    if(this.state.unData[j].id == record.id)
+	      curUn = this.state.unData[j];
+	  }
+	  var unProps = {
+	    item: curUn,//当前的未批准数据: id,fileId,fileName,state,current,modifyTime,modifier,modifyContent
+	  };
+	  return(
+	    <Row gutter={16}>
+	      <Col className="gutter-row" span={4}>
+	        <a href="javascript:void(0);" onClick={ () => { this.inspectUnapprove(unProps) } }>详情</a>
+	      </Col>
+	      <Col className="gutter-row" span={6}>
+	        <Select style={{ width:'100%' }} onChange={ (value) => {this.handleApprove(value,unProps)} }>
+		  <Option value="未批准" disabled={ curUn.state !== 0 }>未批准</Option>
+		  <Option value="不通过" disabled={ curUn.state == 2 }>不通过</Option>
+		  <Option value="已通过" disabled={ curUn.state == 1 }>已通过</Option>
+		</Select>
+	      </Col>
+	    </Row>
+	  );
+	}
+      }
+    ];
   }
 
   state = {
     data: [],//存放所有历史数据
     item: null,//存放当前版本数据
     loading: false,
+    unData: [],//存放所有未批准数据
+    unLoading: false,
   };
 
   getAllHistory = () => {
@@ -97,6 +148,22 @@ class QSManualComponent extends React.Component{
     });
   }
 
+  getAllApprove = () => {
+    $.ajax({
+      type: "get",
+      url: "http://119.23.38.100:8080/cma/QualityManual/getApprove",
+      async: false,
+      success:function(d){
+        for(let i = d.data.length-1; i >= 0; i--){
+	  d.data[i].key = d.data[i].id;
+	}
+        this.setState({
+	  unData: d.data
+	});
+      }.bind(this)
+    });
+  }
+
   componentWillUnmount(){
     this.unsubscribe();
   }
@@ -104,6 +171,7 @@ class QSManualComponent extends React.Component{
   componentWillMount(){
     this.getCurrent();
     this.getAllHistory();
+    this.getAllApprove();
   }
 
   refreshData = () => {
@@ -121,6 +189,10 @@ class QSManualComponent extends React.Component{
 
   showDetail = (props) => {
     this.props.addTab('历史详情','历史详情',QSManualDetailView,props);
+  }
+
+  inspectUnapprove = (unProps) => {
+    this.props.addTab('修改详情','修改详情',QSManualMDView,unProps);
   }
 
   deleteHistory = (props) => {
@@ -162,10 +234,13 @@ class QSManualComponent extends React.Component{
   refreshAM = () => {
     this.getCurrent();
     this.getAllHistory();
+    this.getAllApprove();
   }
 
-  handleApprove = (value) => {
-    let curId = this.state.item.id;
+  handleApprove = (value,unProps) => {
+    console.log('value',value);
+    console.log('props',unProps);
+    let curId = unProps.item.id;
     let result = value;
     let state = null;
     if(result == '未批准'){
@@ -197,9 +272,9 @@ class QSManualComponent extends React.Component{
   }
 
   render(){
-    console.log('当前版本数据',this.state.item);
-    const { loading } = this.state;
+    const { loading, unLoading } = this.state;
     const columns = this.columns;
+    const rows = this.rows;
     const width = '100%';
     let curVersion = {
       id: '0',
@@ -212,16 +287,6 @@ class QSManualComponent extends React.Component{
     };
     if(this.state.item !== null){
       curVersion = this.state.item;
-    }
-    let curState = null;
-    if(curVersion.state == 0){
-      curState = '未批准';
-    }
-    else if(curVersion.state == 1){
-      curState = '不通过';
-    }
-    else if(curVersion.state == 2){
-      curState = '已通过';
     }
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -246,35 +311,21 @@ class QSManualComponent extends React.Component{
 	    </FormItem>
 	  </Row>
 	  <Row key='3'>
-	    <FormItem {...formItemLayout} label="文件状态">
-	      { curState }
-	    </FormItem>
-	  </Row>
-	  <Row key='4'>
 	    <FormItem {...formItemLayout} label="更新时间">
 	      { curVersion.modifyTime }
 	    </FormItem>
 	  </Row>
-	  <Row key='5'>
+	  <Row key='4'>
 	    <FormItem {...formItemLayout} label="操作人员">
 	      { curVersion.modifier }
 	    </FormItem>
 	  </Row>
-	  <Row key='6'>
+	  <Row key='5'>
 	    <FormItem {...formItemLayout} label="日志说明">
 	      { curVersion.modifyContent }
 	    </FormItem>
 	  </Row>
-	  <Row key='7'>
-	    <FormItem {...formItemLayout} label="修改状态">
-	      <Select defaultValue={ curState } style={{ width: '25%' }} onChange={ this.handleApprove }>
-		<Option value="未批准" disabled={ curVersion.state == 0 }>未批准</Option>
-		<Option value="不通过" disabled={ curVersion.state !== 0 }>不通过</Option>
-		<Option value="已通过" disabled={ curVersion.state !== 0 }>已通过</Option>
-	      </Select>
-	    </FormItem>
-	  </Row>
-	  <Row key='8' gutter={16}>
+	  <Row key='6' gutter={16}>
 	    <Col className="gutter-row" span={18}/>
 	    <Col className="gutter-row" span={6}>
 	      <a href="javascript:void(0);" onClick={ this.downloadCurrent }>下载</a>
@@ -290,19 +341,27 @@ class QSManualComponent extends React.Component{
 	    onChange = { this.refreshData }
 	  />
 	 </Card>
+	 <Card key='2' title="修改版本">
+	   <Table
+	     columns = { rows }
+	     dataSource = { this.state.unData }
+	     loading = { this.state.unLoading }
+	     onChange = { this.getAllApprove }
+	   />
+	 </Card>
 	  <div>
 	    <Row gutter={16}>
-	      <Col className="gutter-row" span={6}>
+	      <Col className="gutter-row" span={4}>
 	        <Button type="primary" onClick={ this.addNewManual }>
 		  添加
 		</Button>
 	      </Col>
-	      <Col className="gutter-row" span={6}>
+	      <Col className="gutter-row" span={4}>
 	        <Button type="danger" onClick={ this.modifyManual }>
 		  修改
 		</Button>
 	      </Col>
-	      <Col className="gutter-row" span={6}>
+	      <Col className="gutter-row" span={4}>
 	        <Button type="dashed" onClick={ this.refreshAM }>
 		  刷新
 		</Button>

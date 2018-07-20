@@ -76,6 +76,9 @@ class EquipmentApplicationRecordView extends React.Component {
 	}
 
 	addOne = () => {
+		var date = this.props.form.getFieldValue('auditDate');
+		if(date != null)
+			date = date.format('YYYY-MM-DD');
 		const newapp = {
 			applicant: this.props.form.getFieldValue('applicant'),
 			applicationDate: this.props.form.getFieldValue('applicationDate').format('YYYY-MM-DD'),
@@ -84,7 +87,7 @@ class EquipmentApplicationRecordView extends React.Component {
 			equipmentNumber: this.props.form.getFieldValue('equipmentNumber'),
 			softwareInfo: this.props.form.getFieldValue('softwareInfo'),
 			auditor: this.props.form.getFieldValue('auditor'),
-			auditDate: this.props.form.getFieldValue('auditDate').format('YYYY-MM-DD'),
+			auditDate: date,
 			auditOpinion: this.props.form.getFieldValue('auditOpinion'),
 		}
 
@@ -314,7 +317,7 @@ class EquipmentApplicationRecordView extends React.Component {
                       		</FormItem>
                       		<FormItem {...formItemLayout} label="审核人：" hasFeedback>
                         		{getFieldDecorator('auditor', {
-                          			rules: [{required: true, message: '请输入审核人!'}],
+                          			rules: [],
                           			initialValue: '',
                         			})(
                         				<Input style ={{width: 100,offset:4}}/>
@@ -322,14 +325,14 @@ class EquipmentApplicationRecordView extends React.Component {
                       		</FormItem>
                       		<FormItem {...formItemLayout} label="审核时间：" hasFeedback>
                         		{getFieldDecorator('auditDate', {
-                          			rules: [{required: true, message: '请选择审核时间!'}],
+                          			rules: [],
                         			})(
                         				<DatePicker />
                         		)}
                       		</FormItem>
                       		<FormItem {...formItemLayout} label="审核意见：" hasFeedback>
                         		{getFieldDecorator('auditOpinion', {
-                          			rules: [{required: true, message: '请输入审核意见!'}],
+                          			rules: [],
                           			initialValue: '',
                         			})(
                         				<Input style ={{width: 100,offset:4}}/>
