@@ -47,59 +47,62 @@ const MonthPicker = DatePicker.MonthPicker;
   		        StaffData: test })
   		});
   	}
-  showModal = () => {
-     this.setState({
-     visible: true,
-     });
-  }
-  handleSubmit = () => {
-    this.setState({
-      visible: false,
-    });
-    this.getAllStaff();
-  }
-  handleOk = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-    this.getAllStaff();
-  }
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  }
-  handleModify=()=>{
-    const newData = {
+    showModal = () => {
+        this.setState({
+        visible: true,
+        });
+    }
+    handleSubmit = () => {
+        this.setState({
+            visible: false,
+        });
+        this.getAllStaff();
+    }
+    handleOk = (e) => {
+        this.setState({
+            visible: false,
+        });
+        this.getAllStaff();
+    }
+    handleCancel = (e) => {
+        this.setState({
+            visible: false,
+        });
+    }
+    getAuthInfo=()=>{
+        $.get(baseAddress+"/cma/StaffAuthorization/getOne?authorizationId="+this.state.item.authorizationId ,null,(res)=>{
+   		    let NiMa=res.data;
+   		    console.log(NiMa);
+            this.setState({
+                item:NiMa,
+            });
+        });
+    }
+    handleModify=()=>{
+        const newData = {
         id: this.props.form.getFieldValue('id'),
         authorizerId: this.props.form.getFieldValue('authorizerId'),
         content: this.props.form.getFieldValue('content'),
         authorizerDate: this.props.form.getFieldValue('authorizerDate').format('YYYY-MM-DD'),
         authorizationId: this.state.item.authorizationId
-    };
-		    $.ajax({
-		      	type: "post",
-		      	url: baseAddress+"/cma/StaffAuthorization/modifyOne",
-		      	data: newData,
-		      	async: false,
-		      	success: function (d) {
-		      		message.success("修改成功");
+        };
+	    $.ajax({
+	        type: "post",
+		    url: baseAddress+"/cma/StaffAuthorization/modifyOne",
+		    data: newData,
+		    async: false,
+		    success: function (d) {
+		        message.success("修改成功");
 		      	}
 		    });
-    this.state.item.id=newData.id;
-    this.state.item.authorizerId=newData.authorizerId;
-    this.state.item.content=newData.content;
-    this.state.item.authorizerDate=newData.authorizerDate;
-    this.state.item.authorizationId=newData.authorizationId;
-    this.setState({
-      visible: false,
-    });
-    this.getAllStaff();
-    getAuthorization();
-    console.log(this.props.form.getFieldsValue());
-    this.props.form.resetFields();
+        this.setState({
+            visible: false,
+        });
+        this.getAllStaff();
+        getAuthorization();
+        this.getAuthInfo();
+        console.log(this.props.form.getFieldsValue());
+        this.props.form.resetFields();
     }
   	componentWillMount() {
   		this.getAllStaff();
@@ -220,8 +223,8 @@ const MonthPicker = DatePicker.MonthPicker;
                                   <DatePicker format="YYYY-MM-DD" />
                                 )}
                     </FormItem>
-                    </Form>
-                    </Modal>
+                </Form>
+            </Modal>
 		</div>
         );
     }
