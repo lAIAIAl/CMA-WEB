@@ -20,7 +20,23 @@ const QSInstructionAddView = Form.create()(class extends React.Component{
   state = {
     fileList: [],
     uploading: false,
+    data: [],
+    loading: false,
   };
+
+  fetchStaffInfo = () => {
+    this.setState({ loading: true });
+    $.get("http://119.23.38.100:8080/cma/StaffManagement/getAll",null,(res)=>{
+      this.setState({
+        data: res.data,
+	loading: false,
+      });
+    });
+  }
+
+  componentWillMount(){
+    this.fetchStaffInfo();
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -77,6 +93,7 @@ const QSInstructionAddView = Form.create()(class extends React.Component{
   }
 
   render(){
+    const options = this.state.data.map(data => <Option key={data.name}>{data.name}</Option>);
     const { getFieldDecorator } = this.props.form;
     const width = '50%';
     const formItemLayout = {
@@ -136,7 +153,13 @@ const QSInstructionAddView = Form.create()(class extends React.Component{
 	  </FormItem>
 	  <FormItem {...formItemLayout} label="操作人员:">
 	    {getFieldDecorator('modifier',{ rules: [{ required: true, message: '操作人员必填' }], })
-	    (<Input style={{ width:width }}/>)}
+	    (<Select
+	      showSearch
+	      style={{ width: '25%' }}
+	     >
+	       {options}
+	     </Select>
+	    )}
 	  </FormItem>
 	  <FormItem {...formItemLayout} label="添加内容:">
 	    {getFieldDecorator('modifyContent',)
