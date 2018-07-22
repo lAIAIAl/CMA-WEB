@@ -98,15 +98,15 @@ class EquipmentApplicationRecordInspectView extends React.Component
     $.get("http://119.23.38.100:8080/cma/EquipmentApplication/getOne?id="+this.state.id, null,(res) =>{
       let temp = res.data;
 
-      if(this.state.equipmentUse == 1)
+      if(temp.equipmentUse == 1)
         this.setState({
           isservice: true,
         })
-      else if(this.state.equipmentUse == 2)
+      else if(temp.equipmentUse == 2)
         this.setState({
           istest: true,
         })
-      else if(this.state.equipmentUse == 3)
+      else if(temp.equipmentUse == 3)
         this.setState({
           istest: true,
           isservice: true
@@ -139,6 +139,10 @@ class EquipmentApplicationRecordInspectView extends React.Component
 		const {getFieldDecorator} = this.props.form;
     
     var value = 0;
+    // in case auditDate = null
+    var adate = this.state.item.auditDate;
+    if(adate != null)
+      adate = moment(this.state.item.auditDate, dateFormat);
 
 		return(
 			<Form>
@@ -177,8 +181,8 @@ class EquipmentApplicationRecordInspectView extends React.Component
               align="left"                    
               >
                 仪器类型：
-                <Checkbox defaultChecked={this.state.isservice} disabled>服务器</Checkbox>
-                <Checkbox defaultChecked={this.state.istest} disabled>测试机</Checkbox>
+                <Checkbox disabled checked={this.state.isservice}>服务器</Checkbox>
+                <Checkbox checked={this.state.istest} disabled>测试机</Checkbox>
             </FormItem>
           </Col>
         </Row>
@@ -274,8 +278,8 @@ class EquipmentApplicationRecordInspectView extends React.Component
               <FormItem {...formItemLayout} label="仪器类型：" hasFeedback>
                 <Checkbox.Group onChange={this.handleSelect}>
                   <Row>
-                    <Checkbox value={1} defaultChecked={true} checked="checked">1（服务器）</Checkbox>
-                    <Checkbox value={2} defaultChecked={false} checked="true">2（测试机）</Checkbox>
+                    <Checkbox value={1} checked={true} defaultChecked={true}>1（服务器）</Checkbox>
+                    <Checkbox value={2} checked={this.state.istest}>2（测试机）</Checkbox>
                   </Row>
                 </Checkbox.Group>
               </FormItem>
@@ -309,7 +313,7 @@ class EquipmentApplicationRecordInspectView extends React.Component
               <FormItem {...formItemLayout} label="审核时间：" hasFeedback>
                 {getFieldDecorator('auditDate', {
                   rules: [],
-                  initialValue: moment(this.state.item.auditDate, dateFormat),
+                  initialValue: adate,
                   })(
                       <DatePicker />
                     )}

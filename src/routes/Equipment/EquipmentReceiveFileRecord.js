@@ -69,11 +69,15 @@ class EquipmentReceiveFileRecordView extends React.Component {
       contentType: false,
       data: formdata,
       async: false,
-      success: () => {
-        message.success("新增成功啦");
-        this.setState({
-          fileList: [],
-        })
+      success: function(data){
+        if(data.code ==200) {
+          message.success("新增成功啦");
+          this.setState({
+            fileList: [],
+          })
+        }
+        else
+          message.error(data.msg);
       },
       error: () => {
         message.error("新增失败哦");

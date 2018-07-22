@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Alert, Button, Divider, Form, Input, Row, Col, Upload, Icon, DatePicker, Card, message } from 'antd';
+import { Select, Alert, Button, Divider, Form, Input, Row, Col, Upload, Icon, DatePicker, Card, message } from 'antd';
 
 import { qualityProgramModifyService } from 'services';
 
@@ -9,6 +9,7 @@ import { setItems } from 'common/basic/reducers/ItemReducer';
 import { getAllProgramHistory } from './FetchHistory';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 const QSProgramModifyView = Form.create()(class extends React.Component{
 
@@ -19,7 +20,23 @@ const QSProgramModifyView = Form.create()(class extends React.Component{
   state = {
     fileList: [],
     uploading: false,
+    data: [],
+    loading: false,
   };
+
+  fetchStaffInfo = () => {
+    this.setState({ loading: true });
+    $.get("http://119.23.38.100:8080/cma/StaffManagement/getAll",null,(res)=>{
+      this.setState({
+        data: res.data,
+	loading: false,
+      });
+    });
+  }
+
+  componentWillMount(){
+    this.fetchStaffInfo();
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -60,6 +77,7 @@ const QSProgramModifyView = Form.create()(class extends React.Component{
   }
 
   render(){
+    const options = this.state.data.map(data => <Option key={data.name}>{data.name}</Option>);
     const { getFieldDecorator } = this.props.form;
     const width = '50%';
     const formItemLayout = {
@@ -112,8 +130,14 @@ const QSProgramModifyView = Form.create()(class extends React.Component{
 	    (<DatePicker style={{ width:'25%' }}/>)}
 	  </FormItem>
 	  <FormItem {...formItemLayout} label="操作人员:">
-	    {getFieldDecorator('modifier',{ initialValue: defaultVal.modifier, rules: [{ required: true, message: '修改人员必填' }],})
-	    (<Input style={{ width:'25%' }}/>)}
+	    {getFieldDecorator('modifier',{ rules: [{ required: true, message: '修改人员必填' }],})
+	    (<Select
+	      showSearch
+	      style={{ width: '25%' }}
+	     >
+	       {options}
+	     </Select>
+	    )}
 	  </FormItem>
 	  <FormItem {...formItemLayout} label="日志说明:">
 	    {getFieldDecorator('modifyContent',{ initialValue: defaultVal.modifyContent, rules: [{ required: true, message: '日志说明必填' }], })
